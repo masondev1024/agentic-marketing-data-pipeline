@@ -1,0 +1,50 @@
+{
+  "acceptance_criterion": 4,
+  "authority": "work/marketing-aws-implementation-brief.md sections 4 and 6",
+  "operator": "assistant",
+  "scope_verdict": "verified",
+  "project_verdict": "outside current AC scope",
+  "agent_designation": "experimental",
+  "learner_execution_verified": false,
+  "commands_run": [
+    "python3 scripts/run_marketing_model_isolated.py /tmp/marketing-ac4-real-v1-final",
+    "python3 scripts/verify_marketing_ac4.py -- uv run --locked pytest -q",
+    "python3 scripts/verify_marketing_ac4.py -- uv run --locked pytest",
+    "python3 scripts/verify_marketing_ac4.py -- uv run --locked ruff check ."
+  ],
+  "exit_codes": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "pytest_q_passed": 395,
+  "pytest_passed": 395,
+  "agent_unit_tests": 14,
+  "experiment_evidence": "evidence/marketing-ac4-experiment.json",
+  "experiment_sha256": "62ca11808a35a9a8a4ff0f5a11a4a391bc648912fcb666383e46a092f183df5e",
+  "requirement_evidence": [
+    {
+      "source": "brief section 4",
+      "text": "Pinned Qwen3-4B offline inference selected metrics then finish in three frozen scenarios. Same immutable snapshots used by independent deterministic baseline. Actual outputs and model revision retained."
+    },
+    {
+      "source": "brief section 4",
+      "text": "Model quality 0/3, completeness 0/3, errors 3. All premature conclusions rejected as evidence_incomplete; final unknown. No fallback relabeled as model result. Scripted protocol doubles explicitly labeled."
+    },
+    {
+      "source": "brief section 6",
+      "text": "Preregistered limits and promotion thresholds published before inference, originating as assistant engineering defaults. Three cases are a bounded subset; promotion failed and experimental designation retained."
+    },
+    {
+      "source": "brief section 6",
+      "text": "External-copy observer ran both locked pytest forms (395 passed each) and ruff (exit 0). Real process timeout/reaping, lock serialization, token reservation, malformed JSON retry, scope and evidence guards covered. No localhost:8000 intervention."
+    }
+  ],
+  "limitations": [
+    "Local synthetic evidence only; no production or learner competence claim.",
+    "Three distinct real cases, nine trials across observer recovery and token reservation hardening. Final-code trial retained; no statistical generalization.",
+    "First whole-suite snapshot had sibling graph failures. Later snapshots passed; AC4 did not edit graph code.",
+    "Observer fingerprint scope excludes sibling-owned concurrent changes; all tests still run."
+  ]
+}

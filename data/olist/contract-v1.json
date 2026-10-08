@@ -1,0 +1,90 @@
+{
+  "contract_version": "olist.raw.v1",
+  "description": "Pinned Olist public source files and selected raw semantic checks. Source timezones and currency are unresolved.",
+  "archives": {
+    "brazilian-ecommerce": {
+      "members": [
+        "olist_customers_dataset.csv",
+        "olist_geolocation_dataset.csv",
+        "olist_order_items_dataset.csv",
+        "olist_order_payments_dataset.csv",
+        "olist_order_reviews_dataset.csv",
+        "olist_orders_dataset.csv",
+        "olist_products_dataset.csv",
+        "olist_sellers_dataset.csv",
+        "product_category_name_translation.csv"
+      ]
+    },
+    "marketing-funnel-olist": {
+      "members": [
+        "olist_closed_deals_dataset.csv",
+        "olist_marketing_qualified_leads_dataset.csv"
+      ]
+    }
+  },
+  "tables": {
+    "olist_customers_dataset.csv": ["customer_id", "customer_unique_id", "customer_zip_code_prefix", "customer_city", "customer_state"],
+    "olist_geolocation_dataset.csv": ["geolocation_zip_code_prefix", "geolocation_lat", "geolocation_lng", "geolocation_city", "geolocation_state"],
+    "olist_order_items_dataset.csv": ["order_id", "order_item_id", "product_id", "seller_id", "shipping_limit_date", "price", "freight_value"],
+    "olist_order_payments_dataset.csv": ["order_id", "payment_sequential", "payment_type", "payment_installments", "payment_value"],
+    "olist_order_reviews_dataset.csv": ["review_id", "order_id", "review_score", "review_comment_title", "review_comment_message", "review_creation_date", "review_answer_timestamp"],
+    "olist_orders_dataset.csv": ["order_id", "customer_id", "order_status", "order_purchase_timestamp", "order_approved_at", "order_delivered_carrier_date", "order_delivered_customer_date", "order_estimated_delivery_date"],
+    "olist_products_dataset.csv": ["product_id", "product_category_name", "product_name_lenght", "product_description_lenght", "product_photos_qty", "product_weight_g", "product_length_cm", "product_height_cm", "product_width_cm"],
+    "olist_sellers_dataset.csv": ["seller_id", "seller_zip_code_prefix", "seller_city", "seller_state"],
+    "product_category_name_translation.csv": ["product_category_name", "product_category_name_english"],
+    "olist_closed_deals_dataset.csv": ["mql_id", "seller_id", "sdr_id", "sr_id", "won_date", "business_segment", "lead_type", "lead_behaviour_profile", "has_company", "has_gtin", "average_stock", "business_type", "declared_product_catalog_size", "declared_monthly_revenue"],
+    "olist_marketing_qualified_leads_dataset.csv": ["mql_id", "first_contact_date", "landing_page_id", "origin"]
+  },
+  "semantic_tables": {
+    "leads": {
+      "file": "olist_marketing_qualified_leads_dataset.csv",
+      "key": ["mql_id"],
+      "required_nonempty": ["mql_id", "landing_page_id"],
+      "timestamps": {"first_contact_date": {"nullable": false, "format": "date"}},
+      "nullable": ["origin"]
+    },
+    "deals": {
+      "file": "olist_closed_deals_dataset.csv",
+      "key": ["mql_id"],
+      "unique_keys": [["seller_id"]],
+      "unique_key_policy": "v1_requires_one_contract_per_seller; preserve_source_and_fail_on_duplicates",
+      "required_nonempty": ["mql_id", "seller_id", "sdr_id", "sr_id"],
+      "timestamps": {"won_date": {"nullable": false, "format": "naive_datetime"}},
+      "money": {"declared_monthly_revenue": {"nullable": false, "scale": 2, "precision": 18, "minimum": "0"}}
+    },
+    "orders": {
+      "file": "olist_orders_dataset.csv",
+      "key": ["order_id"],
+      "required_nonempty": ["order_id", "customer_id", "order_status"],
+      "timestamps": {
+        "order_purchase_timestamp": {"nullable": false, "format": "naive_datetime"},
+        "order_approved_at": {"nullable": true, "format": "naive_datetime"},
+        "order_delivered_carrier_date": {"nullable": true, "format": "naive_datetime"},
+        "order_delivered_customer_date": {"nullable": true, "format": "naive_datetime"},
+        "order_estimated_delivery_date": {"nullable": false, "format": "naive_datetime"}
+      }
+    },
+    "items": {
+      "file": "olist_order_items_dataset.csv",
+      "key": ["order_id", "order_item_id"],
+      "required_nonempty": ["order_id", "order_item_id", "product_id", "seller_id"],
+      "positive_integers": ["order_item_id"],
+      "timestamps": {"shipping_limit_date": {"nullable": false, "format": "naive_datetime"}},
+      "money": {
+        "price": {"nullable": false, "scale": 2, "precision": 18, "minimum": "0"},
+        "freight_value": {"nullable": false, "scale": 2, "precision": 18, "minimum": "0"}
+      },
+      "foreign_keys": {"order_id": "orders.order_id", "seller_id": "sellers.seller_id"}
+    },
+    "sellers": {
+      "file": "olist_sellers_dataset.csv",
+      "key": ["seller_id"],
+      "required_nonempty": ["seller_id"]
+    }
+  },
+  "relationships": {
+    "deals.mql_id": {"references": "leads.mql_id", "severity": "error"},
+    "deals.seller_id": {"references": "sellers.seller_id", "severity": "warning"}
+  },
+  "limits": {"max_error_samples": 50}
+}

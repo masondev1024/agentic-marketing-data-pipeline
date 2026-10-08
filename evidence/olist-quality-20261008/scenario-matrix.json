@@ -1,0 +1,74 @@
+[
+  {
+    "id": "protocol-baseline",
+    "intent": "reproduce two failures",
+    "actor": "ordinary analyst",
+    "setup": "v3 Qwen4B and published snapshot",
+    "harness": "capture.py",
+    "expected": "capture rejected actions before any query",
+    "actual": "both invented parameters",
+    "fix": "exact action catalog and one shared repair",
+    "evidence": "v3-coverage.json, v3-attribution.json",
+    "cleanup": "worker context closed; artifacts retained"
+  },
+  {
+    "id": "smoke-regression",
+    "intent": "detect degradation instead of claiming success",
+    "actor": "developer smoke cases",
+    "setup": "v4 then v5 same 6 cases",
+    "harness": "olist.evaluation",
+    "expected": "all 6 strict checks",
+    "actual": "strict scores v3=4/6, v4=3/6, v5=5/6, v6=5/6, v7=3/6, v8=4/6; restore v5",
+    "fix": "host-validated finding/evidence choices",
+    "evidence": "smoke-v4.log, smoke-v5.log",
+    "cleanup": "workers closed; failed batch retained"
+  },
+  {
+    "id": "persona-transfer",
+    "intent": "new wording and role boundary checks",
+    "actor": "six paired question families",
+    "setup": "freeze manifest and v5 before first run",
+    "harness": "olist.evaluation --dataset data/olist/investigation-personas-v1.json",
+    "expected": "12/12 and each pair meets own expectations",
+    "actual": "v5 original10/12; strict rescore6/12; dataset subsequently consumed for development",
+    "fix": "no alteration of original responses; preserve strict failures",
+    "evidence": "transfer-freeze.json, personas-v5.log",
+    "cleanup": "owned model closed; evidence retained"
+  },
+  {
+    "id": "guard-regression",
+    "intent": "no execution of invented scope, fabricated evidence or repeated repair",
+    "actor": "hostile model output",
+    "setup": "fake model; immutable test DB separately",
+    "harness": "pytest",
+    "expected": "terminal bounds and no unauthorized DB action",
+    "actual": "550 full tests passed including13real PostgreSQL; Ruffpassed",
+    "fix": "shared repair budget and strict manifest",
+    "evidence": "tests/test_olist_agent.py, tests/test_olist_eval_manifest.py",
+    "cleanup": "pytest fixtures own temporary state"
+  },
+  {
+    "id": "http-operations",
+    "intent": "new protocol preserves shared queue and hard deadlines",
+    "actor": "malformed input, concurrent clients, timed-out model",
+    "setup": "owned loopback servers",
+    "harness": "work/olist-qa-live/http_verify.py",
+    "expected": "16 checks including reap, restart, genuine model recovery, audit IDs",
+    "actual": "16/16",
+    "fix": "none planned",
+    "evidence": "http-checks.json",
+    "cleanup": "workers and ports released"
+  },
+  {
+    "id": "data-preservation",
+    "intent": "read-only quality work preserves publication",
+    "actor": "local evaluator",
+    "setup": "same dataset version and reader role",
+    "harness": "compare diagnosis evidence hashes",
+    "expected": "same version and full evidence",
+    "actual": "same dataset version and all diagnosis evidence after final tests",
+    "fix": "none",
+    "evidence": "baseline snapshots",
+    "cleanup": "Postgres left running as found"
+  }
+]

@@ -1,0 +1,11 @@
+boundary_origin_positive: PASS
+boundary_coverage_positive: PASS
+boundary_history_positive: PASS
+boundary_quality_positive: PASS
+boundary_rc_log_readonly: PASS
+boundary_rc_deploy_readonly: PASS
+boundary_rc_receipt_only: PASS
+boundary_rc_observability_readonly: PASS
+boundary_unsafe_secret_drop: PASS
+boundary_unsafe_bypass_update: PASS
+Provider stage stopped: rate_limited

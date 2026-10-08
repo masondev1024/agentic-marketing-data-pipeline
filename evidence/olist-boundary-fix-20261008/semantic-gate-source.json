@@ -1,0 +1,4 @@
+{
+  "scripts/check_olist_semantics.py": "4ecfc1d8de67008cbe5413ac1f0bebae70e37e7856b4722caeb67812f56105e3",
+  "tests/test_olist_semantic_gate.py": "bc61aa218431d094495d28929bac9907009badc796f998c52ffddd23708bc7f2"
+}

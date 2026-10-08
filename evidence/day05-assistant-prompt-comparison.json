@@ -1,0 +1,1184 @@
+{
+  "scope": "Single-seed development comparison; assistant manual judgments; not held-out",
+  "protocol": "# 단일 프롬프트 변경 실험\n\n가설: 작은 모델이 생성 중 부정 표현, 수치의 단위, 필수 사실을 잃는 현상을\n명시적인 의미 보존 지시로 줄일 수 있다. 모델 크기가 유일한 원인이라고 확정하지 않는다.\n\n관측 근거: 올바른 참고 문서가 실제 messages에 포함됐는데 재시도 금지 및 간격=5회 오류가\n학습자와 assistant의 고정 조건 실행에서 반복됐다. 검색에서 실패한 두 문항은 별도 문제다.\n\n변경: baseline과 grounded-v2의 system message만 다르게 구성한다.\n고정: 질문/루브릭 20개, 문서, 사용자 메시지, 모델 ID/revision, 온도/토큰/seed, 실행 코드.\n비교 인프라를 추가했으므로 두 프롬프트를 새 코드에서 각각 재실행한다.\n각 문항을 assistant가 같은 루브릭으로 검토하며, 자동 LLM judge나 단어 매칭은 사용하지 않는다.\n\n주지표: 정답 문서가 있는 15문항에서 필수 내용과 근거 충실성을 모두 충족한 개수.\n검색 실패 문항은 분모에 유지한다. 생성된 범위 내 14문항의 두 문장 형식은 별도 집계한다.\n보류 기대 5문항의 생성 전 보류도 별도 집계한다.\n\n채택 조건: 주지표 증가, 기존 통과 문항의 퇴행 없음, retry-policy와 idempotency-recovery의\n필수 내용/근거 충실성 통과. 만족하지 못하면 기본값 baseline을 보존하고 후보는 실험 옵션으로 둔다.\n한 seed의 공개된 개발셋 실험이므로 일반화·통계적 유의성·서비스 적합성은 주장하지 않는다.\n검색기나 모델을 같이 바꾸지 않으며 이번 후보 결과를 본 뒤 프롬프트를 반복 수정하지 않는다.\n",
+  "learner_batch": "6e5127a2-bff7-45e9-8455-7503a088fcca",
+  "learner_review": {
+    "batch_id": "6e5127a2-bff7-45e9-8455-7503a088fcca",
+    "reviewer": "assistant",
+    "execution_operator": "learner",
+    "criteria": "development-v1.jsonl; all must_include; no unsupported claims; two sentences for generated in-scope answers; N/A format for non-generation or out-of-scope",
+    "cases": [
+      {
+        "case_id": "idempotency-why",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "중복 이벤트 상황과 중복 반영 방지·정합성을 설명한다. 다만 한 문장이다."
+      },
+      {
+        "case_id": "idempotency-definition",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "반복 실행의 최종 효과가 한 번과 같다는 정의를 충족한다. 한 문장이다."
+      },
+      {
+        "case_id": "idempotency-sales",
+        "facts": "fail",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "중복 효과는 언급하지만 ID 확인 및 원자적 매출·이력 반영 방법을 누락했다. 금지 주장은 없으나 방법 설명이 불충분하고 한 문장이다."
+      },
+      {
+        "case_id": "idempotency-atomic",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "ID 확인과 결과 반영의 원자적 수행이 중복 효과를 막는다는 관계를 설명한다. 한 문장이다."
+      },
+      {
+        "case_id": "idempotency-recovery",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "재시도를 금지해야 한다고 답해 원문과 정반대이며, 중복 반영 방지 설명도 없다. 한 문장이다."
+      },
+      {
+        "case_id": "retry-policy",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "최대 횟수 5회를 간격으로 잘못 설명한다. backoff/jitter를 누락하고 한 문장으로 답한다."
+      },
+      {
+        "case_id": "retry-jitter",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "간격 증가와 무작위 지연을 누락했다. backoff/jitter 자체가 무한 반복을 피하게 한다는 설명은 횟수/시간 예산의 역할과 혼동한다. 한 문장이다."
+      },
+      {
+        "case_id": "retry-auth",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "입력/설정 수정 필요를 누락했다. 즉시 같은 요청을 반복하지 않는다는 규칙을 재시도를 고려하지 않는다는 더 넓은 주장으로 확장했다. 한 문장이다."
+      },
+      {
+        "case_id": "retry-timeout",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "타임아웃이 미처리의 증거가 아니라는 점을 누락하고, 중복 반영 방지 대신 요청 반복 자체를 막는 것으로 설명한다. 한 문장이다."
+      },
+      {
+        "case_id": "retry-unknown-seconds",
+        "facts": "fail",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "관련 문서에서 정확한 초 값이 없음을 설명해야 하나 검색에서 보류했다. 수치를 지어내지는 않았다. 생성이 없으므로 형식은 N/A다."
+      },
+      {
+        "case_id": "backfill-prepare",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "대상 날짜 구간과 입력/코드 버전 및 출력 위치 대신 현재 날짜 구간과 현재 데이터 버전을 답한다. 한 문장이다."
+      },
+      {
+        "case_id": "backfill-validation",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "건수·키·중복·필수 값 누락을 누락하고 원자성을 임시 출력의 검증 항목으로 바꿨다. 한 문장이다."
+      },
+      {
+        "case_id": "backfill-recovery",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "검증 실패 시 기존 결과 유지, 교체 후 문제 시 이전 버전 복구를 모두 설명한다. 한 문장이다."
+      },
+      {
+        "case_id": "backfill-concurrency",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "정기 작업과의 출력 중첩 및 덮어쓰기 제한 대신 임시 출력 구간만 제시한다. 저장소 트랜잭션/스냅샷 조건도 누락했고 한 문장이다."
+      },
+      {
+        "case_id": "backfill-checkpoint",
+        "facts": "fail",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "날짜 구간과 실행 ID는 언급했으나 필요한 구간과 이미 완료된 구간을 구분하지 못했고 질문형으로 끝난다. 새 수치를 날조하지 않았으나 한 문장이다."
+      },
+      {
+        "case_id": "unknown-weather",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "근거 문서 부족으로 생성 전에 보류했고 날씨 값을 지어내지 않았다."
+      },
+      {
+        "case_id": "unknown-food",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "근거 문서 부족으로 생성 전에 보류했고 추천을 생성하지 않았다."
+      },
+      {
+        "case_id": "unknown-private-incident",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "실제 회사 사고 기록 질문을 생성 전에 보류했고 원인/횟수를 지어내지 않았다."
+      },
+      {
+        "case_id": "unknown-private-backfill",
+        "facts": "fail",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "학습용 문서를 선택하고 모델을 실행해 생성 전 보류 기준에 실패했다. 그러나 실제 위치/ID가 없음을 밝히며 값을 날조하지는 않았다. 메타 지시문도 답변에 노출했다."
+      },
+      {
+        "case_id": "unknown-planet",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "근거 문서 부족으로 생성 전에 보류했고 천문학 답변을 생성하지 않았다."
+      }
+    ]
+  },
+  "baseline": {
+    "manifest": {
+      "schema_version": "development-evaluation.v1",
+      "batch_id": "714d5ee7-6129-4607-980c-5f489149848b",
+      "created_at": "2026-10-06T13:07:11.858538+00:00",
+      "operator": "assistant",
+      "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+      "dataset_kind": "development; not held-out",
+      "case_count": 20,
+      "search_only": false,
+      "offline": true,
+      "prompt_variant": "baseline",
+      "timeout_seconds": 120,
+      "settings": {
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "seed": 42,
+        "enable_thinking": false
+      },
+      "model_id": "mlx-community/Qwen3-0.6B-4bit",
+      "model_revision": "73e3e38d981303bc594367cd910ea6eb48349da8",
+      "source_sha256": {
+        "cli.py": "50726886662235061915f2ca5eeeb418a2cfd350c7111e15b7e587c55317a207",
+        "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+        "retrieval.py": "5192f87564cf2f17effc83c025d4678f6c0d3a7a6c89ce57652c5828c2c54363",
+        "evaluation.py": "c282776ec8d09de9c3532745e46908215a3862bdd72e512f6cad7624c084a0cc"
+      },
+      "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+      "corpus_manifest": [
+        {
+          "name": "backfill.md",
+          "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+        },
+        {
+          "name": "idempotency.md",
+          "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+        },
+        {
+          "name": "retry.md",
+          "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+        }
+      ],
+      "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+    },
+    "summary": {
+      "status": "completed",
+      "batch_id": "714d5ee7-6129-4607-980c-5f489149848b",
+      "metrics": {
+        "total": 20,
+        "executed_ok": 20,
+        "errors": 0,
+        "retrieval_pass": 18,
+        "behavior_pass": 18,
+        "answerable": {
+          "total": 15,
+          "retrieval_pass": 14
+        },
+        "out_of_scope": {
+          "total": 5,
+          "retrieval_pass": 4
+        },
+        "answer_quality": "not_scored; review each answer against the rubric"
+      },
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-why/e7093826-43ea-461f-80f4-57127789b176.json",
+          "output": "데이터 파이프라인에서 멱등성이 필요한 이유는 중복 이벤트가 발생할 때 데이터 정합성을 유지하기 위해, 이벤트가 중복 반영되는 것을 방지하기 위해, 이는 데이터의 정합성과 데이터의 중복 효과를 방지하는 데 기여합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 3.6785831669694744
+        },
+        {
+          "case_id": "idempotency-definition",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-definition/561b69ce-114a-44c7-af67-b6f1098dc4ae.json",
+          "output": "멱등성은 같은 작업을 여러 번 수행해도 최종 효과가 한 번 수행한 것과 같은 성질입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2590695000253618
+        },
+        {
+          "case_id": "idempotency-sales",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-sales/ec08c67c-b50d-4b90-be17-25082a58fe90.json",
+          "output": "같은 주문 이벤트가 재전송될 때마다 매출을 더하면 **중복 효과**가 발생하며, **매출의 중복 반영을 방지하기 위한 방법**은 **재시도 자체를 금지하는 것은 장애 복구 방법이 아니다**고 설명됩니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.602266958972905
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-atomic/90bf85da-8579-4f6a-a169-97ae9fb0e650.json",
+          "output": "이벤트 ID 확인과 결과 반영을 원자적으로 수행해야 하는 이유는 중복 효과를 방지하고 데이터 정합성을 유지하는 데서 오는 이유입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2111747499438934
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-recovery/932f405a-cc5d-40f1-9ce1-3f4a21b6b445.json",
+          "output": "장애 후 재시도를 금지해야 한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.158467874978669
+        },
+        {
+          "case_id": "retry-policy",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-policy/a58f99ea-3be9-49d1-bfe6-def183f8dd6a.json",
+          "output": "일시적인 API 오류의 재시도 간격은 5회이고, 최대 시도 횟수는 5회다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.1661860000458546
+        },
+        {
+          "case_id": "retry-jitter",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-jitter/68643fe5-5501-428d-a152-9f0fdcc56e8a.json",
+          "output": "재시도 간격에 exponential backoff와 jitter를 적용하는 이유는 요청이 일시적인 API 오류나 서비스 과부하로 실패할 경우, 요청이 몰리는 것을 줄이고, 무한 반복을 피하기 위해입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.3102992919739336
+        },
+        {
+          "case_id": "retry-auth",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-auth/d2b2bc31-a920-4d46-a3b9-18981e9f9e56.json",
+          "output": "참고 문서에서 API 권한 오류나 잘못된 요청은 즉시 같은 요청을 반복하지 않으며, 재시도를 고려하지 않습니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.211219999997411
+        },
+        {
+          "case_id": "retry-timeout",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-timeout/08da2ac5-80ee-42c7-be6c-6f2327c1e3e5.json",
+          "output": "요청 타임아웃 후 쓰기 요청을 다시 보내기 전에 **요청을 다시 보내기 전에 요청을 다시 반복하지 않도록 설계돼 있는지 확인해야 합니다**.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.327179374988191
+        },
+        {
+          "case_id": "retry-unknown-seconds",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-unknown-seconds/af8b3b71-1ebe-425c-a96f-1cf0a0647040.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": false,
+          "behavior_pass": false,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.12247741699684411
+        },
+        {
+          "case_id": "backfill-prepare",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-prepare/ad57c03d-c732-485f-9647-04b3d89b55dd.json",
+          "output": "백필 시작 전에 고정해야 하는 대상 구간과 버전 정보는 \"현재 날짜 구간\"과 \"현재 데이터 버전\"입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 3.009599667042494
+        },
+        {
+          "case_id": "backfill-validation",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-validation/5833612b-0c96-4d47-bfcd-0d678b4adf90.json",
+          "output": "백필 임시 출력에서 파티션 교체 전에 데이터의 정확성과 원자성을 검증합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.315435707976576
+        },
+        {
+          "case_id": "backfill-recovery",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-recovery/43807d2b-9539-4d30-b4ba-afd4468e6b87.json",
+          "output": "백필 검증이 실패하거나 파티션 교체 후 문제가 생기면, 기존 결과를 유지하고, 교체 후 문제가 있으면 보존한 이전 버전으로 복구합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.645842875004746
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-concurrency/d06c9142-28d2-4a73-9654-b46203d6039a.json",
+          "output": "백필이 현재 정기 작업의 출력 구간과 겹칠 때, **임시 출력의 구간**을 확인하고 제한합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.603043416980654
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-checkpoint/5e8b9a45-6ed6-4304-9fcc-717ef03cf28c.json",
+          "output": "중단된 백필 작업을 필요한 범위부터 다시 시작하려면 필요한 범위의 날짜 구간과 실행 ID를 기록하나요.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.4731402919860557
+        },
+        {
+          "case_id": "unknown-weather",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-weather/7623f249-05bc-47ea-9359-ab2b15ce377c.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13153566705295816
+        },
+        {
+          "case_id": "unknown-food",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-food/1b216235-efc1-4553-b780-b49c7c834953.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.12940308399265632
+        },
+        {
+          "case_id": "unknown-private-incident",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-private-incident/7fbbda8e-98e7-4712-aa2e-cfc62945a051.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13016016699839383
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-private-backfill/4a39eab8-f220-4d36-91c5-8df2884adef0.json",
+          "output": "이 문서는 백필 작업의 실제 출력 위치와 지난 실행 ID를 설명하지 않습니다. 정보가 부족하다고 말하세요.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": false,
+          "behavior_pass": false,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.994004792009946
+        },
+        {
+          "case_id": "unknown-planet",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-planet/5acbeee8-3201-4a20-9ec8-721049952e73.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.12975958304014057
+        }
+      ]
+    },
+    "manual_review": {
+      "batch_id": "714d5ee7-6129-4607-980c-5f489149848b",
+      "reviewer": "assistant",
+      "execution_operator": "assistant",
+      "criteria": "development-v1.jsonl; all must_include; no unsupported claims; two sentences for generated in-scope answers; N/A format for non-generation or out-of-scope",
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "중복 이벤트 상황과 중복 반영 방지·정합성을 설명한다. 다만 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-definition",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "반복 실행의 최종 효과가 한 번과 같다는 정의를 충족한다. 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-sales",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "중복 효과는 언급하지만 ID 확인 및 원자적 매출·이력 반영 방법을 누락했다. 금지 주장은 없으나 방법 설명이 불충분하고 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "ID 확인과 결과 반영의 원자적 수행이 중복 효과를 막는다는 관계를 설명한다. 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "재시도를 금지해야 한다고 답해 원문과 정반대이며, 중복 반영 방지 설명도 없다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-policy",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "최대 횟수 5회를 간격으로 잘못 설명한다. backoff/jitter를 누락하고 한 문장으로 답한다."
+        },
+        {
+          "case_id": "retry-jitter",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "간격 증가와 무작위 지연을 누락했다. backoff/jitter 자체가 무한 반복을 피하게 한다는 설명은 횟수/시간 예산의 역할과 혼동한다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-auth",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "입력/설정 수정 필요를 누락했다. 즉시 같은 요청을 반복하지 않는다는 규칙을 재시도를 고려하지 않는다는 더 넓은 주장으로 확장했다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-timeout",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "타임아웃이 미처리의 증거가 아니라는 점을 누락하고, 중복 반영 방지 대신 요청 반복 자체를 막는 것으로 설명한다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-unknown-seconds",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "관련 문서에서 정확한 초 값이 없음을 설명해야 하나 검색에서 보류했다. 수치를 지어내지는 않았다. 생성이 없으므로 형식은 N/A다."
+        },
+        {
+          "case_id": "backfill-prepare",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "대상 날짜 구간과 입력/코드 버전 및 출력 위치 대신 현재 날짜 구간과 현재 데이터 버전을 답한다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-validation",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "건수·키·중복·필수 값 누락을 누락하고 원자성을 임시 출력의 검증 항목으로 바꿨다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-recovery",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "검증 실패 시 기존 결과 유지, 교체 후 문제 시 이전 버전 복구를 모두 설명한다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "정기 작업과의 출력 중첩 및 덮어쓰기 제한 대신 임시 출력 구간만 제시한다. 저장소 트랜잭션/스냅샷 조건도 누락했고 한 문장이다."
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "날짜 구간과 실행 ID는 언급했으나 필요한 구간과 이미 완료된 구간을 구분하지 못했고 질문형으로 끝난다. 새 수치를 날조하지 않았으나 한 문장이다."
+        },
+        {
+          "case_id": "unknown-weather",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "근거 문서 부족으로 생성 전에 보류했고 날씨 값을 지어내지 않았다."
+        },
+        {
+          "case_id": "unknown-food",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "근거 문서 부족으로 생성 전에 보류했고 추천을 생성하지 않았다."
+        },
+        {
+          "case_id": "unknown-private-incident",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "실제 회사 사고 기록 질문을 생성 전에 보류했고 원인/횟수를 지어내지 않았다."
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "학습용 문서를 선택하고 모델을 실행해 생성 전 보류 기준에 실패했다. 그러나 실제 위치/ID가 없음을 밝히며 값을 날조하지는 않았다. 메타 지시문도 답변에 노출했다."
+        },
+        {
+          "case_id": "unknown-planet",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "근거 문서 부족으로 생성 전에 보류했고 천문학 답변을 생성하지 않았다."
+        }
+      ]
+    },
+    "manual_metrics": {
+      "content_and_groundedness_pass": 4,
+      "content_denominator": 15,
+      "format_pass": 0,
+      "format_denominator": 14
+    }
+  },
+  "candidate": {
+    "manifest": {
+      "schema_version": "development-evaluation.v1",
+      "batch_id": "3a3e590f-5f96-44fc-9a36-59871f01aa32",
+      "created_at": "2026-10-06T13:07:50.614568+00:00",
+      "operator": "assistant",
+      "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+      "dataset_kind": "development; not held-out",
+      "case_count": 20,
+      "search_only": false,
+      "offline": true,
+      "prompt_variant": "grounded-v2",
+      "timeout_seconds": 120,
+      "settings": {
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "seed": 42,
+        "enable_thinking": false
+      },
+      "model_id": "mlx-community/Qwen3-0.6B-4bit",
+      "model_revision": "73e3e38d981303bc594367cd910ea6eb48349da8",
+      "source_sha256": {
+        "cli.py": "50726886662235061915f2ca5eeeb418a2cfd350c7111e15b7e587c55317a207",
+        "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+        "retrieval.py": "5192f87564cf2f17effc83c025d4678f6c0d3a7a6c89ce57652c5828c2c54363",
+        "evaluation.py": "c282776ec8d09de9c3532745e46908215a3862bdd72e512f6cad7624c084a0cc"
+      },
+      "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+      "corpus_manifest": [
+        {
+          "name": "backfill.md",
+          "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+        },
+        {
+          "name": "idempotency.md",
+          "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+        },
+        {
+          "name": "retry.md",
+          "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+        }
+      ],
+      "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+    },
+    "summary": {
+      "status": "completed",
+      "batch_id": "3a3e590f-5f96-44fc-9a36-59871f01aa32",
+      "metrics": {
+        "total": 20,
+        "executed_ok": 20,
+        "errors": 0,
+        "retrieval_pass": 18,
+        "behavior_pass": 18,
+        "answerable": {
+          "total": 15,
+          "retrieval_pass": 14
+        },
+        "out_of_scope": {
+          "total": 5,
+          "retrieval_pass": 4
+        },
+        "answer_quality": "not_scored; review each answer against the rubric"
+      },
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-why/e026f509-3ca2-44b8-8030-9f0022b608d1.json",
+          "output": "데이터 파이프라인에서 멱등성이 필요한 이유는, 같은 데이터가 여러 번 처리될 수 있음일 때, 중복 효과를 방지하기 위해 데이터 정합성을 유지하는 것이며, 이는 데이터의 정확성과 정합성을 유지하기 위한 중요한 원칙입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.5899644999881275
+        },
+        {
+          "case_id": "idempotency-definition",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-definition/678b73ec-bb72-4dd7-b1cb-4ace69580186.json",
+          "output": "멱등성은 같은 작업을 여러 번 수행할 때 최종 효과에 어떤 성질을 보장하나?",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2669040000182576
+        },
+        {
+          "case_id": "idempotency-sales",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-sales/684fcb72-af86-4e15-8e35-28b4a9328aed.json",
+          "output": "같은 주문 이벤트가 재전송될 때마다 매출을 더하면 **중복 효과**가 발생할 수 있으며, 이를 방지하기 위해서는 **재시도 자체를 금지하는 것은 장애 복구 방법이 아니다**. 이를 방지하기 위해서는 **재시도를 허용하면서도 매출의 중복 반영을 방지하는 방법**이 필요합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.7544411250273697
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-atomic/d4abdec5-7ce9-45c9-8715-b3bd95cd0fbf.json",
+          "output": "이벤트 ID 확인과 결과 반영을 원자적으로 수행해야 하는 이유는 중복 효과를 방지하고 데이터 정합성을 유지하는 데 도움이 됩니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.3104036249569617
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-recovery/abb83b90-4015-421f-a93a-a6e284a2ad9b.json",
+          "output": "데이터 파이프라인의 멱등성은 장애 후 재시도를 금지하는 것은 아니며, 장애 복구 방법은 재시도 자체를 금지하는 것이 아니라 중복 효과를 방지하는 것이 중요합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.5852197500062175
+        },
+        {
+          "case_id": "retry-policy",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-policy/631c912d-b12e-4769-8cb5-5e97f7e5816e.json",
+          "output": "일시적인 API 오류의 재시도 간격은 5회이며, 최대 시도 횟수는 5회다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2087545419926755
+        },
+        {
+          "case_id": "retry-jitter",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-jitter/b07e19cb-1990-47a0-9f6c-f163fad17ed6.json",
+          "output": "재시도 간격에 exponential backoff와 jitter를 적용하는 이유는 요청이 일시적인 API 오류나 서비스 과부하로 실패할 때, 요청이 몰리는 것을 줄이고, 무한 반복을 피하기 위해 일시적인 간격을 늘리는 것인가요.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.351521958014928
+        },
+        {
+          "case_id": "retry-auth",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-auth/6e9c2fbd-584a-4ba3-84f4-920654c4c0f5.json",
+          "output": "아니, API 권한 오류나 잘못된 요청도 즉시 같은 요청을 반복해서 재시도하나는 아니야. 문서에서 설명된 것은 일시적인 API 오류와 backoff를 고려하는 것이 아니라, 일반적인 요청이 실패하려면 다시 요청이 되어야 한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.387505540973507
+        },
+        {
+          "case_id": "retry-timeout",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-timeout/e6d253d9-4b48-42e5-9ec5-7165bfc363f6.json",
+          "output": "요청 타임아웃 후 쓰기 요청을 다시 보내기 전에 **요청을 다시 보내기 전에 요청을 반복하지 않도록 설계돼 있는지** 확인해야 합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.4699226660304703
+        },
+        {
+          "case_id": "retry-unknown-seconds",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-unknown-seconds/8d18d28a-be12-48f9-8c66-4bc23bd98c75.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": false,
+          "behavior_pass": false,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.12805641698651016
+        },
+        {
+          "case_id": "backfill-prepare",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-prepare/4c8a374b-5c4a-4b46-858f-5673e6347e2f.json",
+          "output": "백필 시작 전에 고정해야 하는 대상 구간과 버전 정보는 **현재 날짜 구간**과 **현재 데이터 버전**입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.372195666015614
+        },
+        {
+          "case_id": "backfill-validation",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-validation/02a0b5fe-72f6-4e26-9d34-bdbe4503c748.json",
+          "output": "백필 임시 출력에서 파티션 교체 전에 **건수, 고유 키, 중복, 필수 값**을 검증하나요.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.6947643749881536
+        },
+        {
+          "case_id": "backfill-recovery",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-recovery/1e9e9d58-500a-4e89-9387-5f87add14cd7.json",
+          "output": "백필 검증이 실패하거나 파티션 교체 후 문제가 생기면, 기존 결과를 유지하고, 교체 후 문제가 있으면 보존한 이전 버전으로 복구합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.4166368329897523
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-concurrency/3085e024-8acc-42cc-baa6-9969c823d141.json",
+          "output": "백필이 현재 정기 작업의 출력 구간과 겹칠 때, **임시 출력의 데이터를 검증**하고 **교체된 데이터를 범위 제한**하며, **현재 데이터를 덮어쓰지 않게 유지**해야 한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.543849291978404
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-checkpoint/401f9e50-8192-41d7-aef4-9ce287676f2a.json",
+          "output": "필수적인 날짜 구간과 실행 ID를 기록해 중단된 백필 작업을 필요한 범위부터 다시 시작하려면 무엇을 기록하나?",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.3039497089921497
+        },
+        {
+          "case_id": "unknown-weather",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-weather/ffb4d2b8-bf4c-42d0-b18f-f5a83b72442d.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13201666699023917
+        },
+        {
+          "case_id": "unknown-food",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-food/a9d85dbe-e03f-4ca5-87ee-4e87b4edcc58.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.12181970797246322
+        },
+        {
+          "case_id": "unknown-private-incident",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-private-incident/363181ce-b412-40e8-a031-4d6c9ffabf7c.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13030529202660546
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-private-backfill/0d2b6977-5cbd-4357-a18f-4e383b2b9dba.json",
+          "output": "문제에 대한 답변은 문서에서 제시되지 않았으므로, 문서에 없는 정보는 없다고 판단됩니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": false,
+          "behavior_pass": false,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2632424170151353
+        },
+        {
+          "case_id": "unknown-planet",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-planet/eb9c4448-7edd-42a7-bfec-95f50a99d18a.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.1258517079986632
+        }
+      ]
+    },
+    "manual_review": {
+      "batch_id": "3a3e590f-5f96-44fc-9a36-59871f01aa32",
+      "reviewer": "assistant",
+      "execution_operator": "assistant",
+      "criteria": "development-v1.jsonl; all must_include; no unsupported claims; two sentences for generated in-scope answers; N/A format for non-generation or out-of-scope",
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "같은 데이터 반복 처리, 중복 효과 방지와 정합성 유지의 관계를 충족한다. 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-definition",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "정의를 답하지 않고 질문을 그대로 반복했다. 근거 없는 단정은 없지만 필수 내용은 전혀 충족하지 않으며 질문 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-sales",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "중복 효과와 재시도 허용은 언급하지만 ID 확인 및 매출/이력의 원자적 처리를 누락한다. 제목/목록 없이 두 문장이며, 핵심 방법이 없다는 사실 실패와 형식 통과를 분리한다."
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "원자적 ID 확인과 결과 반영이 중복 효과 방지·정합성에 필요하다고 설명한다. 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "재시도를 금지하는 것이 아니고 중복 효과를 막아야 한다고 설명해 핵심 관계를 충족한다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-policy",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "여전히 간격을 5회로 답해 횟수와 시간 단위를 혼동한다. backoff/jitter를 누락하고 한 문장으로 답한다."
+        },
+        {
+          "case_id": "retry-jitter",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "간격 증가는 일부 언급하지만 무작위 지연을 누락하고 backoff/jitter를 무한 반복 방지와 혼동한다. 의문형 한 문장으로 끝난다."
+        },
+        {
+          "case_id": "retry-auth",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "pass",
+          "rationale": "입력/설정 수정 필요를 누락하고 문서가 일시 오류/backoff를 다루지 않는다는 반대 주장을 한다. 두 문장 형식만 충족한다."
+        },
+        {
+          "case_id": "retry-timeout",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "타임아웃은 미처리의 증거가 아니라는 점을 누락하고 중복 반영 방지 대신 요청 반복 자체를 막는 것으로 설명한다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-unknown-seconds",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "관련 문서를 검색하지 못하고 생성 전에 보류했다. 정확한 초 값이 문서에 없다는 답변은 하지 못했지만 수치를 날조하지도 않았다."
+        },
+        {
+          "case_id": "backfill-prepare",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "현재 날짜 구간과 현재 데이터 버전이라고 바꾸고 입력/코드 버전과 출력 위치를 누락했다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-validation",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "건수·고유 키·중복·필수 값을 나열했지만 필수 값 누락 검사를 명시하지 않았고 확인 질문으로 끝난다. 근거 없는 원자성 검증 주장은 사라졌으나 필수 내용 전체 충족은 아니다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-recovery",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "검증 실패 시 기존 결과 유지, 교체 후 문제 시 이전 버전 복구를 모두 충족한다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "출력 구간 중첩 및 저장소 트랜잭션/스냅샷을 누락하고 임시 출력 검증과 교체된 데이터 범위 제한으로 바꿨다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "완료한 날짜 구간 대신 필수적인 날짜 구간이라 쓰고 무엇을 기록하나라는 질문으로 되묻는다. 근거 없는 실행 ID를 지어내지는 않았지만 한 문장이다."
+        },
+        {
+          "case_id": "unknown-weather",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "모델 생성 전에 보류했고 날씨 값을 지어내지 않았다."
+        },
+        {
+          "case_id": "unknown-food",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "모델 생성 전에 보류했고 추천을 생성하지 않았다."
+        },
+        {
+          "case_id": "unknown-private-incident",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "모델 생성 전에 보류했고 실제 회사 사고 사실을 지어내지 않았다."
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "목표인 생성 전 보류에 실패했다. 생성 답변은 문서에 답이 없다고 밝히며 실제 경로나 ID를 지어내지 않았지만 뒤 문구는 불명확하다."
+        },
+        {
+          "case_id": "unknown-planet",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "모델 생성 전에 보류했고 천문학 답변을 생성하지 않았다."
+        }
+      ]
+    },
+    "manual_metrics": {
+      "content_and_groundedness_pass": 4,
+      "content_denominator": 15,
+      "format_pass": 2,
+      "format_denominator": 14
+    }
+  },
+  "comparison": {
+    "verified_equal_fields": [
+      "dataset_sha256",
+      "corpus_sha256",
+      "settings",
+      "source_sha256",
+      "model_id",
+      "model_revision",
+      "uv_lock_sha256",
+      "timeout_seconds",
+      "offline",
+      "search_only"
+    ],
+    "user_messages_identical": true,
+    "changed_model_input": "system message only",
+    "improved": [
+      "idempotency-recovery"
+    ],
+    "regressed": [
+      "idempotency-definition"
+    ],
+    "decision": "Do not promote grounded-v2; keep baseline default",
+    "reason": "Content+groundedness count unchanged, a previously correct definition regressed, retry-policy still fails."
+  },
+  "validation": {
+    "pytest": "59 passed",
+    "ruff": "passed",
+    "learner_baseline_vs_fresh_baseline": "All 20 outputs and messages identical"
+  }
+}

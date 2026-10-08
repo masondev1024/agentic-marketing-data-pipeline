@@ -1,0 +1,94 @@
+{
+  "schema_version": "olist-backup-restore.v1",
+  "verified_at": "2026-10-07T11:45:39.353199+00:00",
+  "operator": "assistant",
+  "status": "passed",
+  "dump_sha256": "2876d13ced4e1a44405cf374226f97d9f07d3daeee656870b841f166e0cb102e",
+  "restore_database": "olist_restore_81e054922107402db0ffb0f48ea1ba38",
+  "source_preserved": true,
+  "consistent_exported_snapshot": true,
+  "before": {
+    "olist_ops.versions": {
+      "rows": 2,
+      "sha256": "9543011fa08fbb2272ab8f54fbe969e775d9174d23dedcdf9eae5fddac1f2e37"
+    },
+    "olist_ops.publication": {
+      "rows": 1,
+      "sha256": "7a21c6c9c83c43ca9920090d74392abf00031d40794028210e2759a47025859d"
+    },
+    "olist_ops.runs": {
+      "rows": 5,
+      "sha256": "dde71fbcaba3ca5e00eafcda4eb12ea79057b181ff8f18742ccd34cc97a8b8af"
+    },
+    "olist_core.leads": {
+      "rows": 16000,
+      "sha256": "2330d4db11fe48e125273be5482c760f8d96212035777c1bf9b2bc5737d1c4eb"
+    },
+    "olist_core.sellers": {
+      "rows": 6190,
+      "sha256": "5f96e13846c983047c9aca5eb65ee8128594d07e10666fdc1155debd06bc9063"
+    },
+    "olist_core.deals": {
+      "rows": 1684,
+      "sha256": "3a934621daffa03ad2f1863580fe02b6a46fb114d0f58a628b8110702d49b0b4"
+    },
+    "olist_core.orders": {
+      "rows": 198882,
+      "sha256": "9ba775a4d5778a089cf2082190c92760bd64807dc2a072aad0b99ceb99a1feed"
+    },
+    "olist_core.items": {
+      "rows": 225300,
+      "sha256": "dad8bea4bc43203661a108ee02cdec1536786ea61ea454c6e22bfdd15c495e86"
+    },
+    "olist_mart.seller_funnel": {
+      "rows": 1684,
+      "sha256": "c429667d2358f364626a239eef050d81e6ca1fe09fcf856bce00cafc18682a7d"
+    },
+    "olist_mart.channel_funnel": {
+      "rows": 22,
+      "sha256": "151a8edfd5aaf0cd982e176ddccef081f15656ff0593d4d4c41bb2be39ecd9bb"
+    }
+  },
+  "after": {
+    "olist_ops.versions": {
+      "rows": 2,
+      "sha256": "9543011fa08fbb2272ab8f54fbe969e775d9174d23dedcdf9eae5fddac1f2e37"
+    },
+    "olist_ops.publication": {
+      "rows": 1,
+      "sha256": "7a21c6c9c83c43ca9920090d74392abf00031d40794028210e2759a47025859d"
+    },
+    "olist_ops.runs": {
+      "rows": 5,
+      "sha256": "dde71fbcaba3ca5e00eafcda4eb12ea79057b181ff8f18742ccd34cc97a8b8af"
+    },
+    "olist_core.leads": {
+      "rows": 16000,
+      "sha256": "2330d4db11fe48e125273be5482c760f8d96212035777c1bf9b2bc5737d1c4eb"
+    },
+    "olist_core.sellers": {
+      "rows": 6190,
+      "sha256": "5f96e13846c983047c9aca5eb65ee8128594d07e10666fdc1155debd06bc9063"
+    },
+    "olist_core.deals": {
+      "rows": 1684,
+      "sha256": "3a934621daffa03ad2f1863580fe02b6a46fb114d0f58a628b8110702d49b0b4"
+    },
+    "olist_core.orders": {
+      "rows": 198882,
+      "sha256": "9ba775a4d5778a089cf2082190c92760bd64807dc2a072aad0b99ceb99a1feed"
+    },
+    "olist_core.items": {
+      "rows": 225300,
+      "sha256": "dad8bea4bc43203661a108ee02cdec1536786ea61ea454c6e22bfdd15c495e86"
+    },
+    "olist_mart.seller_funnel": {
+      "rows": 1684,
+      "sha256": "c429667d2358f364626a239eef050d81e6ca1fe09fcf856bce00cafc18682a7d"
+    },
+    "olist_mart.channel_funnel": {
+      "rows": 22,
+      "sha256": "151a8edfd5aaf0cd982e176ddccef081f15656ff0593d4d4c41bb2be39ecd9bb"
+    }
+  }
+}

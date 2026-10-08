@@ -1,0 +1,52 @@
+{
+  "diagnostic_mode": "model_planned_investigation",
+  "model_executed": true,
+  "model_execution_status": "returned",
+  "status": "abstained",
+  "stop_reason": "model_abstained",
+  "dataset_version": null,
+  "evidence": [],
+  "findings": [],
+  "limitations": [
+    "insufficient_evidence"
+  ],
+  "trace": [
+    {
+      "stage": "plan",
+      "output_sha256": "164c1a65d4416089115fbf3be1d66a74dc0bdbc85a13350dd98da6a2535902ad",
+      "generation_seconds": 2.653946459002327,
+      "prompt_token_ids_sha256": "fb527182d4cda5d17902e3d22dd4a2fd4c2348efa934512c8abac38ca2aa8e1c",
+      "disposition": "out_of_scope",
+      "intents": []
+    }
+  ],
+  "usage": {
+    "generation_attempts": 1,
+    "generations": 1,
+    "tool_calls": 0,
+    "prompt_tokens": 914,
+    "output_tokens": 9
+  },
+  "model": {
+    "model_id": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "mlx_lm_version": "0.32.0",
+    "mlx_version": "0.32.3",
+    "load_seconds": 2.4365715839667246
+  },
+  "model_id": "mlx-community/Qwen3-4B-4bit",
+  "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+  "prompt": {
+    "version": "olist-intent.v5",
+    "sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6"
+  },
+  "prompt_sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6",
+  "metric_policy": {
+    "version": "olist.metrics.v1",
+    "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+  },
+  "request_plan": {
+    "disposition": "out_of_scope",
+    "intents": []
+  }
+}

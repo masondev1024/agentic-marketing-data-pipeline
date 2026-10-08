@@ -1,0 +1,31 @@
+{
+  "selected": "olist-agent.v5",
+  "selected_source_matches_live_v5": true,
+  "reason": "v6 ties smoke score but misses required coverage finding; v7/v8 regress; preserve best observed grounded findings with strict quality gate still failed",
+  "other_candidates": [
+    {
+      "prompt_version": "olist-agent.v6",
+      "passed": 5,
+      "total": 6,
+      "source_batch": "f06d827c-d821-4b76-9d7f-e96338e5fabe",
+      "retained": false
+    },
+    {
+      "prompt_version": "olist-agent.v7",
+      "passed": 3,
+      "total": 6,
+      "source_batch": "1f805ad2-7ac3-4c09-bf8d-a516679fa63b",
+      "retained": false
+    },
+    {
+      "prompt_version": "olist-agent.v8",
+      "passed": 4,
+      "total": 6,
+      "source_batch": "c122ddae-2f07-40da-a25f-0c1d7a95fa63",
+      "retained": false
+    }
+  ],
+  "tuning_cycles": 5,
+  "stopped_by": "ultraqa maximum 5 cycles",
+  "created_at": "2026-10-08T00:30:58.778504+00:00"
+}

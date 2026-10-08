@@ -1,0 +1,12 @@
+{
+  "reviewer": "separate gpt-6-luna high agent",
+  "scope": "prompt safety boundaries, evidence claims, focused semantic-gate regression review",
+  "initial_findings": [
+    "Gate trusted stored structural PASS and could accept empty supported result or partial findings on refusal",
+    "Archived evidence scripts caused lint errors before explicit exclusion"
+  ],
+  "resolution": "Gate replays strict hashed manifest against actual results and baseline using score_case; stored summary must match. Ruff excludes only archived evidence.",
+  "focused_tests_passed": 20,
+  "remaining_actionable_findings_in_review_scope": [],
+  "reviewed_gate_sha256": "4ecfc1d8de67008cbe5413ac1f0bebae70e37e7856b4722caeb67812f56105e3"
+}

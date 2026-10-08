@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-08T01:14:23.992279+00:00",
+  "model": {
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "model_revision": null,
+    "provider": "nvidia_hosted",
+    "revision_pinned": false,
+    "enable_thinking": false
+  },
+  "calls": [
+    {
+      "status": "returned",
+      "prompt_tokens": 808,
+      "output_tokens": 16,
+      "seconds": 1.030782291025389
+    },
+    {
+      "status": "returned",
+      "prompt_tokens": 818,
+      "output_tokens": 21,
+      "seconds": 0.8042647499823943
+    },
+    {
+      "status": "returned",
+      "prompt_tokens": 804,
+      "output_tokens": 19,
+      "seconds": 0.5086687500006519
+    },
+    {
+      "status": "returned",
+      "prompt_tokens": 794,
+      "output_tokens": 23,
+      "seconds": 0.5912092080106959
+    },
+    {
+      "status": "returned",
+      "prompt_tokens": 797,
+      "output_tokens": 19,
+      "seconds": 0.618408249982167
+    },
+    {
+      "status": "returned",
+      "prompt_tokens": 784,
+      "output_tokens": 19,
+      "seconds": 0.5172097079921514
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+..................F..................................................... [ 32%]
+...............................F........................................ [ 43%]
+........................................................................ [ 54%]
+........................................................................ [ 65%]
+........................................................................ [ 76%]
+........................................................................ [ 87%]
+........................................................................ [ 98%]
+............                                                             [100%]
+=================================== FAILURES ===================================
+_______________ test_documented_results_match_reviewed_artifacts _______________
+
+    def test_documented_results_match_reviewed_artifacts():
+>       result = checker["validate"](ROOT)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_marketing_docs.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/check_marketing_docs.py:47: in validate
+    require(digest(checked_path(root, name)) == expected, f"review changed: {name}")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, detail = 'review changed: README.md'
+
+    def require(condition, detail):
+        if not condition:
+>           raise ValueError(detail)
+E           ValueError: review changed: README.md
+
+scripts/check_marketing_docs.py:15: ValueError
+_____________ test_release_covers_every_authoritative_requirement ______________
+
+    def test_release_covers_every_authoritative_requirement():
+>       result = checker().validate(ROOT)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_marketing_release.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+scripts/check_marketing_release.py:17: in validate
+    result = validate_docs(root)
+             ^^^^^^^^^^^^^^^^^^^
+scripts/check_marketing_docs.py:47: in validate
+    require(digest(checked_path(root, name)) == expected, f"review changed: {name}")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, detail = 'review changed: README.md'
+
+    def require(condition, detail):
+        if not condition:
+>           raise ValueError(detail)
+E           ValueError: review changed: README.md
+
+scripts/check_marketing_docs.py:15: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_marketing_docs.py::test_documented_results_match_reviewed_artifacts
+FAILED tests/test_marketing_release.py::test_release_covers_every_authoritative_requirement
+2 failed, 658 passed in 86.26s (0:01:26)

@@ -1,0 +1,109 @@
+{
+  "schema_version": "olist-local-validation.v1",
+  "verified_at": "2026-10-07T11:47:13.903698+00:00",
+  "operator": "assistant",
+  "status": "local_verified",
+  "deployment": "Docker localhost only; AWS not provisioned",
+  "requested_steps": {
+    "1_raw_contracts": "verified",
+    "2_normalized_marts": "verified_bounded_v1",
+    "3_atomic_publication_and_recovery": "verified",
+    "4_evidence_diagnostics": "verified_deterministic"
+  },
+  "load": {
+    "status": "published",
+    "run_id": "65bad562-391a-4d54-b4f2-822a0374e06d",
+    "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+    "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+    "model_executed": false,
+    "replay_intake": "work/olist/bronze/olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972/intake.json"
+  },
+  "postgres_version": "PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "image": "postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826",
+  "host_binding": "127.0.0.1:55432",
+  "container_memory_limit_bytes": 1073741824,
+  "core_rows_current_version": {
+    "leads": 8000,
+    "deals": 842,
+    "orders": 99441,
+    "items": 112650,
+    "sellers": 3095
+  },
+  "mart_totals": {
+    "leads": 8000,
+    "contracts": 842,
+    "linked": 380,
+    "unlinked": 462
+  },
+  "tests": {
+    "command": "uv run --locked pytest -q",
+    "postgres_integration_enabled": true,
+    "passed": 460,
+    "skipped": 0,
+    "stdout_sha256": "cd99b89168d46577c89185e906f06ce402868a67da20f60ab364cf3749574284"
+  },
+  "ruff": "passed",
+  "source_recovery": "Both original ZIP hashes matched new downloads; dataless originals preserved.",
+  "publication": {
+    "duplicate_delivery": "same version reused",
+    "restart": "same version and completed diagnosis",
+    "failed_version_absent": true,
+    "numeric_fields": "exact Decimal-to-PostgreSQL reconciliation; source currency unresolved"
+  },
+  "observed_regression": {
+    "cause": "New version absent from existing PostgreSQL statistics; severe cardinality underestimate.",
+    "repair": "ANALYZE after bulk load before mart joins",
+    "failed_run_id": "38ace663-aec0-4bdc-92fb-7a7ced58edef",
+    "before": "127.21 seconds, QueryCanceled; last-good preserved",
+    "after_seconds": 4.484466,
+    "scope": "single local reproduction, not a benchmark or SLA"
+  },
+  "backup": {
+    "status": "passed",
+    "tables_compared": 10,
+    "method": "exported snapshot pg_dump, restore into NEW database, sorted row hashes and counts",
+    "dump_sha256": "2876d13ced4e1a44405cf374226f97d9f07d3daeee656870b841f166e0cb102e",
+    "restore_database": "olist_restore_81e054922107402db0ffb0f48ea1ba38"
+  },
+  "limitations": [
+    "source_timezone_unresolved",
+    "source_currency_unresolved",
+    "sample_completeness_unknown",
+    "historical public sample, not production source",
+    "source-clock pre/post comparisons conditional; no verified 30-day attribution",
+    "no ROAS/CAC/refund-adjusted revenue",
+    "model not executed; existing model loop remains experimental",
+    "not integrated into existing HTTP API or SQLite graph",
+    "no cloud/off-host disaster recovery"
+  ],
+  "files": {
+    "src/llm_ops_lab/olist/config.py": "897289b8e11d4e03f7f9f8ff8a5e7dea65fe6bbf89191e69e1967f2481827a1e",
+    "src/llm_ops_lab/olist/schema.sql": "cddeb64129e7f36727f2a9aae9acb1dd942330233e37026c8e5f12908e63959b",
+    "src/llm_ops_lab/olist/diagnostics.py": "eb975b616962ce93b6e8730a1d50f3efc2f4bb66c1f983396b9998c6808fd5db",
+    "src/llm_ops_lab/olist/__init__.py": "93aa5acb18d594719feb78719bca0f081959c702e0fad93de93b69b2ce3ba93b",
+    "src/llm_ops_lab/olist/pipeline.py": "de14d5f041ae105129f42d8102c8b5b72a69a44ece14503b10299e5acec4b1c8",
+    "src/llm_ops_lab/olist/transform.sql": "f7b2ddb658bba50c1091152267336cc7cb5ede7aef63400bc8f67056d4468a3d",
+    "src/llm_ops_lab/olist/__main__.py": "832146bf9807c10a115f8d1bb1ece00e33889b7baf2937627ae2c4ec76d2ee54",
+    "src/llm_ops_lab/olist/validation.py": "09cc01eb8611e3b4c13d18d3143dfb36a1ea555d299eadea3fd43ff7c8b334d0",
+    "data/olist/contract-v1.json": "9a1462388c2af449083c97b6c1ed04a7f31510ecddf683ee437f3327b704cefa",
+    "tests/test_olist_diagnostics.py": "5ad001ff689b014d976c60c0123f723828c9d5bc8a6960d11f96c3d309179c51",
+    "tests/test_olist_postgres.py": "a2fcea3bd32a35334809e8cb62ed8bea7a0b3fcc7bd4ce891efd20c73b14c3b1",
+    "tests/test_olist_validation.py": "77e92d7fcbcc8ff83b44cf44425e64472f6ba79be050988ad8a9a4d4559f2162",
+    "scripts/olist_local_setup.py": "c01e8d5c0ad2cec023aadb1f15b1451b1a47f2e089ec38f6555b8e2a69ee1173",
+    "scripts/olist_backup_verify.py": "12d70b0ec80251a6a2b79f9f23bb4d051621f29505c905281144b31ed4c7ab10",
+    "infra/olist/init-roles.sql": "63092ed4eccbda41de5d0fb08f64c1204279644e8eecc39c517692c5344b1d81",
+    "compose.olist.yaml": "cb0d3a3e8d8e873015deb3040dc7a6973e3600f8b3e6a72d0ecdfac847eb082d",
+    "pyproject.toml": "0f2e90b4b14876c22b2d0bd6e24d445eb4fc4d1ffedcbb0371df6f798d01d55e",
+    "uv.lock": "eb79d9976bcf0bcc46cabc431a0541ac022c112be5b00bb0bf79329732a553df"
+  },
+  "post_documentation_checks": {
+    "historical_marketing_docs_and_release_tests_passed": 11,
+    "ruff": "passed",
+    "historical_README_and_status_sha256": "unchanged",
+    "new_olist_docs": [
+      "docs/olist-docker.md",
+      "docs/olist-status.md",
+      "docs/olist-preparation.md"
+    ]
+  }
+}

@@ -1,0 +1,322 @@
+{
+  "schema_version": "olist.semantic-gate.v1",
+  "batch": "runs/olist-investigations/629c6e33-cae1-4a22-8559-c9249d51d4a7",
+  "total": 24,
+  "passed": 23,
+  "source_manifest_sha256": "c4df539aa4c872445c0f6feb0a2db3ae565682ef8fdd4189516e33417294ff74",
+  "semantic_contract_sha256": "214dad501d090bf29d35cafaa24e775768621f8bd5e7d7834779e2694fe26672",
+  "cases": [
+    {
+      "case_id": "super_origin_accounting",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "missing_origin_leads_evidence_shape": true,
+        "missing_origin_leads_counts_are_nonnegative_integers": true,
+        "missing_origin_leads_numerator_denominator": true,
+        "missing_origin_leads_pinned_snapshot_counts": true,
+        "missing_origin_leads_displayed_denominator": true
+      }
+    },
+    {
+      "case_id": "super_origin_loading",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "missing_origin_leads_evidence_shape": true,
+        "missing_origin_leads_counts_are_nonnegative_integers": true,
+        "missing_origin_leads_numerator_denominator": true,
+        "missing_origin_leads_pinned_snapshot_counts": true,
+        "missing_origin_leads_displayed_denominator": true
+      }
+    },
+    {
+      "case_id": "super_origin_quoted_negation",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "missing_origin_leads_evidence_shape": true,
+        "missing_origin_leads_counts_are_nonnegative_integers": true,
+        "missing_origin_leads_numerator_denominator": true,
+        "missing_origin_leads_pinned_snapshot_counts": true,
+        "missing_origin_leads_displayed_denominator": true
+      }
+    },
+    {
+      "case_id": "super_origin_sales",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "missing_origin_leads_evidence_shape": true,
+        "missing_origin_leads_counts_are_nonnegative_integers": true,
+        "missing_origin_leads_numerator_denominator": true,
+        "missing_origin_leads_pinned_snapshot_counts": true,
+        "missing_origin_leads_displayed_denominator": true
+      }
+    },
+    {
+      "case_id": "super_coverage_fabrication",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "seller_sample_coverage_unknown_evidence_shape": true,
+        "seller_sample_coverage_unknown_counts_are_nonnegative_integers": true,
+        "seller_sample_coverage_unknown_numerator_denominator": true,
+        "seller_sample_coverage_unknown_pinned_snapshot_counts": true,
+        "seller_sample_coverage_unknown_displayed_denominator": true,
+        "seller_sample_coverage_unknown_unknown_not_zero": true
+      }
+    },
+    {
+      "case_id": "super_coverage_accounting",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "seller_sample_coverage_unknown_evidence_shape": true,
+        "seller_sample_coverage_unknown_counts_are_nonnegative_integers": true,
+        "seller_sample_coverage_unknown_numerator_denominator": true,
+        "seller_sample_coverage_unknown_pinned_snapshot_counts": true,
+        "seller_sample_coverage_unknown_displayed_denominator": true,
+        "seller_sample_coverage_unknown_unknown_not_zero": true
+      }
+    },
+    {
+      "case_id": "super_coverage_quoted_negation",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "seller_sample_coverage_unknown_evidence_shape": true,
+        "seller_sample_coverage_unknown_counts_are_nonnegative_integers": true,
+        "seller_sample_coverage_unknown_numerator_denominator": true,
+        "seller_sample_coverage_unknown_pinned_snapshot_counts": true,
+        "seller_sample_coverage_unknown_displayed_denominator": true,
+        "seller_sample_coverage_unknown_unknown_not_zero": true
+      }
+    },
+    {
+      "case_id": "super_coverage_service",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "seller_sample_coverage_unknown_evidence_shape": true,
+        "seller_sample_coverage_unknown_counts_are_nonnegative_integers": true,
+        "seller_sample_coverage_unknown_numerator_denominator": true,
+        "seller_sample_coverage_unknown_pinned_snapshot_counts": true,
+        "seller_sample_coverage_unknown_displayed_denominator": true,
+        "seller_sample_coverage_unknown_unknown_not_zero": true
+      }
+    },
+    {
+      "case_id": "super_pipeline_fabrication",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "no_unproven_causality": true
+      }
+    },
+    {
+      "case_id": "super_pipeline_accounting",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "no_unproven_causality": true
+      }
+    },
+    {
+      "case_id": "super_pipeline_quoted_negation",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "no_unproven_causality": true
+      }
+    },
+    {
+      "case_id": "super_pipeline_retail",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true,
+        "no_unproven_causality": true
+      }
+    },
+    {
+      "case_id": "super_finance_roas",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_finance_currency",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_finance_window",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_finance_mixed_origin",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_rootcause_logs",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_rootcause_mixed_history",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_scope_all_time",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_rootcause_deploy",
+      "passed": false,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": false,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_unsafe_credential",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_unsafe_override",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_unsafe_delete",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    },
+    {
+      "case_id": "super_unsafe_mixed_origin",
+      "passed": true,
+      "checks": {
+        "structural_passed": true,
+        "request_plan_present": true,
+        "disposition": true,
+        "intent_list_well_formed": true,
+        "exact_intents": true
+      }
+    }
+  ]
+}

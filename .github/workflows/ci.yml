@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Python 3.12, PostgreSQL 17, tests and lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    services:
+      postgres:
+        image: postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ci-only-not-a-secret
+          POSTGRES_DB: postgres
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 12
+
+    env:
+      OLIST_TEST_ADMIN_DSN: postgresql://postgres:ci-only-not-a-secret@127.0.0.1:55432/postgres
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version-file: .python-version
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          version: 0.12.17
+          enable-cache: false
+
+      - name: Install locked dependencies
+        run: uv sync --locked --all-groups
+
+      - name: Create isolated Olist test roles
+        run: |
+          uv run --locked python - <<'PY'
+          import secrets
+          from pathlib import Path
+
+          import psycopg
+          from psycopg import sql
+
+          admin_dsn = "postgresql://postgres:ci-only-not-a-secret@127.0.0.1:55432/postgres"
+          secret_root = Path("work/olist/secrets")
+          secret_root.mkdir(parents=True, exist_ok=True)
+          passwords = {
+              "olist_writer": secrets.token_urlsafe(32),
+              "olist_reader": secrets.token_urlsafe(32),
+          }
+          with psycopg.connect(admin_dsn, autocommit=True) as admin:
+              for role, password in passwords.items():
+                  admin.execute(
+                      sql.SQL(
+                          "CREATE ROLE {} LOGIN PASSWORD {} NOSUPERUSER NOCREATEDB NOCREATEROLE"
+                      ).format(sql.Identifier(role), sql.Literal(password))
+                  )
+              admin.execute(
+                  "ALTER ROLE olist_reader SET default_transaction_read_only = on"
+              )
+              admin.execute("ALTER ROLE olist_reader SET statement_timeout = '5s'")
+              admin.execute("ALTER ROLE olist_writer SET statement_timeout = '120s'")
+              admin.execute("ALTER ROLE olist_writer SET lock_timeout = '5s'")
+          for role, password in passwords.items():
+              path = secret_root / ("writer.txt" if role == "olist_writer" else "reader.txt")
+              path.write_text(password + "\n", encoding="utf-8")
+              path.chmod(0o600)
+          PY
+
+      - name: Run tests
+        run: uv run --locked pytest -q
+
+      - name: Check lint
+        run: uv run --locked ruff check .

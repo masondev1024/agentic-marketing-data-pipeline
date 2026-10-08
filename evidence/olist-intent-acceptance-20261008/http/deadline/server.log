@@ -1,0 +1,13 @@
+INFO:     Started server process [65339]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:61272 (Press CTRL+C to quit)
+INFO:     Shutting down
+Worker failure; recovering within restart budget
+Traceback (most recent call last):
+  File "/Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/src/llm_ops_lab/service.py", line 263, in _serve
+    raise RuntimeError("Worker exited while idle")
+RuntimeError: Worker exited while idle
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [65339]

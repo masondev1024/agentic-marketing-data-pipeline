@@ -1,0 +1,3381 @@
+{
+  "scope": "Assistant verification; original development set plus author-visible challenge now used for regression development; not independent held-out",
+  "design": "# Retrieval scope v2 — bounded design and execution\n\nExisting failure: retry-unknown-seconds has coverage .3735 because exactness/time interrogatives\ncontribute unmatched high-IDF bigrams. private-backfill has .5202 and selects a synthetic document.\n\nDecision: preserve baseline as --retriever baseline; add --retriever scoped-v2.\n1. Validate scope.json (schema, synthetic_reference evidence kind, exact filename->content hash map).\n   Missing/stale/malformed metadata is an input failure for v2, not an empty retrieval result.\n2. A versioned deterministic query policy records original/effective search terms and evidence need.\n   Remove only bounded precision/quantity question expressions for ranking. Keep original model question.\n   Company/temporal/instance-specific operational field requests cannot use synthetic reference evidence.\n   General team design questions are not blocked just because they mention the company.\n3. Preserve score threshold/tie handling and existing doc body inputs. Record policy + metadata hashes.\n4. Snapshot scope.json for evaluation, validate exact snapshot hash in child results, keep raw history.\n\nTradeoffs: fixed documented language heuristics are inspectable but incomplete. They are not intent\nunderstanding, access control, or an evidence-entailment proof. No support for private/live record\ncorpora is added; those need structured entity/time/version boundaries in a future connector.\nGlobal lower threshold would worsen false selection; embedding changes alone cannot establish scope.\nLLM intent classification would add cost and another uncalibrated model decision, deferred here.\n\nAcceptance: original 20 development questions improve from 18 to 20 expected selections/refusals;\nno original matched cases regress; timeout/recording invariants hold; scope errors precede inference;\nsource tampering detected; standalone corpus paths preserve original messages. Actual 4B generation\nmust be checked on recovered unknown-value question; do not equate retrieval selection to truthful output.\nFresh 20-question challenge set is frozen before algorithm execution against it. It is author-visible,\nnot independent held-out. Report all results unchanged; no post-evaluation rule/label adjustment.\n\nUnit/integration: metadata missing/stale/schema, snapshot consistency, generic vs actual record queries,\nno model import for unsupported scope, unsupported unit unrelated question, ambiguity, unchanged baseline.\nRun pytest/ruff plus search-only batches (two retrievers, two datasets), then one full 4B v2 development\nbatch and read the new answers. Keep baseline default for explicit rollback/compatibility this milestone.\n\n## Recorded first challenge result and plan amendment\n\nFirst frozen query-scope.v1 run: development 20/20; challenge 14/20 versus baseline 14/20.\nA new false selection occurred because substring `정의` matched inside `설정의`, misclassifying an\nactual company configuration request as conceptual. Preserve these first-run artifacts unchanged.\nAmend the no-post-evaluation-adjustment plan only for this explicit boundary bug: query-scope.v2\nuses a word boundary for definition/meaning phrases and adds both positive/negative regression tests.\nChallenge is now development-used; second results cannot be reported as first-look or independent\nheld-out. Do not tune rules for the five lexical false negatives; leave them as measured limitations.\n",
+  "contract": {
+    "schema_version": "corpus-scope.v1",
+    "evidence_kind": "synthetic_reference",
+    "documents": {
+      "backfill.md": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c",
+      "idempotency.md": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4",
+      "retry.md": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+    }
+  },
+  "challenge_lock": {
+    "sha256": "94fa33853537f030def932cf940af03d430b19ddf1a3e6128b00257dd69d86b5",
+    "scope": "author-visible challenge written before first run; not independent held-out"
+  },
+  "first_trial": {
+    "development_baseline": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "82f326ea-6aba-45ff-b4f6-93c717f6834e",
+        "created_at": "2026-10-06T14:49:32.790772+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": true,
+        "offline": false,
+        "retriever_variant": "baseline",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "658cd67dbac1fc292f7858b3659c94ced11687572546a9f636f50b58908f0f9f",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "82f326ea-6aba-45ff-b4f6-93c717f6834e",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 18,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 15,
+            "retrieval_pass": 14
+          },
+          "out_of_scope": {
+            "total": 5,
+            "retrieval_pass": 4
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "idempotency-why",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-why/f1c8b7e2-944e-43d9-974f-afd0c0b61bc6.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=1.000 | matched=등성,멱등\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13178233400685713
+          },
+          {
+            "case_id": "idempotency-definition",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-definition/7a2506cd-eb60-439e-a3ca-d8ef1890c6ee.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.525 | matched=같은,등성,멱등,성질,수행,여러,작업,최종,효과\ncorpus/backfill.md | score=0.102 | matched=보장,작업\ncorpus/retry.md | score=0.044 | matched=같은",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.07733174995519221
+          },
+          {
+            "case_id": "idempotency-sales",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-sales/351256f1-d96e-48d4-aee5-a3647588ce4d.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.572 | matched=같은,더하,때마,마다,매출,방지,벤트,송될,이벤,재전,전송,주문,지하,하면\ncorpus/backfill.md | score=0.103 | matched=문제,지하,하면\ncorpus/retry.md | score=0.059 | matched=같은,하면",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1278443749761209
+          },
+          {
+            "case_id": "idempotency-atomic",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-atomic/ce3713a3-0310-4525-8135-2f51bfde4964.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.714 | matched=id,결과,등한,멱등,반영,벤트,수행,원자,이벤,인과,자적,처리,행해,확인\ncorpus/backfill.md | score=0.250 | matched=id,결과,원자,처리,해야,확인\ncorpus/retry.md | score=0.212 | matched=반영,처리,하는,해야,확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12717695900937542
+          },
+          {
+            "case_id": "idempotency-recovery",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-recovery/8e25d00e-5a6a-43ab-9bfa-f6fddf75f383.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.646 | matched=금지,등성,멱등,시도,장애,재시,지해\ncorpus/retry.md | score=0.245 | matched=시도,재시,해야\ncorpus/backfill.md | score=0.070 | matched=해야",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12571875000139698
+          },
+          {
+            "case_id": "retry-policy",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-policy/7bfc1b07-6bb0-4bcd-ba76-acd8ed14a57a.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.812 | matched=api,간격,시도,시적,오류,일시,재시,적인,최대,횟수\ncorpus/idempotency.md | score=0.171 | matched=시도,재시,적인\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12639124999986961
+          },
+          {
+            "case_id": "retry-jitter",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-jitter/3ab5bfca-3c53-4076-bab6-bb2104c42cdb.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.759 | matched=backoff,exponential,jitter,간격,시도,재시,적용\ncorpus/idempotency.md | score=0.277 | matched=시도,용하,재시\ncorpus/backfill.md | score=0.084 | matched=적용",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12093891703989357
+          },
+          {
+            "case_id": "retry-auth",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-auth/ec0d9b4e-e6d2-4b8b-a942-8927802450aa.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.627 | matched=api,같은,권한,류나,못된,반복,시도,오류,요청,잘못,재시,즉시\ncorpus/idempotency.md | score=0.118 | matched=같은,시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13129724998725578
+          },
+          {
+            "case_id": "retry-timeout",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-timeout/213aeeba-51c2-4e98-809f-9da98c64593b.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.723 | matched=api,내기,다시,보내,쓰기,아웃,요청,임아,전에,타임,해야,확인\ncorpus/backfill.md | score=0.241 | matched=다시,쓰기,전에,해야,확인\ncorpus/idempotency.md | score=0.039 | matched=확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12480591697385535
+          },
+          {
+            "case_id": "retry-unknown-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-unknown-seconds/a43f6860-21c9-4cb4-8f80-44f0424d24ba.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.344 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.180 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12915204197634012
+          },
+          {
+            "case_id": "backfill-prepare",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-prepare/94ce673b-f220-471b-bd70-201966cbb7b7.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.758 | matched=간과,고정,구간,대상,백필,버전,시작,전에,해야\ncorpus/retry.md | score=0.212 | matched=전에,정해,해야\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12735954095842317
+          },
+          {
+            "case_id": "backfill-validation",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-validation/40c96854-32bd-47a9-8fad-8faad5b105a2.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.721 | matched=검증,교체,백필,임시,전에,출력,티션,파티\ncorpus/retry.md | score=0.066 | matched=전에\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12750779202906415
+          },
+          {
+            "case_id": "backfill-recovery",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-recovery/fbba0486-4c4d-4ce7-9b87-1ee1872de011.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.458 | matched=검증,교체,문제,백필,복구,실패,티션,파티,패하\ncorpus/retry.md | score=0.079 | matched=실패,패하\ncorpus/idempotency.md | score=0.040 | matched=복구",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13324304204434156
+          },
+          {
+            "case_id": "backfill-concurrency",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-concurrency/b7838e80-3e0e-471e-9cd0-3e023aba3cef.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.652 | matched=간과,구간,백필,인하,작업,정기,제한,출력,하고,현재,확인\ncorpus/idempotency.md | score=0.173 | matched=인하,작업,하고,확인\ncorpus/retry.md | score=0.075 | matched=하고,확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12915375002194196
+          },
+          {
+            "case_id": "backfill-checkpoint",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-checkpoint/6912b6b3-927c-404c-ac82-01cd05c10bd1.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.522 | matched=기록,다시,단된,백필,범위,부터,시작,위부,작업,중단\ncorpus/retry.md | score=0.131 | matched=기록,다시,록하\ncorpus/idempotency.md | score=0.075 | matched=기록,작업",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12920212501194328
+          },
+          {
+            "case_id": "unknown-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-weather/968f126f-1b36-4dae-9304-5c6f52676476.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12863608304178342
+          },
+          {
+            "case_id": "unknown-food",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-food/00359e9d-4e9b-47ff-bd02-1b2300aa1380.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13185983302537352
+          },
+          {
+            "case_id": "unknown-private-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-incident/06ef6b8f-9e15-40a6-bfd3-68aca7562017.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.376 | matched=api,시도,실제,오류,재시,횟수\ncorpus/idempotency.md | score=0.258 | matched=시도,실제,인과,장애,재시\ncorpus/backfill.md | score=0.037 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.07798199995886534
+          },
+          {
+            "case_id": "unknown-private-backfill",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-backfill/66aa437a-b2a7-42ee-8dac-3563b9c6f139.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.433 | matched=id,백필,실제,실행,위치,작업,출력\ncorpus/idempotency.md | score=0.144 | matched=id,실제,작업\ncorpus/retry.md | score=0.040 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12791641696821898
+          },
+          {
+            "case_id": "unknown-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-planet/591b0492-bcea-4739-8a90-494b1898aba2.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12801024998771027
+          }
+        ]
+      }
+    },
+    "development_scoped": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "0b447029-20e0-4acb-8d06-ec13a43bdaf1",
+        "created_at": "2026-10-06T14:49:35.355253+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": true,
+        "offline": false,
+        "retriever_variant": "scoped-v2",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "658cd67dbac1fc292f7858b3659c94ced11687572546a9f636f50b58908f0f9f",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "0b447029-20e0-4acb-8d06-ec13a43bdaf1",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 20,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 15,
+            "retrieval_pass": 15
+          },
+          "out_of_scope": {
+            "total": 5,
+            "retrieval_pass": 5
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "idempotency-why",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-why/2b5e4c3c-8004-4ba5-b279-ffcca0a430c8.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=1.000 | matched=등성,멱등\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1305403340375051
+          },
+          {
+            "case_id": "idempotency-definition",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-definition/acca6f22-7569-45ea-a6f8-86613bb0c847.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.525 | matched=같은,등성,멱등,성질,수행,여러,작업,최종,효과\ncorpus/backfill.md | score=0.102 | matched=보장,작업\ncorpus/retry.md | score=0.044 | matched=같은",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12776799994753674
+          },
+          {
+            "case_id": "idempotency-sales",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-sales/e2b8e563-1262-48df-b422-ed8729ec6d58.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.572 | matched=같은,더하,때마,마다,매출,방지,벤트,송될,이벤,재전,전송,주문,지하,하면\ncorpus/backfill.md | score=0.103 | matched=문제,지하,하면\ncorpus/retry.md | score=0.059 | matched=같은,하면",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12882470904150978
+          },
+          {
+            "case_id": "idempotency-atomic",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-atomic/e6105238-0db5-404f-95fc-ca97c6b6c000.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.714 | matched=id,결과,등한,멱등,반영,벤트,수행,원자,이벤,인과,자적,처리,행해,확인\ncorpus/backfill.md | score=0.250 | matched=id,결과,원자,처리,해야,확인\ncorpus/retry.md | score=0.212 | matched=반영,처리,하는,해야,확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12472929200157523
+          },
+          {
+            "case_id": "idempotency-recovery",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-recovery/d95f4cb1-895e-4b57-9069-6a9999f3fccd.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.646 | matched=금지,등성,멱등,시도,장애,재시,지해\ncorpus/retry.md | score=0.245 | matched=시도,재시,해야\ncorpus/backfill.md | score=0.070 | matched=해야",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13280562503496185
+          },
+          {
+            "case_id": "retry-policy",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-policy/f700ed8d-88f0-4989-9250-2b27a24cf998.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.812 | matched=api,간격,시도,시적,오류,일시,재시,적인,최대,횟수\ncorpus/idempotency.md | score=0.171 | matched=시도,재시,적인\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12986291700508446
+          },
+          {
+            "case_id": "retry-jitter",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-jitter/9bb1bf5d-8176-4ec4-a8ce-c98e8a222813.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.759 | matched=backoff,exponential,jitter,간격,시도,재시,적용\ncorpus/idempotency.md | score=0.277 | matched=시도,용하,재시\ncorpus/backfill.md | score=0.084 | matched=적용",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1220111669972539
+          },
+          {
+            "case_id": "retry-auth",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-auth/80937251-4993-41dc-bba1-17a6ebe01928.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.627 | matched=api,같은,권한,류나,못된,반복,시도,오류,요청,잘못,재시,즉시\ncorpus/idempotency.md | score=0.118 | matched=같은,시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13257791701471433
+          },
+          {
+            "case_id": "retry-timeout",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-timeout/fafb42b0-3af0-4842-9aa3-23c71d147246.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.723 | matched=api,내기,다시,보내,쓰기,아웃,요청,임아,전에,타임,해야,확인\ncorpus/backfill.md | score=0.241 | matched=다시,쓰기,전에,해야,확인\ncorpus/idempotency.md | score=0.039 | matched=확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12462112499633804
+          },
+          {
+            "case_id": "retry-unknown-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-unknown-seconds/82eb3e7d-2e6f-403f-86a4-4c34756fe16f.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.921 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.483 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12950504198670387
+          },
+          {
+            "case_id": "backfill-prepare",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-prepare/34f1a17a-624b-492f-b81a-8ad3ab193b8e.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.758 | matched=간과,고정,구간,대상,백필,버전,시작,전에,해야\ncorpus/retry.md | score=0.212 | matched=전에,정해,해야\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1276539159589447
+          },
+          {
+            "case_id": "backfill-validation",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-validation/fca0316e-9c67-4674-b3d9-737920261663.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.721 | matched=검증,교체,백필,임시,전에,출력,티션,파티\ncorpus/retry.md | score=0.066 | matched=전에\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12976312497630715
+          },
+          {
+            "case_id": "backfill-recovery",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-recovery/64889342-d983-4977-9f40-9e07ac58135d.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.458 | matched=검증,교체,문제,백필,복구,실패,티션,파티,패하\ncorpus/retry.md | score=0.079 | matched=실패,패하\ncorpus/idempotency.md | score=0.040 | matched=복구",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1251628749887459
+          },
+          {
+            "case_id": "backfill-concurrency",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-concurrency/cadea4cf-1f42-47da-9ded-0191b1f0784b.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.652 | matched=간과,구간,백필,인하,작업,정기,제한,출력,하고,현재,확인\ncorpus/idempotency.md | score=0.173 | matched=인하,작업,하고,확인\ncorpus/retry.md | score=0.075 | matched=하고,확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12240337498951703
+          },
+          {
+            "case_id": "backfill-checkpoint",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-checkpoint/c83550e1-7751-4176-a534-676c93abd1ce.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.522 | matched=기록,다시,단된,백필,범위,부터,시작,위부,작업,중단\ncorpus/retry.md | score=0.131 | matched=기록,다시,록하\ncorpus/idempotency.md | score=0.075 | matched=기록,작업",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13007412501610816
+          },
+          {
+            "case_id": "unknown-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-weather/a652e871-b674-4d6f-bfe1-e2b1a3e84123.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13052604196127504
+          },
+          {
+            "case_id": "unknown-food",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-food/a99ed036-f860-49ca-a2bd-c764e70088dc.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13085262500680983
+          },
+          {
+            "case_id": "unknown-private-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-incident/fcdcd206-2326-4dfd-8a44-3a11718f8040.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/retry.md | score=0.376 | matched=api,시도,실제,오류,재시,횟수\ncorpus/idempotency.md | score=0.258 | matched=시도,실제,인과,장애,재시\ncorpus/backfill.md | score=0.037 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12673270801315084
+          },
+          {
+            "case_id": "unknown-private-backfill",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-backfill/2f3bee56-c9b1-4549-b118-902f03e08f52.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.433 | matched=id,백필,실제,실행,위치,작업,출력\ncorpus/idempotency.md | score=0.144 | matched=id,실제,작업\ncorpus/retry.md | score=0.040 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12942816695431247
+          },
+          {
+            "case_id": "unknown-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-planet/13c0480a-5843-4cbc-9f40-f1153f311b23.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12874795799143612
+          }
+        ]
+      }
+    },
+    "challenge_baseline": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "a51249c6-a7bd-403f-9ee8-2dc11a3c512e",
+        "created_at": "2026-10-06T14:49:38.020503+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "94fa33853537f030def932cf940af03d430b19ddf1a3e6128b00257dd69d86b5",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": true,
+        "offline": false,
+        "retriever_variant": "baseline",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "658cd67dbac1fc292f7858b3659c94ced11687572546a9f636f50b58908f0f9f",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "a51249c6-a7bd-403f-9ee8-2dc11a3c512e",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 14,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 10,
+            "retrieval_pass": 5
+          },
+          "out_of_scope": {
+            "total": 10,
+            "retrieval_pass": 9
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "time-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/time-seconds/52e6e14a-0d56-439e-a0a1-d175edab4802.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.243 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.127 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12684508401434869
+          },
+          {
+            "case_id": "attempt-cap",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/attempt-cap/14964305-8d1b-4b19-9bef-ec0f980a8d48.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.178 | matched=시도,재시\ncorpus/idempotency.md | score=0.142 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1259091249667108
+          },
+          {
+            "case_id": "team-retry-design",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/team-retry-design/586a3dce-6cc9-4294-a48b-c8783f4f1482.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.342 | matched=시도,재시,하는,해야,횟수\ncorpus/backfill.md | score=0.129 | matched=제한,해야\ncorpus/idempotency.md | score=0.111 | matched=시도,재시",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.07751412503421307
+          },
+          {
+            "case_id": "team-checkpoint-design",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/team-checkpoint-design/6563024a-11c7-4a05-988d-60b9b37f43e0.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.541 | matched=id,기록,록해,백필,실행,해야\ncorpus/idempotency.md | score=0.136 | matched=id,기록\ncorpus/retry.md | score=0.136 | matched=기록,해야",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.11930399999255314
+          },
+          {
+            "case_id": "backfill-null",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-null/1529a7c7-60c2-43c3-8aec-392748398134.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.703 | matched=검증,누락,백필,인하,중복,필수,확인\ncorpus/idempotency.md | score=0.225 | matched=인하,중복,확인\ncorpus/retry.md | score=0.063 | matched=확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12604558398015797
+          },
+          {
+            "case_id": "repeat-effect",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/repeat-effect/daf99350-caa2-49f0-9f55-5f644dc66312.json",
+            "output": "검색 판정: low_overlap\ncorpus/idempotency.md | score=0.321 | matched=등성,멱등,최종,효과\ncorpus/retry.md | score=0.214 | matched=반복,수와,횟수\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1299342910060659
+          },
+          {
+            "case_id": "transaction-reason",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/transaction-reason/3af9670a-d217-4196-b063-8ec3d5573e29.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.693 | matched=id,고유,랜잭,벤트,이력,이벤,잭션,저장,주문,처리,트랜\ncorpus/backfill.md | score=0.402 | matched=id,고유,랜잭,잭션,저장,처리,트랜\ncorpus/retry.md | score=0.045 | matched=처리",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13709262502379715
+          },
+          {
+            "case_id": "restore-result",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/restore-result/865efe77-3acd-4037-8317-b1c40318b4f1.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.478 | matched=검증,결과,기존,백필,버전,실패,이전\ncorpus/idempotency.md | score=0.120 | matched=결과,용하\ncorpus/retry.md | score=0.052 | matched=실패",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12403637502575293
+          },
+          {
+            "case_id": "time-minutes",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/time-minutes/e5aca532-12b0-49f1-87d6-6a97e722bdda.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.295 | matched=간격,시도,예시,재시\ncorpus/idempotency.md | score=0.184 | matched=시도,예시,재시\ncorpus/backfill.md | score=0.081 | matched=고정",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.076754208013881
+          },
+          {
+            "case_id": "backoff-load",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/backoff-load/b361e47e-b131-44f0-aba3-10f3a5eb70f5.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.594 | matched=api,backoff,jitter,과부,부하\ncorpus/backfill.md | score=0.108 | matched=이나\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12974850001046434
+          },
+          {
+            "case_id": "team-last-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/team-last-run/2adbe5a8-998b-43d8-895a-7661c0c99479.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.341 | matched=id,백필,실행,출력\ncorpus/idempotency.md | score=0.065 | matched=id\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12394966598367319
+          },
+          {
+            "case_id": "company-cap",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/company-cap/a7ae0d60-f1ba-49b6-ae3b-311df9ac2730.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.386 | matched=설정,시도,재시,최대,횟수\ncorpus/idempotency.md | score=0.120 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12010091700358316
+          },
+          {
+            "case_id": "today-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/today-incident/b8deaf40-b186-47dd-91cb-596c31da5b83.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.131 | matched=api\ncorpus/idempotency.md | score=0.105 | matched=장애\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13170091598294675
+          },
+          {
+            "case_id": "last-row-count",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/last-row-count/daeb6881-c9c8-445c-9c9a-1edf882a59d5.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.346 | matched=건수,백필,실행,처리\ncorpus/idempotency.md | score=0.051 | matched=처리\ncorpus/retry.md | score=0.051 | matched=처리",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1303164170240052
+          },
+          {
+            "case_id": "mixed-record-design",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/mixed-record-design/5d1f6c71-addc-4e22-b65d-e51372513021.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.189 | matched=id,리와,실행\ncorpus/idempotency.md | score=0.143 | matched=id,시도,재시\ncorpus/retry.md | score=0.119 | matched=시도,재시",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12765725003555417
+          },
+          {
+            "case_id": "specific-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/specific-run/73b0b5ae-92b7-45cd-92b9-0b6a648d1447.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.360 | matched=백필,위치,출력\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12983220804017037
+          },
+          {
+            "case_id": "dated-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/dated-run/d8c6d4ba-2546-4aa7-9f50-59d0dc70f2dc.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.446 | matched=id,백필,실행,위치,출력\ncorpus/idempotency.md | score=0.068 | matched=id\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1258905419963412
+          },
+          {
+            "case_id": "busan-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/busan-weather/61bf999b-9ee4-46d3-b6ff-c0537e5297f5.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.130803374981042
+          },
+          {
+            "case_id": "private-offset",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/private-offset/72f23f07-ef1b-4e92-8c72-0312026fcaac.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.052 | matched=실제\ncorpus/idempotency.md | score=0.052 | matched=실제\ncorpus/retry.md | score=0.052 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13003049994586036
+          },
+          {
+            "case_id": "mixed-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/mixed-planet/8c5cc118-61d1-4e18-b309-9694e4f67a3a.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.243 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.127 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12568004202330485
+          }
+        ]
+      }
+    },
+    "challenge_scoped": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "3b8ec147-17f7-4b5c-b9f8-227b7c504f90",
+        "created_at": "2026-10-06T14:49:40.573086+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "94fa33853537f030def932cf940af03d430b19ddf1a3e6128b00257dd69d86b5",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": true,
+        "offline": false,
+        "retriever_variant": "scoped-v2",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "658cd67dbac1fc292f7858b3659c94ced11687572546a9f636f50b58908f0f9f",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "3b8ec147-17f7-4b5c-b9f8-227b7c504f90",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 14,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 10,
+            "retrieval_pass": 5
+          },
+          "out_of_scope": {
+            "total": 10,
+            "retrieval_pass": 9
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "time-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/time-seconds/10effcb2-66ed-4d8d-93bb-00a7140fd339.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.435 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.228 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13274779199855402
+          },
+          {
+            "case_id": "attempt-cap",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/attempt-cap/d7027a84-1890-4d45-9522-96a1d40e09e7.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.212 | matched=시도,재시\ncorpus/idempotency.md | score=0.170 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12404012499609962
+          },
+          {
+            "case_id": "team-retry-design",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/team-retry-design/955a3fcc-917d-4714-8d31-f7db6baf8e23.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.342 | matched=시도,재시,하는,해야,횟수\ncorpus/backfill.md | score=0.129 | matched=제한,해야\ncorpus/idempotency.md | score=0.111 | matched=시도,재시",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12862562498776242
+          },
+          {
+            "case_id": "team-checkpoint-design",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/team-checkpoint-design/2ef04c0f-85c3-4f05-8426-a8413137a4ee.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.541 | matched=id,기록,록해,백필,실행,해야\ncorpus/idempotency.md | score=0.136 | matched=id,기록\ncorpus/retry.md | score=0.136 | matched=기록,해야",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12753699999302626
+          },
+          {
+            "case_id": "backfill-null",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-null/67cd5d07-8719-488a-a7d5-a786cfe9c8a3.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.703 | matched=검증,누락,백필,인하,중복,필수,확인\ncorpus/idempotency.md | score=0.225 | matched=인하,중복,확인\ncorpus/retry.md | score=0.063 | matched=확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1265158750466071
+          },
+          {
+            "case_id": "repeat-effect",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/repeat-effect/b7f35af4-bb15-475c-ba09-ef8abe45078d.json",
+            "output": "검색 판정: low_overlap\ncorpus/idempotency.md | score=0.321 | matched=등성,멱등,최종,효과\ncorpus/retry.md | score=0.214 | matched=반복,수와,횟수\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12784116598777473
+          },
+          {
+            "case_id": "transaction-reason",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/transaction-reason/7d6c7596-b53f-476c-9a59-b40b4475ad26.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.693 | matched=id,고유,랜잭,벤트,이력,이벤,잭션,저장,주문,처리,트랜\ncorpus/backfill.md | score=0.402 | matched=id,고유,랜잭,잭션,저장,처리,트랜\ncorpus/retry.md | score=0.045 | matched=처리",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13170516601530835
+          },
+          {
+            "case_id": "restore-result",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/restore-result/411e001c-392d-4b72-af88-4cfcfb54a9f9.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.478 | matched=검증,결과,기존,백필,버전,실패,이전\ncorpus/idempotency.md | score=0.120 | matched=결과,용하\ncorpus/retry.md | score=0.052 | matched=실패",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13378891599131748
+          },
+          {
+            "case_id": "time-minutes",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/time-minutes/d6dc455d-89dc-4e59-aaf9-3b4e3fa2a9b3.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.413 | matched=간격,시도,예시,재시\ncorpus/idempotency.md | score=0.257 | matched=시도,예시,재시\ncorpus/backfill.md | score=0.113 | matched=고정",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12620366702321917
+          },
+          {
+            "case_id": "backoff-load",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/backoff-load/ab2bae72-2231-49a7-a5d1-188bf33aba2d.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.594 | matched=api,backoff,jitter,과부,부하\ncorpus/backfill.md | score=0.108 | matched=이나\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13000666699372232
+          },
+          {
+            "case_id": "team-last-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/team-last-run/a769e3be-51d8-4016-8793-3ec65ddd6aab.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.341 | matched=id,백필,실행,출력\ncorpus/idempotency.md | score=0.065 | matched=id\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13158962497254834
+          },
+          {
+            "case_id": "company-cap",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/company-cap/5068b9ed-ee60-4ce5-b8be-6dc8431dfd0e.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.661 | matched=설정,시도,재시,최대,횟수\ncorpus/idempotency.md | score=0.205 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12868112500291318
+          },
+          {
+            "case_id": "today-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/today-incident/ffa02cb5-94e6-42c7-a81d-156cc81eb151.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/retry.md | score=0.131 | matched=api\ncorpus/idempotency.md | score=0.105 | matched=장애\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12895812501665205
+          },
+          {
+            "case_id": "last-row-count",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/last-row-count/f557927b-b761-42d4-b5ef-21bf874e34b8.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.346 | matched=건수,백필,실행,처리\ncorpus/idempotency.md | score=0.051 | matched=처리\ncorpus/retry.md | score=0.051 | matched=처리",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12826050003059208
+          },
+          {
+            "case_id": "mixed-record-design",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/mixed-record-design/d7354505-4700-4734-afea-6d49368014bd.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.189 | matched=id,리와,실행\ncorpus/idempotency.md | score=0.143 | matched=id,시도,재시\ncorpus/retry.md | score=0.119 | matched=시도,재시",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1289778749924153
+          },
+          {
+            "case_id": "specific-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/specific-run/50adaa75-5999-42e7-b8d7-fa4e101b1e62.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.360 | matched=백필,위치,출력\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12362095800926909
+          },
+          {
+            "case_id": "dated-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/dated-run/60582a00-549e-4b3f-b631-0bfd62f7aa1d.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.446 | matched=id,백필,실행,위치,출력\ncorpus/idempotency.md | score=0.068 | matched=id\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12692108401097357
+          },
+          {
+            "case_id": "busan-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/busan-weather/0dc2d0b0-7f09-4d90-870d-abd3fcd02a34.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12947191699640825
+          },
+          {
+            "case_id": "private-offset",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/private-offset/ab10dfb8-4a48-4bd6-821a-336e2f322aa3.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.052 | matched=실제\ncorpus/idempotency.md | score=0.052 | matched=실제\ncorpus/retry.md | score=0.052 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1323336249915883
+          },
+          {
+            "case_id": "mixed-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/mixed-planet/0a051fd3-e2b1-41f9-9a9e-e370240eff28.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.243 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.127 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12640983297023922
+          }
+        ]
+      }
+    }
+  },
+  "first_trial_issue": "query-scope.v1 matched 정의 inside 설정의; preserved as failure then fixed word boundary in query-scope.v2",
+  "final_batches": {
+    "development_baseline": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "915f24cb-ce1a-427b-864c-c2989b4965ce",
+        "created_at": "2026-10-06T14:51:37.366020+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": true,
+        "offline": false,
+        "retriever_variant": "baseline",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "1afd26820b6f5ebbf7cd2c96a3eae764ab181de12a2da143f43f73321928025e",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "915f24cb-ce1a-427b-864c-c2989b4965ce",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 18,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 15,
+            "retrieval_pass": 14
+          },
+          "out_of_scope": {
+            "total": 5,
+            "retrieval_pass": 4
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "idempotency-why",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-why/186ab2ba-7f18-4760-88e1-b07c750c898c.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=1.000 | matched=등성,멱등\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12975550000555813
+          },
+          {
+            "case_id": "idempotency-definition",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-definition/bccab037-ba57-45f7-b7d9-b645e999cdfa.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.525 | matched=같은,등성,멱등,성질,수행,여러,작업,최종,효과\ncorpus/backfill.md | score=0.102 | matched=보장,작업\ncorpus/retry.md | score=0.044 | matched=같은",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1302717090002261
+          },
+          {
+            "case_id": "idempotency-sales",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-sales/ef100249-1057-4341-9168-2bb63678c95c.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.572 | matched=같은,더하,때마,마다,매출,방지,벤트,송될,이벤,재전,전송,주문,지하,하면\ncorpus/backfill.md | score=0.103 | matched=문제,지하,하면\ncorpus/retry.md | score=0.059 | matched=같은,하면",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12781224999343976
+          },
+          {
+            "case_id": "idempotency-atomic",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-atomic/5efe833c-2817-43bd-a838-686f2ca3be24.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.714 | matched=id,결과,등한,멱등,반영,벤트,수행,원자,이벤,인과,자적,처리,행해,확인\ncorpus/backfill.md | score=0.250 | matched=id,결과,원자,처리,해야,확인\ncorpus/retry.md | score=0.212 | matched=반영,처리,하는,해야,확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12899129203287885
+          },
+          {
+            "case_id": "idempotency-recovery",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-recovery/9b0d3e7f-ac0b-4c75-b9a1-2f84d58e355c.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.646 | matched=금지,등성,멱등,시도,장애,재시,지해\ncorpus/retry.md | score=0.245 | matched=시도,재시,해야\ncorpus/backfill.md | score=0.070 | matched=해야",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.127799584006425
+          },
+          {
+            "case_id": "retry-policy",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-policy/1d3719d4-048e-40d8-96a1-830c3b6f5f24.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.812 | matched=api,간격,시도,시적,오류,일시,재시,적인,최대,횟수\ncorpus/idempotency.md | score=0.171 | matched=시도,재시,적인\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1291680419817567
+          },
+          {
+            "case_id": "retry-jitter",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-jitter/5bdde926-9d71-4e72-beec-ceae20d57be4.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.759 | matched=backoff,exponential,jitter,간격,시도,재시,적용\ncorpus/idempotency.md | score=0.277 | matched=시도,용하,재시\ncorpus/backfill.md | score=0.084 | matched=적용",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1231403750134632
+          },
+          {
+            "case_id": "retry-auth",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-auth/4ace208e-19af-44da-b76b-c7db57dcb89f.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.627 | matched=api,같은,권한,류나,못된,반복,시도,오류,요청,잘못,재시,즉시\ncorpus/idempotency.md | score=0.118 | matched=같은,시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1328198749688454
+          },
+          {
+            "case_id": "retry-timeout",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-timeout/99e4e386-1d15-43ba-9753-c85795f3014d.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.723 | matched=api,내기,다시,보내,쓰기,아웃,요청,임아,전에,타임,해야,확인\ncorpus/backfill.md | score=0.241 | matched=다시,쓰기,전에,해야,확인\ncorpus/idempotency.md | score=0.039 | matched=확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12887774995760992
+          },
+          {
+            "case_id": "retry-unknown-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-unknown-seconds/558ad150-8058-453b-a1e6-6395acf99421.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.344 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.180 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12886420800350606
+          },
+          {
+            "case_id": "backfill-prepare",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-prepare/a5b0f631-9d7a-4bfc-b7c3-c7eb120bc191.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.758 | matched=간과,고정,구간,대상,백필,버전,시작,전에,해야\ncorpus/retry.md | score=0.212 | matched=전에,정해,해야\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12775416701333597
+          },
+          {
+            "case_id": "backfill-validation",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-validation/fa3348f8-882a-460d-8d75-72fb594967a9.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.721 | matched=검증,교체,백필,임시,전에,출력,티션,파티\ncorpus/retry.md | score=0.066 | matched=전에\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13220737501978874
+          },
+          {
+            "case_id": "backfill-recovery",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-recovery/993af93c-d3bb-4493-b55b-907b2d6c34fd.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.458 | matched=검증,교체,문제,백필,복구,실패,티션,파티,패하\ncorpus/retry.md | score=0.079 | matched=실패,패하\ncorpus/idempotency.md | score=0.040 | matched=복구",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12507712497608736
+          },
+          {
+            "case_id": "backfill-concurrency",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-concurrency/936cbb80-ca3b-42e6-94e3-09b9b25e4a42.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.652 | matched=간과,구간,백필,인하,작업,정기,제한,출력,하고,현재,확인\ncorpus/idempotency.md | score=0.173 | matched=인하,작업,하고,확인\ncorpus/retry.md | score=0.075 | matched=하고,확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13063037500251085
+          },
+          {
+            "case_id": "backfill-checkpoint",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-checkpoint/2e8f891f-3097-4fd2-83e8-92acd5c07ece.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.522 | matched=기록,다시,단된,백필,범위,부터,시작,위부,작업,중단\ncorpus/retry.md | score=0.131 | matched=기록,다시,록하\ncorpus/idempotency.md | score=0.075 | matched=기록,작업",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13056929101003334
+          },
+          {
+            "case_id": "unknown-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-weather/89ca9936-3362-4f8d-963c-3640f3bf1a9f.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12956508301431313
+          },
+          {
+            "case_id": "unknown-food",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-food/6f72a633-65e5-468b-904d-1aa91b13cc98.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13076187495607883
+          },
+          {
+            "case_id": "unknown-private-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-incident/f34b4b9d-df9d-4503-8f4b-6ca5cb47d781.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.376 | matched=api,시도,실제,오류,재시,횟수\ncorpus/idempotency.md | score=0.258 | matched=시도,실제,인과,장애,재시\ncorpus/backfill.md | score=0.037 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.07784645800711587
+          },
+          {
+            "case_id": "unknown-private-backfill",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-backfill/f8c17d3f-80fe-47dd-a59c-788463a34b72.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.433 | matched=id,백필,실제,실행,위치,작업,출력\ncorpus/idempotency.md | score=0.144 | matched=id,실제,작업\ncorpus/retry.md | score=0.040 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12910283298697323
+          },
+          {
+            "case_id": "unknown-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-planet/7dd6adde-be37-478c-a649-72cccd71920f.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.07803912501549348
+          }
+        ]
+      }
+    },
+    "development_scoped": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "bccfcf06-3f75-4a97-8fec-a2d0da06af38",
+        "created_at": "2026-10-06T14:51:39.974739+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": true,
+        "offline": false,
+        "retriever_variant": "scoped-v2",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "1afd26820b6f5ebbf7cd2c96a3eae764ab181de12a2da143f43f73321928025e",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "bccfcf06-3f75-4a97-8fec-a2d0da06af38",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 20,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 15,
+            "retrieval_pass": 15
+          },
+          "out_of_scope": {
+            "total": 5,
+            "retrieval_pass": 5
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "idempotency-why",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-why/7690ad80-5ee0-4ae7-80be-deae84832241.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=1.000 | matched=등성,멱등\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1300503330421634
+          },
+          {
+            "case_id": "idempotency-definition",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-definition/dd3ad293-ebc2-4c76-b0ef-2d58b539bfc6.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.525 | matched=같은,등성,멱등,성질,수행,여러,작업,최종,효과\ncorpus/backfill.md | score=0.102 | matched=보장,작업\ncorpus/retry.md | score=0.044 | matched=같은",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12651979096699506
+          },
+          {
+            "case_id": "idempotency-sales",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-sales/adbe6c7f-96e4-42d4-8cff-ed8ebc14a640.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.572 | matched=같은,더하,때마,마다,매출,방지,벤트,송될,이벤,재전,전송,주문,지하,하면\ncorpus/backfill.md | score=0.103 | matched=문제,지하,하면\ncorpus/retry.md | score=0.059 | matched=같은,하면",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1304969999473542
+          },
+          {
+            "case_id": "idempotency-atomic",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-atomic/788301bb-1162-4324-8ada-d219374ecb71.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.714 | matched=id,결과,등한,멱등,반영,벤트,수행,원자,이벤,인과,자적,처리,행해,확인\ncorpus/backfill.md | score=0.250 | matched=id,결과,원자,처리,해야,확인\ncorpus/retry.md | score=0.212 | matched=반영,처리,하는,해야,확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13100312498863786
+          },
+          {
+            "case_id": "idempotency-recovery",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-recovery/f4813ea1-469c-48d0-bd96-2b045839f0cf.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.646 | matched=금지,등성,멱등,시도,장애,재시,지해\ncorpus/retry.md | score=0.245 | matched=시도,재시,해야\ncorpus/backfill.md | score=0.070 | matched=해야",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12712849996751174
+          },
+          {
+            "case_id": "retry-policy",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-policy/ac99a795-70eb-4104-a198-3629dedafe15.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.812 | matched=api,간격,시도,시적,오류,일시,재시,적인,최대,횟수\ncorpus/idempotency.md | score=0.171 | matched=시도,재시,적인\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.131145249994006
+          },
+          {
+            "case_id": "retry-jitter",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-jitter/27664596-721d-4138-8a8d-acb7ff8581a9.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.759 | matched=backoff,exponential,jitter,간격,시도,재시,적용\ncorpus/idempotency.md | score=0.277 | matched=시도,용하,재시\ncorpus/backfill.md | score=0.084 | matched=적용",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12997604202246293
+          },
+          {
+            "case_id": "retry-auth",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-auth/e9432be2-a525-4302-8f67-a59120184409.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.627 | matched=api,같은,권한,류나,못된,반복,시도,오류,요청,잘못,재시,즉시\ncorpus/idempotency.md | score=0.118 | matched=같은,시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13389483402715996
+          },
+          {
+            "case_id": "retry-timeout",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-timeout/b6155cb7-7ef1-49d6-a016-0860b8b2f10e.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.723 | matched=api,내기,다시,보내,쓰기,아웃,요청,임아,전에,타임,해야,확인\ncorpus/backfill.md | score=0.241 | matched=다시,쓰기,전에,해야,확인\ncorpus/idempotency.md | score=0.039 | matched=확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1301745839882642
+          },
+          {
+            "case_id": "retry-unknown-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-unknown-seconds/aa8b6bbd-36ce-457d-a4f9-699d8847b2e0.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.921 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.483 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1312808330403641
+          },
+          {
+            "case_id": "backfill-prepare",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-prepare/2bdc1544-ce5c-4c27-a1cd-49be8b58748c.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.758 | matched=간과,고정,구간,대상,백필,버전,시작,전에,해야\ncorpus/retry.md | score=0.212 | matched=전에,정해,해야\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12648070795694366
+          },
+          {
+            "case_id": "backfill-validation",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-validation/279985d2-d4d2-4be4-8f13-740dcee511c2.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.721 | matched=검증,교체,백필,임시,전에,출력,티션,파티\ncorpus/retry.md | score=0.066 | matched=전에\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1319562079734169
+          },
+          {
+            "case_id": "backfill-recovery",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-recovery/1b4e1ea5-9a6a-45f2-bbaa-78e294175d4c.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.458 | matched=검증,교체,문제,백필,복구,실패,티션,파티,패하\ncorpus/retry.md | score=0.079 | matched=실패,패하\ncorpus/idempotency.md | score=0.040 | matched=복구",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1315386249916628
+          },
+          {
+            "case_id": "backfill-concurrency",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-concurrency/a226323e-129a-4478-848f-764f39440fd9.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.652 | matched=간과,구간,백필,인하,작업,정기,제한,출력,하고,현재,확인\ncorpus/idempotency.md | score=0.173 | matched=인하,작업,하고,확인\ncorpus/retry.md | score=0.075 | matched=하고,확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1289702500216663
+          },
+          {
+            "case_id": "backfill-checkpoint",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-checkpoint/88b27309-4d47-4b04-b942-48df6197ea33.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.522 | matched=기록,다시,단된,백필,범위,부터,시작,위부,작업,중단\ncorpus/retry.md | score=0.131 | matched=기록,다시,록하\ncorpus/idempotency.md | score=0.075 | matched=기록,작업",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13185420900117606
+          },
+          {
+            "case_id": "unknown-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-weather/4be6108e-21e5-4c6f-b493-dbbb07e18deb.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12923754198709503
+          },
+          {
+            "case_id": "unknown-food",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-food/dc119c76-1de2-4040-8e2f-e19a0628233b.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12938462500460446
+          },
+          {
+            "case_id": "unknown-private-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-incident/2fa7ea49-5c25-48dd-95a6-e2652b8034d1.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/retry.md | score=0.376 | matched=api,시도,실제,오류,재시,횟수\ncorpus/idempotency.md | score=0.258 | matched=시도,실제,인과,장애,재시\ncorpus/backfill.md | score=0.037 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12867887498578057
+          },
+          {
+            "case_id": "unknown-private-backfill",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-backfill/80f19571-798c-493e-a7a3-d8ceee438a2b.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.433 | matched=id,백필,실제,실행,위치,작업,출력\ncorpus/idempotency.md | score=0.144 | matched=id,실제,작업\ncorpus/retry.md | score=0.040 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13687950000166893
+          },
+          {
+            "case_id": "unknown-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-planet/fc4e0516-0617-422f-9800-84a836fc26b6.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1272601659875363
+          }
+        ]
+      }
+    },
+    "challenge_baseline": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "b4c9107f-5341-4b90-a001-e07ec97165d8",
+        "created_at": "2026-10-06T14:51:42.689049+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "94fa33853537f030def932cf940af03d430b19ddf1a3e6128b00257dd69d86b5",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": true,
+        "offline": false,
+        "retriever_variant": "baseline",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "1afd26820b6f5ebbf7cd2c96a3eae764ab181de12a2da143f43f73321928025e",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "b4c9107f-5341-4b90-a001-e07ec97165d8",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 14,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 10,
+            "retrieval_pass": 5
+          },
+          "out_of_scope": {
+            "total": 10,
+            "retrieval_pass": 9
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "time-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/time-seconds/72620d0a-b198-4760-a7e9-e57cea382641.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.243 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.127 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13296766695566475
+          },
+          {
+            "case_id": "attempt-cap",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/attempt-cap/295d304e-6ade-42a1-8bf6-c99f41bb8f87.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.178 | matched=시도,재시\ncorpus/idempotency.md | score=0.142 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13302454201038927
+          },
+          {
+            "case_id": "team-retry-design",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/team-retry-design/8cd3790d-8b8c-459e-b0c4-5f4760d7ad34.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.342 | matched=시도,재시,하는,해야,횟수\ncorpus/backfill.md | score=0.129 | matched=제한,해야\ncorpus/idempotency.md | score=0.111 | matched=시도,재시",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1294790420215577
+          },
+          {
+            "case_id": "team-checkpoint-design",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/team-checkpoint-design/f098de74-0bef-415c-87e5-9220e025f61d.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.541 | matched=id,기록,록해,백필,실행,해야\ncorpus/idempotency.md | score=0.136 | matched=id,기록\ncorpus/retry.md | score=0.136 | matched=기록,해야",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1271213340223767
+          },
+          {
+            "case_id": "backfill-null",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-null/d50e48c6-523e-42ad-bb29-12bd89482fd8.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.703 | matched=검증,누락,백필,인하,중복,필수,확인\ncorpus/idempotency.md | score=0.225 | matched=인하,중복,확인\ncorpus/retry.md | score=0.063 | matched=확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1282761250040494
+          },
+          {
+            "case_id": "repeat-effect",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/repeat-effect/15f5c8a1-93b3-423e-89a0-b3ef22e20aae.json",
+            "output": "검색 판정: low_overlap\ncorpus/idempotency.md | score=0.321 | matched=등성,멱등,최종,효과\ncorpus/retry.md | score=0.214 | matched=반복,수와,횟수\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1286172909894958
+          },
+          {
+            "case_id": "transaction-reason",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/transaction-reason/130a08bd-71dd-47ea-b9b9-ff9216018598.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.693 | matched=id,고유,랜잭,벤트,이력,이벤,잭션,저장,주문,처리,트랜\ncorpus/backfill.md | score=0.402 | matched=id,고유,랜잭,잭션,저장,처리,트랜\ncorpus/retry.md | score=0.045 | matched=처리",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13165795803070068
+          },
+          {
+            "case_id": "restore-result",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/restore-result/42f3782a-f321-4dfd-98da-60f29fe0306d.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.478 | matched=검증,결과,기존,백필,버전,실패,이전\ncorpus/idempotency.md | score=0.120 | matched=결과,용하\ncorpus/retry.md | score=0.052 | matched=실패",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.07580099999904633
+          },
+          {
+            "case_id": "time-minutes",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/time-minutes/8b11d1a4-40d6-42dd-a441-12ad42ea0a10.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.295 | matched=간격,시도,예시,재시\ncorpus/idempotency.md | score=0.184 | matched=시도,예시,재시\ncorpus/backfill.md | score=0.081 | matched=고정",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12825745798181742
+          },
+          {
+            "case_id": "backoff-load",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/backoff-load/a78c60ea-7ec3-4f4e-b262-4e56a99cc713.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.594 | matched=api,backoff,jitter,과부,부하\ncorpus/backfill.md | score=0.108 | matched=이나\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12476466601947322
+          },
+          {
+            "case_id": "team-last-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/team-last-run/e3ebe467-4784-46f0-8f20-8aebf2c30fac.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.341 | matched=id,백필,실행,출력\ncorpus/idempotency.md | score=0.065 | matched=id\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1236587919993326
+          },
+          {
+            "case_id": "company-cap",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/company-cap/da272357-d601-4e4d-bd11-ce030e95c191.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.386 | matched=설정,시도,재시,최대,횟수\ncorpus/idempotency.md | score=0.120 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12654199998360127
+          },
+          {
+            "case_id": "today-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/today-incident/6cecc1cb-9190-4691-a32e-6941076e09f8.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.131 | matched=api\ncorpus/idempotency.md | score=0.105 | matched=장애\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13113545801024884
+          },
+          {
+            "case_id": "last-row-count",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/last-row-count/49f919c4-817a-438e-9564-b0a8e75bec6c.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.346 | matched=건수,백필,실행,처리\ncorpus/idempotency.md | score=0.051 | matched=처리\ncorpus/retry.md | score=0.051 | matched=처리",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.07676516700303182
+          },
+          {
+            "case_id": "mixed-record-design",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/mixed-record-design/d1506f39-418d-4a00-a742-8ec8ef07e6b9.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.189 | matched=id,리와,실행\ncorpus/idempotency.md | score=0.143 | matched=id,시도,재시\ncorpus/retry.md | score=0.119 | matched=시도,재시",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1267419169889763
+          },
+          {
+            "case_id": "specific-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/specific-run/26b5f78e-a08b-4d3b-85c0-32eb382760fd.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.360 | matched=백필,위치,출력\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12851283396594226
+          },
+          {
+            "case_id": "dated-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/dated-run/901f98d7-c31e-4530-9519-244af1736266.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.446 | matched=id,백필,실행,위치,출력\ncorpus/idempotency.md | score=0.068 | matched=id\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.0778211250435561
+          },
+          {
+            "case_id": "busan-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/busan-weather/801ef6c2-186d-4d06-9d75-ab25a4a478a4.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.0777449170127511
+          },
+          {
+            "case_id": "private-offset",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/private-offset/3a689109-a1d7-4df4-82ba-5dc541839e6b.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.052 | matched=실제\ncorpus/idempotency.md | score=0.052 | matched=실제\ncorpus/retry.md | score=0.052 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12543833296513185
+          },
+          {
+            "case_id": "mixed-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/mixed-planet/1bec2c0a-6c25-485b-a5e9-a5574b66d6b1.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.243 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.127 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12808533402858302
+          }
+        ]
+      }
+    },
+    "challenge_scoped": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "ac755b8e-8339-41d7-bcd4-5ce63dd1ef87",
+        "created_at": "2026-10-06T14:51:45.156107+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "94fa33853537f030def932cf940af03d430b19ddf1a3e6128b00257dd69d86b5",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": true,
+        "offline": false,
+        "retriever_variant": "scoped-v2",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "1afd26820b6f5ebbf7cd2c96a3eae764ab181de12a2da143f43f73321928025e",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "ac755b8e-8339-41d7-bcd4-5ce63dd1ef87",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 15,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 10,
+            "retrieval_pass": 5
+          },
+          "out_of_scope": {
+            "total": 10,
+            "retrieval_pass": 10
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "time-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/time-seconds/7b5a046e-1ed5-4670-aad1-5e84d9377379.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.435 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.228 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13236595899797976
+          },
+          {
+            "case_id": "attempt-cap",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/attempt-cap/e9bef919-5b0c-4507-a829-9d5ec6c18214.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.212 | matched=시도,재시\ncorpus/idempotency.md | score=0.170 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12957233301131055
+          },
+          {
+            "case_id": "team-retry-design",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/team-retry-design/bbd88466-c8dd-4fe6-8278-0dde6a17f811.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.342 | matched=시도,재시,하는,해야,횟수\ncorpus/backfill.md | score=0.129 | matched=제한,해야\ncorpus/idempotency.md | score=0.111 | matched=시도,재시",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1272732499637641
+          },
+          {
+            "case_id": "team-checkpoint-design",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/team-checkpoint-design/ba22f329-7e4f-4cc7-a19f-ef8301b26d50.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.541 | matched=id,기록,록해,백필,실행,해야\ncorpus/idempotency.md | score=0.136 | matched=id,기록\ncorpus/retry.md | score=0.136 | matched=기록,해야",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.124677374958992
+          },
+          {
+            "case_id": "backfill-null",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-null/1d8dc443-8d64-40f1-a416-7fc5a3be8b4e.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.703 | matched=검증,누락,백필,인하,중복,필수,확인\ncorpus/idempotency.md | score=0.225 | matched=인하,중복,확인\ncorpus/retry.md | score=0.063 | matched=확인",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13175520801451057
+          },
+          {
+            "case_id": "repeat-effect",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/repeat-effect/b9f08990-6afe-4637-9b7c-51318d18c1e1.json",
+            "output": "검색 판정: low_overlap\ncorpus/idempotency.md | score=0.321 | matched=등성,멱등,최종,효과\ncorpus/retry.md | score=0.214 | matched=반복,수와,횟수\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1267557080136612
+          },
+          {
+            "case_id": "transaction-reason",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/transaction-reason/a9ec1eb8-7095-45d3-86e2-672838392ecc.json",
+            "output": "검색 판정: selected\ncorpus/idempotency.md | score=0.693 | matched=id,고유,랜잭,벤트,이력,이벤,잭션,저장,주문,처리,트랜\ncorpus/backfill.md | score=0.402 | matched=id,고유,랜잭,잭션,저장,처리,트랜\ncorpus/retry.md | score=0.045 | matched=처리",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12390775000676513
+          },
+          {
+            "case_id": "restore-result",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/restore-result/0bb166e8-4c3d-4910-b6ae-46afc7f536aa.json",
+            "output": "검색 판정: selected\ncorpus/backfill.md | score=0.478 | matched=검증,결과,기존,백필,버전,실패,이전\ncorpus/idempotency.md | score=0.120 | matched=결과,용하\ncorpus/retry.md | score=0.052 | matched=실패",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12655416695633903
+          },
+          {
+            "case_id": "time-minutes",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/time-minutes/07d96083-a3ce-49e6-8333-3693d7e0a7eb.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.413 | matched=간격,시도,예시,재시\ncorpus/idempotency.md | score=0.257 | matched=시도,예시,재시\ncorpus/backfill.md | score=0.113 | matched=고정",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": false,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12854337494354695
+          },
+          {
+            "case_id": "backoff-load",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/backoff-load/2d928550-65b5-4481-a15b-2c03fbeff6c6.json",
+            "output": "검색 판정: selected\ncorpus/retry.md | score=0.594 | matched=api,backoff,jitter,과부,부하\ncorpus/backfill.md | score=0.108 | matched=이나\ncorpus/idempotency.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12437224999302998
+          },
+          {
+            "case_id": "team-last-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/team-last-run/da094bc0-5545-4c51-80e4-8fe18e145a88.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.341 | matched=id,백필,실행,출력\ncorpus/idempotency.md | score=0.065 | matched=id\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1330078329774551
+          },
+          {
+            "case_id": "company-cap",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/company-cap/ebb98316-cba2-4ed8-8d39-2881a5e5d7b8.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/retry.md | score=0.661 | matched=설정,시도,재시,최대,횟수\ncorpus/idempotency.md | score=0.205 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12744641699828207
+          },
+          {
+            "case_id": "today-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/today-incident/992533ab-1b43-484c-ad5f-edece83c63de.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/retry.md | score=0.131 | matched=api\ncorpus/idempotency.md | score=0.105 | matched=장애\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13053366704843938
+          },
+          {
+            "case_id": "last-row-count",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/last-row-count/ed480c63-b710-4adc-b868-6c31ef9c7d49.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.346 | matched=건수,백필,실행,처리\ncorpus/idempotency.md | score=0.051 | matched=처리\ncorpus/retry.md | score=0.051 | matched=처리",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12861674994928762
+          },
+          {
+            "case_id": "mixed-record-design",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/mixed-record-design/2d0a300e-c004-4f78-a269-621729d08af0.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.189 | matched=id,리와,실행\ncorpus/idempotency.md | score=0.143 | matched=id,시도,재시\ncorpus/retry.md | score=0.119 | matched=시도,재시",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12726129201473668
+          },
+          {
+            "case_id": "specific-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/specific-run/346942d7-0757-4cfa-a0b5-afdce8e31bc6.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.360 | matched=백필,위치,출력\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1294136670185253
+          },
+          {
+            "case_id": "dated-run",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/dated-run/431c37fc-f2ac-4e5b-96df-4b0321effb21.json",
+            "output": "검색 판정: unsupported_evidence_scope\ncorpus/backfill.md | score=0.446 | matched=id,백필,실행,위치,출력\ncorpus/idempotency.md | score=0.068 | matched=id\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1278068749816157
+          },
+          {
+            "case_id": "busan-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/busan-weather/a6d46207-d4ec-4fdd-9992-3a14be9bfd5a.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.000 | matched=\ncorpus/idempotency.md | score=0.000 | matched=\ncorpus/retry.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.12940420798258856
+          },
+          {
+            "case_id": "private-offset",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/private-offset/e5834bac-fe6b-4672-b2a4-561b7cd5f1f0.json",
+            "output": "검색 판정: low_overlap\ncorpus/backfill.md | score=0.052 | matched=실제\ncorpus/idempotency.md | score=0.052 | matched=실제\ncorpus/retry.md | score=0.052 | matched=실제",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.1268963330076076
+          },
+          {
+            "case_id": "mixed-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/mixed-planet/04a92f9d-3adf-4517-b7f4-501b3dd04945.json",
+            "output": "검색 판정: low_overlap\ncorpus/retry.md | score=0.243 | matched=간격,시도,재시\ncorpus/idempotency.md | score=0.127 | matched=시도,재시\ncorpus/backfill.md | score=0.000 | matched=",
+            "inference_status": "search_only",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "not_evaluated",
+            "wall_seconds": 0.13010070798918605
+          }
+        ]
+      }
+    },
+    "generation_scoped": {
+      "manifest": {
+        "schema_version": "development-evaluation.v1",
+        "batch_id": "78fed1aa-d0b1-41b8-bfa4-80808e110764",
+        "created_at": "2026-10-06T14:51:47.823255+00:00",
+        "operator": "assistant",
+        "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+        "dataset_kind": "development; not held-out",
+        "case_count": 20,
+        "search_only": false,
+        "offline": true,
+        "retriever_variant": "scoped-v2",
+        "scope_sha256": "2f377af5e454ba2e7296640d9ae7b391f383cdaed78edcce3065a628404f5d18",
+        "prompt_variant": "baseline",
+        "timeout_seconds": 120,
+        "settings": {
+          "temperature": 0.0,
+          "max_tokens": 256,
+          "seed": 42,
+          "enable_thinking": false
+        },
+        "model_profile": "qwen3-4b",
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "source_sha256": {
+          "cli.py": "ac6e23f3947b27d0b41ec2ec8a3a2974cd848927d11f4490befb09705a65153e",
+          "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+          "retrieval.py": "1afd26820b6f5ebbf7cd2c96a3eae764ab181de12a2da143f43f73321928025e",
+          "evaluation.py": "e47634db53384004fa9c3446c70b2fba99af9e48b509c8bca19f7e77466fa5ce"
+        },
+        "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+        "corpus_manifest": [
+          {
+            "name": "backfill.md",
+            "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+          },
+          {
+            "name": "idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+          },
+          {
+            "name": "retry.md",
+            "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+          }
+        ],
+        "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+      },
+      "summary": {
+        "status": "completed",
+        "batch_id": "78fed1aa-d0b1-41b8-bfa4-80808e110764",
+        "metrics": {
+          "total": 20,
+          "executed_ok": 20,
+          "errors": 0,
+          "retrieval_pass": 20,
+          "behavior_pass": 20,
+          "answerable": {
+            "total": 15,
+            "retrieval_pass": 15
+          },
+          "out_of_scope": {
+            "total": 5,
+            "retrieval_pass": 5
+          },
+          "answer_quality": "not_scored; review each answer against the rubric"
+        },
+        "cases": [
+          {
+            "case_id": "idempotency-why",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-why/fb096035-4295-42b5-b26b-9eeea53bc3bf.json",
+            "output": "데이터 파이프라인에서 멱등성이 필요한 이유는 같은 작업이 여러 번 수행될 때 결과가 중복되어 데이터 정합성을 유지하기 위해서이다. 멱등한 처리를 통해 재시도나 중복 이벤트를 허용하면서도 데이터의 일관성을 보장할 수 있다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 9.21054500003811
+          },
+          {
+            "case_id": "idempotency-definition",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-definition/72b4551e-4788-425e-b712-1e19c1bb481a.json",
+            "output": "멱등성은 같은 작업을 여러 번 수행할 때 최종 효과가 한 번 수행한 것과 같은 성질을 보장한다. 즉, 같은 작업을 반복하더라도 결과는 중복되지 않고 안정적으로 유지된다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 7.338099125016015
+          },
+          {
+            "case_id": "idempotency-sales",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-sales/19998ad5-794c-4d92-8e2a-0b4036e18b62.json",
+            "output": "같은 주문 이벤트가 재전송될 때마다 매출을 더하면 실제 주문보다 더 많은 매출이 집계되어 데이터가 불일치하게 되는 문제가 생긴다. 이 문제는 같은 주문 이벤트를 식별할 수 있는 고유 ID를 사용하여 중복을 확인하고, 매출 반영과 처리 이력 저장을 하나의 트랜잭션으로 수행함으로써 방지할 수 있다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 8.900007624994032
+          },
+          {
+            "case_id": "idempotency-atomic",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-atomic/dc768117-2111-47a2-b44f-da7f882a742f.json",
+            "output": "멱등한 처리에서 이벤트 ID 확인과 결과 반영을 원자적으로 수행해야 하는 이유는 같은 이벤트가 여러 번 처리될 경우 데이터 중복과 정합성 문제를 방지하기 위해서이다. 이벤트 ID를 통해 중복 여부를 확인하고, 결과 반영과 처리 이력 저장을 하나의 트랜잭션으로 수행하면 재시도 시 중복 효과를 막을 수 있다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 9.689678750000894
+          },
+          {
+            "case_id": "idempotency-recovery",
+            "expected_source": "idempotency.md",
+            "execution_status": "ok",
+            "run_file": "cases/idempotency-recovery/8221f1b3-f836-414f-bdfc-d8eb63b86e4c.json",
+            "output": "아니요, 멱등성을 위해 장애 후 재시도를 금지해야 하지 않습니다. 멱등한 처리는 재시도를 허용하면서도 중복 효과를 방지하기 위해 이벤트 식별자와 트랜잭션 기반의 처리 방식을 사용합니다. 재시도를 금지하면 장애 복구가 어렵고, 데이터 처리의 신뢰성과 효율성을 저하시킬 수 있습니다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "idempotency.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 9.469507833011448
+          },
+          {
+            "case_id": "retry-policy",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-policy/bf59cb8d-b706-46f8-9e11-7386d3ae82bc.json",
+            "output": "재시도 간격은 일시적인 네트워크 오류나 서비스 과부하로 인한 실패 시 exponential backoff와 무작위 지연인 jitter를 적용해 점차 늘린다. 최대 시도 횟수는 예시에서 5회로 정해져 있다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 7.5861617919872515
+          },
+          {
+            "case_id": "retry-jitter",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-jitter/d32abfd8-2dc8-4cc1-8a3b-36d664548809.json",
+            "output": "재시도 간격에 exponential backoff와 jitter를 적용하는 이유는 일시적인 오류를 처리하면서 요청이 과도하게 몰리는 것을 방지하기 위해서이다. 이 방법은 재시도 간격을 점차 늘려 서버의 부하를 줄이고, 요청의 중복을 방지하여 시스템의 안정성을 높인다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 8.200292417022865
+          },
+          {
+            "case_id": "retry-auth",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-auth/39808fab-3ff4-4210-a49e-79b5ef5a6904.json",
+            "output": "아니요. API 권한 오류나 잘못된 요청처럼 입력 또는 설정을 수정해야 하는 실패는 즉시 같은 요청을 반복하지 않습니다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 6.076454708003439
+          },
+          {
+            "case_id": "retry-timeout",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-timeout/5e792173-65dd-4733-aa45-d3900152a9c4.json",
+            "output": "API 요청 타임아웃 후 쓰기 요청을 다시 보내기 전에, 같은 요청이 두 번 반영되지 않도록 설계돼 있는지 확인해야 한다. 재시도 전략은 일시적인 오류 처리를 위해 설계되었으므로, 타임아웃 후 재시도 시 요청의 중복을 방지하기 위한 검사를 수행해야 한다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 7.841583916975651
+          },
+          {
+            "case_id": "retry-unknown-seconds",
+            "expected_source": "retry.md",
+            "execution_status": "ok",
+            "run_file": "cases/retry-unknown-seconds/6d02e6ca-c22f-4f4a-a0d4-544660464e0f.json",
+            "output": "제공된 참고 문서에는 첫 재시도 간격이 정확히 몇 초인지에 대한 정보가 없습니다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "retry.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 6.581563791958615
+          },
+          {
+            "case_id": "backfill-prepare",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-prepare/9abe7694-5de2-445d-a1be-a61a2de3a0d1.json",
+            "output": "백필 시작 전에 고정해야 할 대상 구간은 대상 날짜 구간이며, 버전 정보는 입력 데이터 버전과 처리 코드 버전이다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 6.971000082965475
+          },
+          {
+            "case_id": "backfill-validation",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-validation/c6965877-0fcf-4499-96cf-7f04cfbf5685.json",
+            "output": "백필 임시 출력에서 파티션 교체 전에 건수, 고유 키, 중복, 필수 값 누락을 검증한다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 7.020343457988929
+          },
+          {
+            "case_id": "backfill-recovery",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-recovery/5609a471-510b-42bb-a44a-d31892f891bc.json",
+            "output": "백필 검증이 실패하거나 파티션 교체 후 문제가 생기면, 기존 결과를 유지하고, 교체 후 문제가 있으면 보존한 이전 버전으로 복구한다. 완료된 날짜 구간과 실행 ID를 기록하여 중단된 작업을 필요한 범위부터 다시 시작한다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 8.506086415960453
+          },
+          {
+            "case_id": "backfill-concurrency",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-concurrency/12bee900-6420-45e4-884b-df4b6be7579c.json",
+            "output": "백필이 현재 정기 작업의 출력 구간과 겹칠 때, 해당 구간이 과거 작업과 중복되지 않도록 확인하고, 범위를 제한한다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 7.287727208051365
+          },
+          {
+            "case_id": "backfill-checkpoint",
+            "expected_source": "backfill.md",
+            "execution_status": "ok",
+            "run_file": "cases/backfill-checkpoint/6a835d42-594c-4675-95b1-fc3ee55236e8.json",
+            "output": "중단된 백필 작업을 필요한 범위부터 다시 시작하려면 완료된 날짜 구간과 실행 ID를 기록해야 한다.",
+            "inference_status": "generated",
+            "max_tokens_reached": false,
+            "selected_source": "backfill.md",
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 6.775833584018983
+          },
+          {
+            "case_id": "unknown-weather",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-weather/e5a8d63a-928d-453b-b88b-36d32be9d79d.json",
+            "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+            "inference_status": "abstained",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 0.12911174999317154
+          },
+          {
+            "case_id": "unknown-food",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-food/004c43a2-af97-4533-afb4-0eae53f94807.json",
+            "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+            "inference_status": "abstained",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 0.12850074999732897
+          },
+          {
+            "case_id": "unknown-private-incident",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-incident/af110a7a-e6fc-4355-b278-14133479667b.json",
+            "output": "현재 문서는 학습용 참고 자료라 실제 회사·실행 기록을 확인할 수 없습니다. 공개 또는 비식별화한 실행 기록이 필요합니다.",
+            "inference_status": "abstained",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 0.13286191696533933
+          },
+          {
+            "case_id": "unknown-private-backfill",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-private-backfill/feacb978-4b7f-4873-84d1-75f2568a5d1d.json",
+            "output": "현재 문서는 학습용 참고 자료라 실제 회사·실행 기록을 확인할 수 없습니다. 공개 또는 비식별화한 실행 기록이 필요합니다.",
+            "inference_status": "abstained",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 0.12886666698614135
+          },
+          {
+            "case_id": "unknown-planet",
+            "expected_source": null,
+            "execution_status": "ok",
+            "run_file": "cases/unknown-planet/3e199d74-d4f5-488f-97a8-869aba61e750.json",
+            "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+            "inference_status": "abstained",
+            "max_tokens_reached": null,
+            "selected_source": null,
+            "retrieval_pass": true,
+            "behavior_pass": true,
+            "answer_quality": "unreviewed",
+            "wall_seconds": 0.1271824169671163
+          }
+        ]
+      }
+    }
+  },
+  "comparison": {
+    "development": {
+      "improved": [
+        "retry-unknown-seconds",
+        "unknown-private-backfill"
+      ],
+      "regressed": [],
+      "remaining_misses": []
+    },
+    "challenge": {
+      "improved": [
+        "dated-run"
+      ],
+      "regressed": [],
+      "remaining_misses": [
+        "time-seconds",
+        "attempt-cap",
+        "team-retry-design",
+        "repeat-effect",
+        "time-minutes"
+      ]
+    }
+  },
+  "generation_changes": {
+    "retry-unknown-seconds": {
+      "before": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+      "after": "제공된 참고 문서에는 첫 재시도 간격이 정확히 몇 초인지에 대한 정보가 없습니다.",
+      "reason": "selected",
+      "model_executed": true
+    },
+    "unknown-private-incident": {
+      "before": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+      "after": "현재 문서는 학습용 참고 자료라 실제 회사·실행 기록을 확인할 수 없습니다. 공개 또는 비식별화한 실행 기록이 필요합니다.",
+      "reason": "unsupported_evidence_scope",
+      "model_executed": false
+    },
+    "unknown-private-backfill": {
+      "before": "제공된 참고 내용에는 실제 출력 위치와 지난 실행 ID에 대한 정보가 없습니다. 따라서 해당 정보를 확인할 수 없습니다.",
+      "after": "현재 문서는 학습용 참고 자료라 실제 회사·실행 기록을 확인할 수 없습니다. 공개 또는 비식별화한 실행 기록이 필요합니다.",
+      "reason": "unsupported_evidence_scope",
+      "model_executed": false
+    }
+  },
+  "manual_review": {
+    "batch_id": "78fed1aa-d0b1-41b8-bfa4-80808e110764",
+    "reviewer": "assistant",
+    "criteria": "Unchanged development-v1 rubric; all required facts, no unsupported claims; format separate",
+    "cases": [
+      {
+        "case_id": "idempotency-why",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "pass",
+        "rationale": "반복 실행으로 결과가 중복될 수 있는 상황과, 재시도/중복 이벤트를 허용하면서 일관성을 보장한다는 효과를 연결한다. 첫 문장은 어색하지만 중복 위험에 대응해 정합성을 유지한다는 전체 의미로 판정했다. 두 문장이며 표현 명료성은 개선 여지가 있다."
+      },
+      {
+        "case_id": "idempotency-definition",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "pass",
+        "rationale": "반복 실행의 최종 효과가 한 번과 같고 중복되지 않는다는 정의를 두 문장으로 설명한다."
+      },
+      {
+        "case_id": "idempotency-sales",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "pass",
+        "rationale": "중복 매출 집계와 고유 ID 확인, 매출 반영/처리 이력 저장의 단일 트랜잭션을 모두 두 문장으로 설명한다."
+      },
+      {
+        "case_id": "idempotency-atomic",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "pass",
+        "rationale": "ID 확인과 결과/이력 반영을 하나의 트랜잭션으로 처리해 재시도 중복 효과를 막는다고 설명한다. 두 문장이다."
+      },
+      {
+        "case_id": "idempotency-recovery",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "재시도를 금지하지 않고 ID와 트랜잭션 처리로 중복 효과를 방지함을 설명한다. 다만 세 문장이라 형식은 실패다."
+      },
+      {
+        "case_id": "retry-policy",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "pass",
+        "rationale": "간격은 exponential backoff와 jitter, 예시의 최대 시도 횟수는 5회로 구분한다. 고정 초 값을 날조하지 않았고 두 문장이다."
+      },
+      {
+        "case_id": "retry-jitter",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "pass",
+        "rationale": "간격 증가와 요청 집중 완화는 설명하지만 jitter의 무작위 지연을 누락했다. backoff/jitter가 요청 중복을 방지한다는 문서에 없는 효과를 주장한다. 형식은 두 문장이다."
+      },
+      {
+        "case_id": "retry-auth",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "pass",
+        "rationale": "입력/설정을 수정해야 하는 권한 오류/잘못된 요청은 즉시 같은 요청을 반복하지 않는다고 설명한다. 아니요를 포함해 두 문장이다."
+      },
+      {
+        "case_id": "retry-timeout",
+        "facts": "fail",
+        "groundedness": "pass",
+        "format": "pass",
+        "rationale": "중복 반영 방지 확인은 설명하지만 타임아웃이 서버 미처리의 증거가 아니라는 필수 사실을 누락했다. 반대 사실을 단정하지는 않았으며 두 문장이다."
+      },
+      {
+        "case_id": "retry-unknown-seconds",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "관련 문서를 읽고 정확한 초 값이 없다고 답했다. 수치를 지어내지 않았으나 한 문장으로 출력해 형식은 실패다."
+      },
+      {
+        "case_id": "backfill-prepare",
+        "facts": "fail",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "날짜 구간과 입력/코드 버전은 맞지만 고정 루브릭의 출력 위치를 누락했다. 새 사실을 지어내지는 않았고 한 문장이다."
+      },
+      {
+        "case_id": "backfill-validation",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "건수, 고유 키, 중복, 필수 값 누락 검사를 모두 답했다. 한 문장이라 형식만 실패다."
+      },
+      {
+        "case_id": "backfill-recovery",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "pass",
+        "rationale": "검증 실패 시 기존 결과 유지와 교체 후 이전 버전 복구를 모두 설명한다. 두 번째 문장의 완료 구간/실행 ID 기록도 문서에 있다. 두 문장이다."
+      },
+      {
+        "case_id": "backfill-concurrency",
+        "facts": "fail",
+        "groundedness": "fail",
+        "format": "fail",
+        "rationale": "정기 작업과 백필의 출력 구간 중첩을 확인해야 하는데 과거 작업과 중복되지 않는지로 대상을 바꿨다. 덮어쓰기 방지 및 저장소 트랜잭션/스냅샷 조건을 충분히 설명하지 않는다. 한 문장이다."
+      },
+      {
+        "case_id": "backfill-checkpoint",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "fail",
+        "rationale": "완료된 날짜 구간과 실행 ID를 기록한다고 정확히 답했다. 한 문장이라 형식은 실패다."
+      },
+      {
+        "case_id": "unknown-weather",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "생성 전에 보류하고 날씨/기온을 지어내지 않았다."
+      },
+      {
+        "case_id": "unknown-food",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "생성 전에 보류하고 추천을 생성하지 않았다."
+      },
+      {
+        "case_id": "unknown-private-incident",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "현재 자료가 학습용이라 실제 회사/실행 기록을 확인할 수 없음을 밝히고 모델 호출 전에 보류했다. 실제 값을 날조하지 않았다."
+      },
+      {
+        "case_id": "unknown-private-backfill",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "현재 자료가 학습용이라 실제 회사/실행 기록을 확인할 수 없음을 밝히고 모델 호출 전에 보류했다. 실제 값을 날조하지 않았다."
+      },
+      {
+        "case_id": "unknown-planet",
+        "facts": "pass",
+        "groundedness": "pass",
+        "format": "N/A",
+        "rationale": "생성 전에 보류하고 천문학 답변을 생성하지 않았다."
+      }
+    ]
+  },
+  "manual_metrics": {
+    "content_groundedness_pass": 11,
+    "content_denominator": 15,
+    "format_pass": 9,
+    "format_denominator": 15
+  },
+  "validation": {
+    "pytest": "79 passed",
+    "ruff": "passed",
+    "challenge_bytes_unchanged": true,
+    "unaffected_generation_outputs_identical": 17
+  },
+  "limitations": [
+    "Heuristic scope detection, not authorization or semantic entailment",
+    "Five challenge false negatives remain (5/10 positive recall)",
+    "Challenge is development-used after discovered boundary bug, not held-out",
+    "Only synthetic_reference scope is supported; contract hash proves binding, not source truth",
+    "Baseline remains default; scoped-v2 must be explicit"
+  ]
+}

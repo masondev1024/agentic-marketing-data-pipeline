@@ -1,0 +1,276 @@
+{
+  "diagnostic_mode": "model_planned_investigation",
+  "model_executed": true,
+  "model_execution_status": "returned",
+  "status": "completed",
+  "stop_reason": "completed",
+  "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "evidence": [
+    {
+      "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+      "tool": "version_evidence",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": {
+        "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+        "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+        "contract_version": "olist.raw.v1",
+        "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+        "published_at": "2026-10-07T11:43:59.903303+00:00",
+        "quality_status": "passed",
+        "check_count": 113,
+        "failed_check_count": 0,
+        "warning_count": 2,
+        "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+      }
+    },
+    {
+      "evidence_id": "f270d2d6ba35e64bda942bbb7a52994b3db2765e670324044c4a82242f26749a",
+      "tool": "run_history",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": [
+        {
+          "run_id": "6d82a0cf-816e-468b-a901-c024e3b9e60a",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "status": "reused",
+          "step": "complete",
+          "error_code": null,
+          "started_at": "2026-10-07T11:45:09.560277+00:00",
+          "finished_at": "2026-10-07T11:45:14.065301+00:00"
+        },
+        {
+          "run_id": "65bad562-391a-4d54-b4f2-822a0374e06d",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "status": "published",
+          "step": "complete",
+          "error_code": null,
+          "started_at": "2026-10-07T11:43:55.418837+00:00",
+          "finished_at": "2026-10-07T11:43:59.903303+00:00"
+        },
+        {
+          "run_id": "38ace663-aec0-4bdc-92fb-7a7ced58edef",
+          "version_id": "05a3a7ceb2ec97cc60f681509796eb9abdab2dd1041a2cd2a7f97fc8f67f044e",
+          "status": "failed",
+          "step": "mart",
+          "error_code": "QueryCanceled",
+          "started_at": "2026-10-07T11:41:20.449047+00:00",
+          "finished_at": "2026-10-07T11:43:27.658922+00:00"
+        },
+        {
+          "run_id": "1291db18-e32c-4b5a-be39-4d4bd8593090",
+          "version_id": "83435f85ae1da236ec641b29bc753f04be9ede796c3257124f5b8fa2bd9e020c",
+          "status": "reused",
+          "step": "complete",
+          "error_code": null,
+          "started_at": "2026-10-07T11:39:20.215204+00:00",
+          "finished_at": "2026-10-07T11:39:24.572299+00:00"
+        },
+        {
+          "run_id": "56e53cfd-5c87-4099-a22b-ded95f8650dd",
+          "version_id": "83435f85ae1da236ec641b29bc753f04be9ede796c3257124f5b8fa2bd9e020c",
+          "status": "published",
+          "step": "complete",
+          "error_code": null,
+          "started_at": "2026-10-07T11:37:49.499767+00:00",
+          "finished_at": "2026-10-07T11:37:54.024647+00:00"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "code": "recent_pipeline_failures",
+      "severity": "warning",
+      "summary": "1 of the latest five runs failed before the investigation start; this history does not establish root cause. Active published version: 2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369.",
+      "evidence_ids": [
+        "f270d2d6ba35e64bda942bbb7a52994b3db2765e670324044c4a82242f26749a",
+        "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97"
+      ]
+    },
+    {
+      "code": "published_quality_warnings",
+      "severity": "info",
+      "summary": "The published quality report records 2 warning-status checks.",
+      "evidence_ids": [
+        "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97"
+      ]
+    }
+  ],
+  "limitations": [
+    "source_timezone_unresolved",
+    "source_currency_unresolved",
+    "sample_completeness_unknown"
+  ],
+  "trace": [
+    {
+      "stage": "plan",
+      "output_sha256": "53040fef253798c55068793f83babe81afa1e5b78ba3f072b3e222971dea72da",
+      "generation_seconds": 0.6006558330263942,
+      "disposition": "supported",
+      "intents": [
+        "pipeline_history",
+        "quality"
+      ]
+    },
+    {
+      "stage": "execute",
+      "selected_action": "tool",
+      "selected_tool": "run_history"
+    },
+    {
+      "stage": "render",
+      "finding_codes": [
+        "recent_pipeline_failures",
+        "published_quality_warnings"
+      ]
+    }
+  ],
+  "usage": {
+    "generation_attempts": 1,
+    "generations": 1,
+    "tool_calls": 1,
+    "prompt_tokens": 810,
+    "output_tokens": 21
+  },
+  "model": {
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "model_revision": null,
+    "provider": "nvidia_hosted",
+    "revision_pinned": false,
+    "enable_thinking": false
+  },
+  "model_id": "nvidia/nemotron-3-super-120b-a12b",
+  "model_revision": null,
+  "prompt": {
+    "version": "olist-intent.v5",
+    "sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6"
+  },
+  "prompt_sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6",
+  "metric_policy": {
+    "version": "olist.metrics.v1",
+    "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+  },
+  "request_plan": {
+    "disposition": "supported",
+    "intents": [
+      "pipeline_history",
+      "quality"
+    ]
+  },
+  "pipeline_context": {
+    "status": "completed",
+    "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+    "graph": {
+      "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+      "lineage_map_version": "olist-dependency-map.v1",
+      "source_hashes": {
+        "schema.sql": "cddeb64129e7f36727f2a9aae9acb1dd942330233e37026c8e5f12908e63959b",
+        "transform.sql": "f7b2ddb658bba50c1091152267336cc7cb5ede7aef63400bc8f67056d4468a3d",
+        "pipeline.py": "de14d5f041ae105129f42d8102c8b5b72a69a44ece14503b10299e5acec4b1c8",
+        "validation.py": "09cc01eb8611e3b4c13d18d3143dfb36a1ea555d299eadea3fd43ff7c8b334d0"
+      },
+      "nodes": [
+        {
+          "id": "source_validation",
+          "label": "Validate source contract",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+          "runtime_state": "not_observed"
+        },
+        {
+          "id": "bronze_freeze",
+          "label": "Freeze validated source files",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+          "runtime_state": "not_observed"
+        },
+        {
+          "id": "core_copy_reconcile",
+          "label": "Copy and reconcile versioned core data",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+          "runtime_state": "not_observed"
+        },
+        {
+          "id": "mart_build",
+          "label": "Build and reconcile marts",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+          "runtime_state": "not_observed"
+        },
+        {
+          "id": "publication",
+          "label": "Atomically publish the version",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+          "runtime_state": "not_observed"
+        }
+      ],
+      "edges": [
+        {
+          "from": "source_validation",
+          "to": "bronze_freeze",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+        },
+        {
+          "from": "bronze_freeze",
+          "to": "core_copy_reconcile",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+        },
+        {
+          "from": "core_copy_reconcile",
+          "to": "mart_build",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+        },
+        {
+          "from": "mart_build",
+          "to": "publication",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+        }
+      ]
+    },
+    "lineage_provenance": {
+      "lineage_map_version": "olist-dependency-map.v1",
+      "source_hashes": {
+        "schema.sql": "cddeb64129e7f36727f2a9aae9acb1dd942330233e37026c8e5f12908e63959b",
+        "transform.sql": "f7b2ddb658bba50c1091152267336cc7cb5ede7aef63400bc8f67056d4468a3d",
+        "pipeline.py": "de14d5f041ae105129f42d8102c8b5b72a69a44ece14503b10299e5acec4b1c8",
+        "validation.py": "09cc01eb8611e3b4c13d18d3143dfb36a1ea555d299eadea3fd43ff7c8b334d0"
+      },
+      "evidence_transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+      "current_transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+      "source_hash_match": true
+    },
+    "incident_observations": [
+      {
+        "run_id": "38ace663-aec0-4bdc-92fb-7a7ced58edef",
+        "status": "failed",
+        "failed_version_id": "05a3a7ceb2ec97cc60f681509796eb9abdab2dd1041a2cd2a7f97fc8f67f044e",
+        "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+        "step": "mart",
+        "mapped_stage": "mart_build",
+        "error_code": "QueryCanceled",
+        "observation_only": true,
+        "error_note": "QueryCanceled is observed; its underlying cause is unproven."
+      }
+    ],
+    "candidate_affected_downstream_nodes": [
+      "publication"
+    ],
+    "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+    "active_published_version_available": true,
+    "distinct_published_version_available": true,
+    "last_good_preserved": null,
+    "diagnosis": {
+      "root_cause": "unknown",
+      "uncertainty": "The run cursor identifies a stage boundary only; it does not prove per-node completion or the cause of the error."
+    },
+    "recommended_read_only_checks": [
+      "Read the run receipt and validation report for the exact run_id and error_code.",
+      "Verify the selected version_id and transform_sha256 against the immutable version evidence.",
+      "Inspect the frozen Bronze manifest and compare each recorded SHA-256 with the retained files.",
+      "Inspect recorded core row-count and mart reconciliation in the run receipt and quality report.",
+      "Read publication and run history in one repeatable-read snapshot before deciding recovery."
+    ]
+  }
+}

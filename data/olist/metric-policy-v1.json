@@ -1,0 +1,45 @@
+{
+  "policy_version": "olist.metrics.v1",
+  "reviewed_at": "2026-10-07",
+  "scope": "historical Olist Kaggle samples; not current production commerce",
+  "currency": {
+    "status": "unresolved",
+    "value": null,
+    "reason": "Pinned CSV files have no currency field. Current Olist product documentation is not proof of the currency of these historical exports."
+  },
+  "timezone": {
+    "status": "unresolved",
+    "value": null,
+    "reason": "Exported timestamps have no UTC offset or IANA timezone. Seller location is not timestamp provenance."
+  },
+  "coverage": {
+    "status": "sample_only",
+    "complete_through": null,
+    "reason": "Maximum observed timestamp is not a completeness watermark. Unlinked sellers have unknown order outcomes."
+  },
+  "allowed": [
+    "sample_lead_count",
+    "sample_contract_count",
+    "sample_linked_contract_count",
+    "sample_unlinked_contract_count",
+    "sample_missing_origin_count",
+    "seller_distinct_observed_order_count"
+  ],
+  "conditional": {
+    "source_clock_pre_post_contract_count": "Only naive source-clock comparison; timezone alignment and business attribution are unverified."
+  },
+  "blocked": {
+    "currency_denominated_revenue": ["documented_source_currency", "revenue_status_and_refund_definition"],
+    "attributed_30_day_orders": ["documented_source_timezone", "complete_observation_window", "attribution_contract"],
+    "roas": ["ad_spend", "attributed_revenue", "consistent_currency"],
+    "cac": ["acquisition_cost", "customer_definition", "attribution_contract"],
+    "net_revenue": ["refund_ledger", "revenue_recognition_contract"]
+  },
+  "evidence_sources": [
+    {"url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce", "role": "dataset publisher; no timezone or currency confirmation obtained in this review"},
+    {"url": "https://www.kaggle.com/datasets/olistbr/marketing-funnel-olist", "role": "dataset publisher; cross-sample completeness is not guaranteed"},
+    {"path": "data/olist/contract-v1.json", "role": "pinned raw column and timestamp contracts"},
+    {"path": "evidence/olist-local-v1.json", "role": "local observed coverage and validation evidence"}
+  ],
+  "promotion": "Require dataset-specific documentary evidence or explicitly label a scenario assumption; never silently promote an assumption to a verified production metric."
+}

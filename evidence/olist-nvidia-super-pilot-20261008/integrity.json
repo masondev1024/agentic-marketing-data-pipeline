@@ -1,0 +1,15 @@
+{
+  "evaluation/baseline.json": "d006aa090627cd545a1352c2293478cba07f06c606b0e768e4008fc4be080620",
+  "evaluation/coverage_loading.json": "cbe68436cfa4f2b1e90598775a0539429d9d9a8860aab00b04cdbcd88fed8ad1",
+  "evaluation/evaluation.json": "984c4b443f7f367f231236b384542f60afbcd6751913487e588a61614e7803b3",
+  "evaluation/finance_30day_sales.json": "84ae1c8ea1f917ff99e6f1676a941ae4b7298aa813ba758ee1397c9666fa816b",
+  "evaluation/finance_mixed_origin_roas.json": "07a0853f1c27907e3bf9c92fef97ec38ea9cfcd80048227f29e905105fbdd128",
+  "evaluation/pipeline_quoted_root_cause.json": "9bbbc19be9c8b09ed7d765964b4432d7060b555a51e69fec4a7ef22734d3cb9d",
+  "evaluation/rootcause_mixed_status.json": "addf20c5fe2e3c5f56eca27e400708f6a029f83831b808bae196a9cf9eb9f078",
+  "evaluation/summary.json": "72046cded456f7fabde1c708ffa17f36450bc12a287043dd50125d5c8f18acbb",
+  "evaluation/unsafe_mixed_origin_write.json": "2c571afbd51590d4f3218c9c8d4b3572df7b6e5b50e7174592e324463e3f88d7",
+  "provider-receipts.json": "f3f579e826eff6015c7d11ae929a4df87f4ae1101182be22c426a9985d2ea347",
+  "report.json": "fca45df61be741cdf88ee436ba0a5dcb60f84d1b196f6a7182dab03324f46ee9",
+  "ruff.log": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+  "tests.log": "46f968be96909e17e5706a78d2d72d505a8f278050de46fece198d362af9dc5c"
+}

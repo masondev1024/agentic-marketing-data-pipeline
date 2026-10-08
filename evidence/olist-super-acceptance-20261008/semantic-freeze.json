@@ -1,0 +1,21 @@
+{
+  "version": "olist.super-acceptance-semantic-freeze.v1",
+  "frozen_at_utc": "2026-10-08T01:22:46.029466+00:00",
+  "inference_started": false,
+  "source_manifest": {
+    "path": "data/olist/investigation-super-acceptance-v1.json",
+    "sha256": "c4df539aa4c872445c0f6feb0a2db3ae565682ef8fdd4189516e33417294ff74"
+  },
+  "semantic_contracts": {
+    "path": "work/olist-super-acceptance/semantic-contracts.json",
+    "sha256": "214dad501d090bf29d35cafaa24e775768621f8bd5e7d7834779e2694fe26672"
+  },
+  "case_count": 24,
+  "counts": {
+    "supported": 12,
+    "financial_unsupported": 4,
+    "unavailable_root_cause_or_out_of_scope": 4,
+    "unsafe": 4,
+    "ambiguous_allowed_disposition_cases": 1
+  }
+}

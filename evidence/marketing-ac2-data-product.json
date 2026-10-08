@@ -1,0 +1,782 @@
+{
+  "schema_version": "marketing-ac2-evidence.v1",
+  "operator": "assistant",
+  "environment": "local isolated temporary checkout; actual DuckDB/Parquet",
+  "learner_executed": false,
+  "model_executed": false,
+  "frozen_cases": {
+    "version": "marketing-freeze.v1",
+    "sha256": {
+      "acceptance.json": "abb92bfa733e623f79d5185846f95adf9343cf29e58c05314612b2d821001c57",
+      "acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81"
+    }
+  },
+  "exact_duplicate": {
+    "silver_row_count": 1,
+    "gold": [
+      {
+        "account_id": "alpha",
+        "campaign_id": "c1",
+        "business_date": "2026-09-20",
+        "spend_krw": 10000
+      }
+    ]
+  },
+  "scenarios": {
+    "duplicate": {
+      "snapshot_id": "4cd366d5d13414b2528048aa889d0fc0085ffa3cf6f13b1832d4fc744af1f788",
+      "rerun_snapshot_identical": true,
+      "quality": "complete",
+      "account_metrics": [
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 60000,
+          "net_attributed_sales_krw": 53000,
+          "observed_roas": 3.533333333333333,
+          "order_count": 3,
+          "refund_krw": 7000,
+          "roas": 3.533333333333333,
+          "spend_krw": 15000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 20000,
+          "net_attributed_sales_krw": 20000,
+          "observed_roas": 2.0,
+          "order_count": 2,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 10000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 16000,
+          "net_attributed_sales_krw": 16000,
+          "observed_roas": 2.0,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 4000,
+          "net_attributed_sales_krw": 4000,
+          "observed_roas": 0.5,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 0.5,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        }
+      ]
+    },
+    "corrected_spend": {
+      "snapshot_id": "b0492e3d95f14a882a1be660924a7b265b96280d0aa1e5c28366462be0d61b66",
+      "rerun_snapshot_identical": true,
+      "quality": "complete",
+      "account_metrics": [
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 60000,
+          "net_attributed_sales_krw": 53000,
+          "observed_roas": 3.533333333333333,
+          "order_count": 3,
+          "refund_krw": 7000,
+          "roas": 3.533333333333333,
+          "spend_krw": 15000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 20000,
+          "net_attributed_sales_krw": 20000,
+          "observed_roas": 1.6666666666666667,
+          "order_count": 2,
+          "refund_krw": 0,
+          "roas": 1.6666666666666667,
+          "spend_krw": 12000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 16000,
+          "net_attributed_sales_krw": 16000,
+          "observed_roas": 2.0,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 4000,
+          "net_attributed_sales_krw": 4000,
+          "observed_roas": 0.5,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 0.5,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        }
+      ]
+    },
+    "late_order": {
+      "snapshot_id": "9c94dc5e28a283b05afc4edf94e88245fd7aacf83336f3bd23ddb84500cc535d",
+      "rerun_snapshot_identical": true,
+      "quality": "complete",
+      "account_metrics": [
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 60000,
+          "net_attributed_sales_krw": 53000,
+          "observed_roas": 3.533333333333333,
+          "order_count": 3,
+          "refund_krw": 7000,
+          "roas": 3.533333333333333,
+          "spend_krw": 15000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 26000,
+          "net_attributed_sales_krw": 26000,
+          "observed_roas": 2.6,
+          "order_count": 3,
+          "refund_krw": 0,
+          "roas": 2.6,
+          "spend_krw": 10000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 16000,
+          "net_attributed_sales_krw": 16000,
+          "observed_roas": 2.0,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 4000,
+          "net_attributed_sales_krw": 4000,
+          "observed_roas": 0.5,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 0.5,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        }
+      ]
+    },
+    "late_refund": {
+      "snapshot_id": "644cc9adfdf3b56b31afc1c7af26c1785b264dcef4e4441ba49c6fed756a73e5",
+      "rerun_snapshot_identical": true,
+      "quality": "complete",
+      "account_metrics": [
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 60000,
+          "net_attributed_sales_krw": 50000,
+          "observed_roas": 3.3333333333333335,
+          "order_count": 3,
+          "refund_krw": 10000,
+          "roas": 3.3333333333333335,
+          "spend_krw": 15000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 20000,
+          "net_attributed_sales_krw": 20000,
+          "observed_roas": 2.0,
+          "order_count": 2,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 10000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 16000,
+          "net_attributed_sales_krw": 16000,
+          "observed_roas": 2.0,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 4000,
+          "net_attributed_sales_krw": 4000,
+          "observed_roas": 0.5,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 0.5,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        }
+      ]
+    },
+    "zero_spend": {
+      "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+      "rerun_snapshot_identical": true,
+      "quality": "complete",
+      "account_metrics": [
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 60000,
+          "net_attributed_sales_krw": 53000,
+          "observed_roas": 3.533333333333333,
+          "order_count": 3,
+          "refund_krw": 7000,
+          "roas": 3.533333333333333,
+          "spend_krw": 15000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 20000,
+          "net_attributed_sales_krw": 20000,
+          "observed_roas": null,
+          "order_count": 2,
+          "refund_krw": 0,
+          "roas": null,
+          "spend_krw": 0,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 16000,
+          "net_attributed_sales_krw": 16000,
+          "observed_roas": 2.0,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 4000,
+          "net_attributed_sales_krw": 4000,
+          "observed_roas": 0.5,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 0.5,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        }
+      ]
+    },
+    "incomplete": {
+      "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+      "rerun_snapshot_identical": true,
+      "quality": "incomplete",
+      "account_metrics": [
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 60000,
+          "net_attributed_sales_krw": 53000,
+          "observed_roas": 3.533333333333333,
+          "order_count": 3,
+          "refund_krw": 7000,
+          "roas": 3.533333333333333,
+          "spend_krw": 15000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": false,
+          "gross_sales_krw": 20000,
+          "net_attributed_sales_krw": 20000,
+          "observed_roas": 2.0,
+          "order_count": 2,
+          "refund_krw": 0,
+          "roas": null,
+          "spend_krw": 10000,
+          "through_utc": null
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 16000,
+          "net_attributed_sales_krw": 16000,
+          "observed_roas": 2.0,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 4000,
+          "net_attributed_sales_krw": 4000,
+          "observed_roas": 0.5,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 0.5,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        }
+      ]
+    },
+    "observed_decline": {
+      "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+      "rerun_snapshot_identical": true,
+      "quality": "complete",
+      "account_metrics": [
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 60000,
+          "net_attributed_sales_krw": 53000,
+          "observed_roas": 3.533333333333333,
+          "order_count": 3,
+          "refund_krw": 7000,
+          "roas": 3.533333333333333,
+          "spend_krw": 15000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 20000,
+          "net_attributed_sales_krw": 20000,
+          "observed_roas": 2.0,
+          "order_count": 2,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 10000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "gross_sales_krw": 16000,
+          "net_attributed_sales_krw": 16000,
+          "observed_roas": 2.0,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 2.0,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "gross_sales_krw": 4000,
+          "net_attributed_sales_krw": 4000,
+          "observed_roas": 0.5,
+          "order_count": 1,
+          "refund_krw": 0,
+          "roas": 0.5,
+          "spend_krw": 8000,
+          "through_utc": "2026-09-23T12:00:00Z"
+        }
+      ]
+    },
+    "conflict": {
+      "error": {
+        "code": "payload_conflict",
+        "detail": "snapshot_id: contradictory same revision"
+      },
+      "previous_manifest_preserved": true,
+      "previous_snapshot_id": "204d305dde9e90264c61838fb316102717c8c7800d913dbe0ca259148954faf0"
+    },
+    "missing_mapping": {
+      "error": {
+        "code": "missing_mapping",
+        "detail": "campaign missing in account scope"
+      },
+      "previous_manifest_preserved": true,
+      "previous_snapshot_id": "204d305dde9e90264c61838fb316102717c8c7800d913dbe0ca259148954faf0"
+    },
+    "schema_error": {
+      "error": {
+        "code": "type",
+        "detail": "spend_snapshots[3].spend_krw: int required"
+      },
+      "previous_manifest_preserved": true,
+      "previous_snapshot_id": "204d305dde9e90264c61838fb316102717c8c7800d913dbe0ca259148954faf0"
+    }
+  },
+  "reviewed_manifest": {
+    "accounts": [
+      "alpha",
+      "beta"
+    ],
+    "artifacts": {
+      "bronze/input.json": "8b32c96ab9c55214b82070dc1f26b7220de75635c72ab2259dbe651ecf905e47",
+      "gold/gold_account.parquet": "b9d1e9ef544fee62e0e457d261dce4a9bc0b29d1fc992d3e7f33e6a9b18eef56",
+      "gold/gold_campaign.parquet": "7ea38ea509ae465466d50839785ddf9eaf5d0a1e138ca32d5d97dcf9b3742317",
+      "gold/metrics.json": "141f8f944e85da8e0f34e74a216ca9033879469986dc9fb758b9e6c8b5652336",
+      "metric_definitions.json": "59647fab60c43e40ddc37bdaf73ef94424bd8a18266e71f9d5b652e9ff3e26a8",
+      "quality.json": "9a2aaee059cb88df8ce79603116c0e3ee555a6eb51debdb017b8d4cc41c38dc9",
+      "silver/business_days.parquet": "ae1413aeef9c4bc9870adb17d41ec93f71d490f6b00c0124b36a749573108495",
+      "silver/quality_daily.parquet": "9d0f654146dd5a9030daa8b931a9066de1dabfbdc8b666404bc88e2bb4b0b693",
+      "silver/silver_campaigns.parquet": "729b26992c3ab55f3477ffbfb4ec31a2956e9fe05a05de8b75e85f4061d98732",
+      "silver/silver_coverage.parquet": "c94cfa3748ed60d5b1cd56136e6b0ef3852d1f1d12d18bbfb97714ab7981f7c9",
+      "silver/silver_orders.parquet": "62b552760b1f015c5bc8dd6e326810a1fbf26afd95b0f8bbf3b9825471c6263b",
+      "silver/silver_refunds.parquet": "efaeaa1298d5ac51d415e62dd33892a6a20b245276bf82c0fbb6c391e682f2fe",
+      "silver/silver_spend.parquet": "7c926d0f52fca232681010979652baddf578e9fb9e78e1d7bff951f1a8b5da91"
+    },
+    "as_of": "2026-09-23T12:00:00Z",
+    "date_end": "2026-09-21",
+    "date_start": "2026-09-20",
+    "freshness": {
+      "as_of": "2026-09-23T12:00:00Z",
+      "oldest_through_utc": "2026-09-23T12:00:00Z",
+      "policy": "compare both as_of and oldest source watermark to clock; 86400s",
+      "sources": [
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "source": "spend",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "source": "orders",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "source": "refunds",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "source": "spend",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "source": "orders",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "alpha",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "source": "refunds",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "source": "spend",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "source": "orders",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-20",
+          "complete": true,
+          "source": "refunds",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "source": "spend",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "source": "orders",
+          "through_utc": "2026-09-23T12:00:00Z"
+        },
+        {
+          "account_id": "beta",
+          "business_date": "2026-09-21",
+          "complete": true,
+          "source": "refunds",
+          "through_utc": "2026-09-23T12:00:00Z"
+        }
+      ]
+    },
+    "identity": {
+      "contract_version": "marketing.v1",
+      "duckdb_version": "1.4.3",
+      "fixture_revision": "marketing-acceptance.v1",
+      "input_sha256": "8b32c96ab9c55214b82070dc1f26b7220de75635c72ab2259dbe651ecf905e47",
+      "metrics_sha256": "59647fab60c43e40ddc37bdaf73ef94424bd8a18266e71f9d5b652e9ff3e26a8",
+      "pipeline_version": "marketing-pipeline.v1",
+      "source_sha256": {
+        "contracts.py": "c58f5bb19c6064e1b1c00acc6a67974b8509681aa4ae849670cb3f6c16cbb3a0",
+        "pipeline.py": "3aadc9161f21d5fcf973124227555877ecbeaccde1067a8b2f7485d57fa9b673",
+        "transform.sql": "15cf57e77c5bce5c5e567a986eae8e67dfafae310fbf812925a51e13978ccd38"
+      }
+    },
+    "lineage": {
+      "bronze": "bronze/input.json",
+      "bronze_sha256": "8b32c96ab9c55214b82070dc1f26b7220de75635c72ab2259dbe651ecf905e47",
+      "gold": [
+        "gold_campaign",
+        "gold_account"
+      ],
+      "restatement": "full declared window; refunds on original order date",
+      "silver": [
+        "silver_campaigns",
+        "silver_spend",
+        "silver_orders",
+        "silver_refunds",
+        "silver_coverage"
+      ],
+      "sql_sha256": "15cf57e77c5bce5c5e567a986eae8e67dfafae310fbf812925a51e13978ccd38"
+    },
+    "quality": {
+      "blocking_errors": [],
+      "future_delivery_rows": 0,
+      "missing_coverage": [],
+      "raw_rows": {
+        "campaigns": 3,
+        "coverage": 12,
+        "orders": 7,
+        "refunds": 2,
+        "spend_snapshots": 6
+      },
+      "silver_rows": {
+        "business_days": 2,
+        "quality_daily": 4,
+        "silver_campaigns": 3,
+        "silver_coverage": 12,
+        "silver_orders": 7,
+        "silver_refunds": 2,
+        "silver_spend": 6
+      },
+      "status": "complete"
+    },
+    "schema_version": "marketing-manifest.v1",
+    "snapshot_id": "204d305dde9e90264c61838fb316102717c8c7800d913dbe0ca259148954faf0"
+  },
+  "reviewed_metrics": {
+    "account": [
+      {
+        "account_id": "alpha",
+        "business_date": "2026-09-20",
+        "complete": true,
+        "gross_sales_krw": 60000,
+        "net_attributed_sales_krw": 53000,
+        "observed_roas": 3.533333333333333,
+        "order_count": 3,
+        "refund_krw": 7000,
+        "roas": 3.533333333333333,
+        "spend_krw": 15000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      },
+      {
+        "account_id": "alpha",
+        "business_date": "2026-09-21",
+        "complete": true,
+        "gross_sales_krw": 20000,
+        "net_attributed_sales_krw": 20000,
+        "observed_roas": 2.0,
+        "order_count": 2,
+        "refund_krw": 0,
+        "roas": 2.0,
+        "spend_krw": 10000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      },
+      {
+        "account_id": "beta",
+        "business_date": "2026-09-20",
+        "complete": true,
+        "gross_sales_krw": 16000,
+        "net_attributed_sales_krw": 16000,
+        "observed_roas": 2.0,
+        "order_count": 1,
+        "refund_krw": 0,
+        "roas": 2.0,
+        "spend_krw": 8000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      },
+      {
+        "account_id": "beta",
+        "business_date": "2026-09-21",
+        "complete": true,
+        "gross_sales_krw": 4000,
+        "net_attributed_sales_krw": 4000,
+        "observed_roas": 0.5,
+        "order_count": 1,
+        "refund_krw": 0,
+        "roas": 0.5,
+        "spend_krw": 8000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      }
+    ],
+    "campaign": [
+      {
+        "account_id": "alpha",
+        "business_date": "2026-09-20",
+        "campaign_id": "c1",
+        "complete": true,
+        "gross_sales_krw": 50000,
+        "name": "synthetic-alpha-c1",
+        "net_attributed_sales_krw": 43000,
+        "observed_roas": 4.3,
+        "order_count": 2,
+        "refund_krw": 7000,
+        "roas": 4.3,
+        "spend_krw": 10000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      },
+      {
+        "account_id": "alpha",
+        "business_date": "2026-09-21",
+        "campaign_id": "c1",
+        "complete": true,
+        "gross_sales_krw": 12000,
+        "name": "synthetic-alpha-c1",
+        "net_attributed_sales_krw": 12000,
+        "observed_roas": 1.2,
+        "order_count": 1,
+        "refund_krw": 0,
+        "roas": 1.2,
+        "spend_krw": 10000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      },
+      {
+        "account_id": "alpha",
+        "business_date": "2026-09-20",
+        "campaign_id": "c2",
+        "complete": true,
+        "gross_sales_krw": 10000,
+        "name": "synthetic-alpha-c2",
+        "net_attributed_sales_krw": 10000,
+        "observed_roas": 2.0,
+        "order_count": 1,
+        "refund_krw": 0,
+        "roas": 2.0,
+        "spend_krw": 5000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      },
+      {
+        "account_id": "alpha",
+        "business_date": "2026-09-21",
+        "campaign_id": "c2",
+        "complete": true,
+        "gross_sales_krw": 8000,
+        "name": "synthetic-alpha-c2",
+        "net_attributed_sales_krw": 8000,
+        "observed_roas": null,
+        "order_count": 1,
+        "refund_krw": 0,
+        "roas": null,
+        "spend_krw": 0,
+        "through_utc": "2026-09-23T12:00:00Z"
+      },
+      {
+        "account_id": "beta",
+        "business_date": "2026-09-20",
+        "campaign_id": "c1",
+        "complete": true,
+        "gross_sales_krw": 16000,
+        "name": "synthetic-beta-c1",
+        "net_attributed_sales_krw": 16000,
+        "observed_roas": 2.0,
+        "order_count": 1,
+        "refund_krw": 0,
+        "roas": 2.0,
+        "spend_krw": 8000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      },
+      {
+        "account_id": "beta",
+        "business_date": "2026-09-21",
+        "campaign_id": "c1",
+        "complete": true,
+        "gross_sales_krw": 4000,
+        "name": "synthetic-beta-c1",
+        "net_attributed_sales_krw": 4000,
+        "observed_roas": 0.5,
+        "order_count": 1,
+        "refund_krw": 0,
+        "roas": 0.5,
+        "spend_krw": 8000,
+        "through_utc": "2026-09-23T12:00:00Z"
+      }
+    ]
+  },
+  "marketer_report": "# 합성 마케팅·커머스 보고서\nsnapshot: 204d305dde9e90264c61838fb316102717c8c7800d913dbe0ca259148954faf0\nas_of(UTC): 2026-09-23T12:00:00Z | freshness: fresh\nclock(UTC): 2026-09-23T12:00:00+00:00 | fixture_clock_override: True\noldest source watermark: 2026-09-23T12:00:00Z\nquality: complete | blocked attempts: 0\nBronze SHA256: 8b32c96ab9c55214b82070dc1f26b7220de75635c72ab2259dbe651ecf905e47\n단위: 정수 KRW. 합성 단일 캠페인 귀속; 인과관계·예산 변경 판단 불가.\n불완전/오래된 데이터의 관측 합계는 잠정치이며 확정 성과 판단은 unknown.\n\n계정 | KST 날짜 | 광고비 | 주문수 | 매출 | 환불 | 순귀속매출 | ROAS | 품질\n---|---|---:|---:|---:|---:|---:|---:|---\nalpha | 2026-09-20 | 15000 | 3 | 60000 | 7000 | 53000 | 3.5333 | complete\nalpha | 2026-09-21 | 10000 | 2 | 20000 | 0 | 20000 | 2.0000 | complete\nbeta | 2026-09-20 | 8000 | 1 | 16000 | 0 | 16000 | 2.0000 | complete\nbeta | 2026-09-21 | 8000 | 1 | 4000 | 0 | 4000 | 0.5000 | complete\n\n캠페인별 관측치 (계정 합계와 별도 grain)\n계정 | 캠페인 | KST 날짜 | 광고비 | 순귀속매출 | ROAS | 품질\n---|---|---|---:|---:|---:|---\nalpha | c1 | 2026-09-20 | 10000 | 43000 | 4.3000 | complete\nalpha | c1 | 2026-09-21 | 10000 | 12000 | 1.2000 | complete\nalpha | c2 | 2026-09-20 | 5000 | 10000 | 2.0000 | complete\nalpha | c2 | 2026-09-21 | 0 | 8000 | unknown | complete\nbeta | c1 | 2026-09-20 | 8000 | 16000 | 2.0000 | complete\nbeta | c1 | 2026-09-21 | 8000 | 4000 | 0.5000 | complete\n\n원천 watermark (UTC, 원천 선언이며 독립적인 완전성 증명은 아님)\n- alpha/2026-09-20/spend: 2026-09-23T12:00:00Z complete=True\n- alpha/2026-09-20/orders: 2026-09-23T12:00:00Z complete=True\n- alpha/2026-09-20/refunds: 2026-09-23T12:00:00Z complete=True\n- alpha/2026-09-21/spend: 2026-09-23T12:00:00Z complete=True\n- alpha/2026-09-21/orders: 2026-09-23T12:00:00Z complete=True\n- alpha/2026-09-21/refunds: 2026-09-23T12:00:00Z complete=True\n- beta/2026-09-20/spend: 2026-09-23T12:00:00Z complete=True\n- beta/2026-09-20/orders: 2026-09-23T12:00:00Z complete=True\n- beta/2026-09-20/refunds: 2026-09-23T12:00:00Z complete=True\n- beta/2026-09-21/spend: 2026-09-23T12:00:00Z complete=True\n- beta/2026-09-21/orders: 2026-09-23T12:00:00Z complete=True\n- beta/2026-09-21/refunds: 2026-09-23T12:00:00Z complete=True\n"
+}

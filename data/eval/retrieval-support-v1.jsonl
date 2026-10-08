@@ -1,0 +1,24 @@
+{"id": "repeat-positive", "question": "멱등성의 최종 효과는?", "expected_source": "idempotency.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "repeat-mixed", "question": "멱등성의 최종 효과와 토성의 고리는?", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "attempts-positive", "question": "재시도 횟수는?", "expected_source": "retry.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "attempts-mixed", "question": "재시도 횟수와 목성의 위성 수는?", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "validate-positive", "question": "백필 검증은?", "expected_source": "backfill.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "validate-mixed", "question": "백필 검증과 서울 기온을 함께 알려줘.", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "interval-positive", "question": "재시도 간격은?", "expected_source": "retry.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "interval-mixed", "question": "재시도 간격과 혈압 수치는?", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "jitter-positive", "question": "API 재시도에 jitter를 적용하는 이유는?", "expected_source": "retry.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "jitter-mixed", "question": "API 재시도에 jitter를 적용하는 이유와 환율은?", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "restore-positive", "question": "백필 검증 실패 시 기존 결과를 유지하나요?", "expected_source": "backfill.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "restore-mixed", "question": "백필 검증 실패 시 기존 결과와 축구 순위를 알려줘.", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "sales-positive", "question": "주문 이벤트가 중복되면 매출은 어떻게 되나요?", "expected_source": "idempotency.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "sales-mixed", "question": "주문 이벤트의 매출과 화성의 대기는?", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "short-cap-positive", "question": "재시도 최대 시도 횟수는?", "expected_source": "retry.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "short-cap-mixed", "question": "재시도 최대 시도 횟수와 태양의 온도는?", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "paraphrase-cap-positive", "question": "재시도를 몇 번까지 시도하는 정책인가요?", "expected_source": "retry.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "paraphrase-cap-mixed", "question": "재시도를 몇 번까지 시도하는 정책이고 은행 금리는?", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "checkpoint-positive", "question": "백필 실행 ID를 기록하는 이유는?", "expected_source": "backfill.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "checkpoint-mixed", "question": "백필 실행 ID를 기록하는 이유와 행성 질량을 알려줘.", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "team-positive", "question": "우리 팀에서 재시도 횟수를 제한해야 하는 이유는?", "expected_source": "retry.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "team-mixed", "question": "우리 팀에서 재시도 횟수를 제한해야 하는 이유와 선거 결과는?", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}
+{"id": "minute-positive", "question": "재시도 예시의 간격은 몇 분인가요?", "expected_source": "retry.md", "must_include": ["해당 문서에 근거해 답변; 문서에 없는 값은 없다고 명시"], "must_not_claim": ["문서 밖 사실이나 값을 지어냄"]}
+{"id": "minute-mixed", "question": "재시도 예시의 간격과 보험료를 알려줘.", "expected_source": null, "must_include": ["질문 전체를 해당 문서가 지원하지 못하므로 생성 전 보류"], "must_not_claim": ["일부 관련 단어만으로 전체 질문 답변을 생성"]}

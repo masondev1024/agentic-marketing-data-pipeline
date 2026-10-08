@@ -1,0 +1,3 @@
+# Evidence and frozen input contracts preserve their original hashed bytes.
+evidence/** -text -whitespace
+data/** -text

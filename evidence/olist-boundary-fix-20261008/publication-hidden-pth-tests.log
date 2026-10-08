@@ -1,0 +1,67 @@
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+........................................................................ [ 32%]
+........................................................................ [ 42%]
+........................................................................ [ 53%]
+........................................................................ [ 64%]
+........................................................................ [ 75%]
+........................................................................ [ 85%]
+....................................................FF.................. [ 96%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+______ test_evaluation_snapshots_contract_and_forwards_variant[scoped-v2] ______
+
+tmp_path = PosixPath('/private/var/folders/pv/16m2x3wn0_97mt_f30wr7q940000gn/T/pytest-of-mason/pytest-270/test_evaluation_snapshots_cont0')
+variant = 'scoped-v2'
+
+    @pytest.mark.parametrize("variant", ["scoped-v2", "scoped-v3"])
+    def test_evaluation_snapshots_contract_and_forwards_variant(tmp_path, variant):
+        args = parse_args([
+            "--corpus-dir", str(ROOT / "data/runbooks"),
+            "--dataset", str(ROOT / "data/eval/retrieval-smoke.jsonl"),
+            "--retriever", variant, "--search-only", "--output-dir", str(tmp_path),
+        ])
+        # The old smoke schema is retrieval-only; use one valid full evaluation row.
+        dataset = tmp_path / "one.jsonl"
+        dataset.write_text((ROOT / "data/eval/development-v1.jsonl").read_text().splitlines()[0])
+        args.dataset = dataset
+        batch = run_batch(args)
+        manifest = json.loads((batch / "manifest.json").read_text())
+        snapshot = batch / "corpus/scope.json"
+        assert hashlib.sha256(snapshot.read_bytes()).hexdigest() == manifest["scope_sha256"]
+        summary = json.loads((batch / "summary.json").read_text())
+>       record = json.loads((batch / summary["cases"][0]["run_file"]).read_text())
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'run_file'
+
+tests/test_retrieval_scope.py:134: KeyError
+______ test_evaluation_snapshots_contract_and_forwards_variant[scoped-v3] ______
+
+tmp_path = PosixPath('/private/var/folders/pv/16m2x3wn0_97mt_f30wr7q940000gn/T/pytest-of-mason/pytest-270/test_evaluation_snapshots_cont1')
+variant = 'scoped-v3'
+
+    @pytest.mark.parametrize("variant", ["scoped-v2", "scoped-v3"])
+    def test_evaluation_snapshots_contract_and_forwards_variant(tmp_path, variant):
+        args = parse_args([
+            "--corpus-dir", str(ROOT / "data/runbooks"),
+            "--dataset", str(ROOT / "data/eval/retrieval-smoke.jsonl"),
+            "--retriever", variant, "--search-only", "--output-dir", str(tmp_path),
+        ])
+        # The old smoke schema is retrieval-only; use one valid full evaluation row.
+        dataset = tmp_path / "one.jsonl"
+        dataset.write_text((ROOT / "data/eval/development-v1.jsonl").read_text().splitlines()[0])
+        args.dataset = dataset
+        batch = run_batch(args)
+        manifest = json.loads((batch / "manifest.json").read_text())
+        snapshot = batch / "corpus/scope.json"
+        assert hashlib.sha256(snapshot.read_bytes()).hexdigest() == manifest["scope_sha256"]
+        summary = json.loads((batch / "summary.json").read_text())
+>       record = json.loads((batch / summary["cases"][0]["run_file"]).read_text())
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'run_file'
+
+tests/test_retrieval_scope.py:134: KeyError
+=========================== short test summary info ============================
+FAILED tests/test_retrieval_scope.py::test_evaluation_snapshots_contract_and_forwards_variant[scoped-v2]
+FAILED tests/test_retrieval_scope.py::test_evaluation_snapshots_contract_and_forwards_variant[scoped-v3]
+2 failed, 669 passed in 85.91s (0:01:25)

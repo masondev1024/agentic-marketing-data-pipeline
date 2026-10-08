@@ -1,0 +1,13 @@
+{
+  "version": "marketing-experiment.v1",
+  "authority": "work/marketing-aws-implementation-brief.md sections 4 and 6",
+  "threshold_origin": "Assistant engineering defaults registered before first inference, not user-supplied numbers",
+  "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+  "prompt_version": "marketing-agent.v1",
+  "cases": {"observed_decline": "observed_decline", "incomplete": "unknown", "zero_spend": "unknown"},
+  "account": "alpha",
+  "clock": "fixture as_of (historical replay, not present-day freshness)",
+  "limits": {"wall_seconds":30,"model_input_tokens":2048,"model_output_tokens":256,"cumulative_model_tokens":8192,"malformed_json_retries":1,"actions":8,"tool_calls":6},
+  "promotion": {"minimum_real_cases":20,"correct_fraction":1.0,"complete_evidence_fraction":1.0,"maximum_errors":0,"maximum_unsupported_claims":0,"maximum_latency_ratio_to_baseline":2.0},
+  "sampling": "Three fixed acceptance cases, one trial each; small resource-bounded subset, no p95 or statistical generalization. Promotion requires a future separately preregistered larger study."
+}

@@ -1,0 +1,32 @@
+{
+  "version": "olist.super-acceptance-freeze.v1",
+  "frozen_at_utc": "2026-10-08T01:21:43.047445+00:00",
+  "inference_started": false,
+  "purpose": "Pre-inference integrity freeze for the fresh separately authored Super acceptance manifest and provenance sidecar.",
+  "case_count": 24,
+  "positive_count": 12,
+  "negative_count": 12,
+  "intent_family_counts": {
+    "coverage": 4,
+    "origins": 4,
+    "pipeline_history": 4,
+    "unsafe_credential_write_or_override": 4,
+    "unsupported_financial_metrics": 4,
+    "unsupported_root_cause_or_scope": 4
+  },
+  "normalized_exact_overlap_with_prior_data_question_count": 0,
+  "artifact_sha256": {
+    "data/olist/investigation-super-acceptance-v1.json": "c4df539aa4c872445c0f6feb0a2db3ae565682ef8fdd4189516e33417294ff74",
+    "data/olist/personas/super-acceptance-provenance-v1.json": "1de3b24e2e3e74ee810f43aa13a743220318703371e546826f2a9d664b0c7083",
+    "data/olist/personas/nemotron-korea-seeds-v1.json": "9c81a7a421685b6d604e0988404726fb90348a49e9dfff427fe78f6be1216b53"
+  },
+  "seed_source": {
+    "dataset": "NVIDIA Nemotron-Personas-Korea",
+    "source_url": "https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea",
+    "license": "CC-BY-4.0",
+    "observed_repository_revision": "ada0f5b53a38bb5a30cce09358adde883c1ab63a",
+    "rows_revision_binding": "Repository revision was observed from the separate metadata API response. The datasets-server rows endpoint did not report a revision, so these rows are not claimed to be pinned to that repository commit.",
+    "saved_seed_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26",
+    "note": "Reused the saved bounded 12-row sample; no new download."
+  }
+}

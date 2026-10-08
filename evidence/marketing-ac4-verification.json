@@ -1,0 +1,59 @@
+{
+  "acceptance_criterion": 4,
+  "authority": "work/marketing-aws-implementation-brief.md sections 4 and 6",
+  "operator": "assistant",
+  "scope_verdict": "actual_inference_reverified_after_review_repairs",
+  "project_verdict": "pending_current_full_release_checks",
+  "agent_designation": "experimental",
+  "learner_execution_verified": false,
+  "previous_verification": "evidence/marketing-ac4-verification-before-review-repairs.json",
+  "commands_run": [
+    "PYTHONDONTWRITEBYTECODE=1 uv run --locked python scripts/run_marketing_model_isolated.py /Users/mason/Documents/Codex/2026-10-06/new-chat/work/marketing-model-review-repair-2026-10-07"
+  ],
+  "exit_codes": [
+    0
+  ],
+  "source_observation": "Watched source fingerprints unchanged during isolated real inference",
+  "experiment_evidence": "evidence/marketing-ac4-experiment.json",
+  "experiment_sha256": "cda532af2cd0c1d4487a3eed4e1ca26e212c7641d65c6e1bf6e993e214889db4",
+  "summary": {
+    "real_cases": 3,
+    "correct": 0,
+    "complete_evidence": 0,
+    "errors": 3,
+    "abstentions": 0,
+    "unsupported_claims_rejected": 0,
+    "promotion_passed": false,
+    "promotion_failure": "minimum_real_cases: 3 < 20; see per-case scores",
+    "failed_closed_unknown": 3
+  },
+  "case_errors": {
+    "observed_decline": {
+      "code": "evidence_reference",
+      "detail": "bounded issued evidence required"
+    },
+    "incomplete": {
+      "code": "evidence_incomplete",
+      "detail": "metrics, quality, freshness required"
+    },
+    "zero_spend": {
+      "code": "evidence_incomplete",
+      "detail": "metrics, quality, freshness required"
+    }
+  },
+  "requirement_evidence": [
+    {
+      "source": "brief section 4",
+      "text": "Three actual offline Qwen cases use the current repaired worker. The deterministic baseline is correct and complete in all three. The model selects metrics then attempts finish; one invalid reference and two incomplete evidence sets are rejected to unknown. No fallback relabelled as model behavior."
+    },
+    {
+      "source": "brief section 6",
+      "text": "Preregistered promotion thresholds unchanged. Actual correct 0/3, complete 0/3, errors 3. Model remains experimental. Raw generations and immutable snapshot identities retained."
+    }
+  ],
+  "limitations": [
+    "Assistant-run local synthetic cases; no production or learner competence claim.",
+    "Three distinct fixed cases, twelve trials including earlier nine and this three-case post-review repeat. Repeats are not independent cases.",
+    "Prior 395-test count is historical in previous_verification; current full release verification is pending documentation reconciliation."
+  ]
+}

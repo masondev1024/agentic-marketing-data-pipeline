@@ -1,0 +1,1351 @@
+{
+  "scope": "Assistant-run single-seed development comparison, manually reviewed; not held-out or production validation",
+  "protocol": "# Model comparison protocol — 2026-10-06\n\nOne change: qwen3-0.6b versus qwen3-4b, both original Qwen3 family, MLX 4bit.\nFixed: baseline prompt, dataset and rubric, corpus snapshot, code, dependencies,\nseed 42, temperature 0, max 256 output tokens, non-thinking mode, 120s timeout.\nRerun both models sequentially under the same new model-selection code.\nCompare actual messages and token-ID hashes. Preserve output truncation as a failure observation.\n\nManual criteria: same development-v1 facts, grounding, and format as prior experiment.\nPrimary: all required content and grounding on 15 in-scope questions, with retrieval misses included.\nSecondary: 14 generated in-scope answers' two-sentence format; 5 out-of-scope pre-generation gates.\nReport per-case improvement and regression, no binary automatic truth scoring.\n\nCandidate advancement: primary count increases, no previous content+grounding pass regresses,\nretry-policy and idempotency-recovery both pass, no execution errors, max observed MLX peak <=4GB.\nThis is a next-development-stage decision, not a production-readiness gate or held-out score.\nKeep the 0.6B CLI default for reproducibility; recommend the explicit --model option if criteria pass.\n\nMeasure generation time and output token lengths, per-case load, subprocess wall time and MLX peak.\nDo not call a 15-generation sample p95 or a throughput benchmark. Output lengths differ, so a time\nratio is not an isolated hardware-speed comparison. MLX peak is not total process/system RAM.\nMemory/swap already in use before the experiment must not be blamed on the candidate.\nNo paid APIs, extra model families, fine-tuning or search-threshold changes in this experiment.\n\nTiming detail before reading comparative outputs: exclude the first generated case in each batch\nfrom timing aggregates (startup warm-up; local weights checksum verification overlaps early baseline).\nUse the remaining 14 matched generated questions for medians. Keep all 20 in quality review and\nall 15 generated records in the peak-memory/truncation inventory. Background host load is uncontrolled.\n",
+  "model_source": {
+    "repo_id": "mlx-community/Qwen3-4B-4bit",
+    "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "license": "apache-2.0",
+    "files": [
+      {
+        "name": "README.md",
+        "size": 857
+      },
+      {
+        "name": "added_tokens.json",
+        "size": 707
+      },
+      {
+        "name": "config.json",
+        "size": 937
+      },
+      {
+        "name": "merges.txt",
+        "size": 1671853
+      },
+      {
+        "name": "model.safetensors",
+        "size": 2263022529
+      },
+      {
+        "name": "model.safetensors.index.json",
+        "size": 63924
+      },
+      {
+        "name": "special_tokens_map.json",
+        "size": 613
+      },
+      {
+        "name": "tokenizer.json",
+        "size": 11422654
+      },
+      {
+        "name": "tokenizer_config.json",
+        "size": 9706
+      },
+      {
+        "name": "vocab.json",
+        "size": 2776833
+      }
+    ],
+    "total_bytes": 2278970613,
+    "download_seconds": 278.2639624589938,
+    "checked_download_sizes": true,
+    "configuration_sha256": {
+      "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+      "config.json": "b5efdcf3b0035a3638e7228dad4d85f5c4a23f156eb7cdb0b44c8366a5d34d9b",
+      "model.safetensors.index.json": "f7825defe5865d179c3b593173d37056be5f202dcb7153985cf74e75ecf1628b",
+      "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "tokenizer_config.json": "253153d0738ceb4c668d2eff957714dd2bea0b56de772a9fdccd96cbf517e6a0",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    "weights_sha256": "e240c0bdc0ebb0681bf0da0f98d9719fd6ebe269a3633f81542c13e81345651d"
+  },
+  "source_urls": [
+    "https://huggingface.co/mlx-community/Qwen3-4B-4bit",
+    "https://huggingface.co/Qwen/Qwen3-4B"
+  ],
+  "host_preflight": {
+    "physical_memory_bytes": 17179869184,
+    "disk_free_gb": 33.1,
+    "memory_pressure_free_percent": 38,
+    "swap_used_mb": 4964.81
+  },
+  "excluded_preliminary_batch": "0334bb33-f0ad-44d3-bbca-d93ebda23c48",
+  "baseline": {
+    "manifest": {
+      "schema_version": "development-evaluation.v1",
+      "batch_id": "14bb628b-4207-4eef-8602-3f3e8e389f3b",
+      "created_at": "2026-10-06T13:23:22.763157+00:00",
+      "operator": "assistant",
+      "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+      "dataset_kind": "development; not held-out",
+      "case_count": 20,
+      "search_only": false,
+      "offline": true,
+      "prompt_variant": "baseline",
+      "timeout_seconds": 120,
+      "settings": {
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "seed": 42,
+        "enable_thinking": false
+      },
+      "model_profile": "qwen3-0.6b",
+      "model_id": "mlx-community/Qwen3-0.6B-4bit",
+      "model_revision": "73e3e38d981303bc594367cd910ea6eb48349da8",
+      "source_sha256": {
+        "cli.py": "1b8d749ce6ddd58d66261d3336d2a0914bcd0e74ebd89219719d50b46e846994",
+        "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+        "retrieval.py": "5192f87564cf2f17effc83c025d4678f6c0d3a7a6c89ce57652c5828c2c54363",
+        "evaluation.py": "9c3aba00e1f01e0d10a02c3b7f45f9984b3d51f23ad48ada09e066ccce8fac82"
+      },
+      "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+      "corpus_manifest": [
+        {
+          "name": "backfill.md",
+          "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+        },
+        {
+          "name": "idempotency.md",
+          "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+        },
+        {
+          "name": "retry.md",
+          "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+        }
+      ],
+      "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+    },
+    "summary": {
+      "status": "completed",
+      "batch_id": "14bb628b-4207-4eef-8602-3f3e8e389f3b",
+      "metrics": {
+        "total": 20,
+        "executed_ok": 20,
+        "errors": 0,
+        "retrieval_pass": 18,
+        "behavior_pass": 18,
+        "answerable": {
+          "total": 15,
+          "retrieval_pass": 14
+        },
+        "out_of_scope": {
+          "total": 5,
+          "retrieval_pass": 4
+        },
+        "answer_quality": "not_scored; review each answer against the rubric"
+      },
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-why/16c8e289-7224-46e3-9343-938b6d30c73e.json",
+          "output": "데이터 파이프라인에서 멱등성이 필요한 이유는 중복 이벤트가 발생할 때 데이터 정합성을 유지하기 위해, 이벤트가 중복 반영되는 것을 방지하기 위해, 이는 데이터의 정합성과 데이터의 중복 효과를 방지하는 데 기여합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 3.454261749982834
+        },
+        {
+          "case_id": "idempotency-definition",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-definition/5b3816bc-9d76-4702-9ede-d13a3229de4a.json",
+          "output": "멱등성은 같은 작업을 여러 번 수행해도 최종 효과가 한 번 수행한 것과 같은 성질입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 3.081689041981008
+        },
+        {
+          "case_id": "idempotency-sales",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-sales/2cb5a360-8a7e-4442-81e8-add12e61fc69.json",
+          "output": "같은 주문 이벤트가 재전송될 때마다 매출을 더하면 **중복 효과**가 발생하며, **매출의 중복 반영을 방지하기 위한 방법**은 **재시도 자체를 금지하는 것은 장애 복구 방법이 아니다**고 설명됩니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.573344167030882
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-atomic/2946b858-4307-4063-b3a1-fc69e5475a7f.json",
+          "output": "이벤트 ID 확인과 결과 반영을 원자적으로 수행해야 하는 이유는 중복 효과를 방지하고 데이터 정합성을 유지하는 데서 오는 이유입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.5171649170224555
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-recovery/c606337d-7601-4df8-8b72-8fc851c9a9a5.json",
+          "output": "장애 후 재시도를 금지해야 한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2297342080273665
+        },
+        {
+          "case_id": "retry-policy",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-policy/e12fdeb4-85ad-4391-bf30-f78bf36a22b5.json",
+          "output": "일시적인 API 오류의 재시도 간격은 5회이고, 최대 시도 횟수는 5회다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2801146249985322
+        },
+        {
+          "case_id": "retry-jitter",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-jitter/5407faf4-12ed-4457-b97b-279c95895e7d.json",
+          "output": "재시도 간격에 exponential backoff와 jitter를 적용하는 이유는 요청이 일시적인 API 오류나 서비스 과부하로 실패할 경우, 요청이 몰리는 것을 줄이고, 무한 반복을 피하기 위해입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.446458708960563
+        },
+        {
+          "case_id": "retry-auth",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-auth/ba5fbf5d-c488-45dd-bbb1-d3a4c99bd971.json",
+          "output": "참고 문서에서 API 권한 오류나 잘못된 요청은 즉시 같은 요청을 반복하지 않으며, 재시도를 고려하지 않습니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2832815409637988
+        },
+        {
+          "case_id": "retry-timeout",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-timeout/c9027c55-fb84-4c18-8012-3ed22974a64f.json",
+          "output": "요청 타임아웃 후 쓰기 요청을 다시 보내기 전에 **요청을 다시 보내기 전에 요청을 다시 반복하지 않도록 설계돼 있는지 확인해야 합니다**.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.3643046659999527
+        },
+        {
+          "case_id": "retry-unknown-seconds",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-unknown-seconds/772a4f3c-057e-4fbb-b251-32ccd1b37308.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": false,
+          "behavior_pass": false,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13343866699142382
+        },
+        {
+          "case_id": "backfill-prepare",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-prepare/2da4d6f8-8d4f-4968-a693-9c23b35ce01e.json",
+          "output": "백필 시작 전에 고정해야 하는 대상 구간과 버전 정보는 \"현재 날짜 구간\"과 \"현재 데이터 버전\"입니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.324288333998993
+        },
+        {
+          "case_id": "backfill-validation",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-validation/26cabb4c-3f51-452f-acd0-0013b7e31623.json",
+          "output": "백필 임시 출력에서 파티션 교체 전에 데이터의 정확성과 원자성을 검증합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.4390426669851877
+        },
+        {
+          "case_id": "backfill-recovery",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-recovery/dbfbab58-7281-4cb1-ba1e-251ba952f195.json",
+          "output": "백필 검증이 실패하거나 파티션 교체 후 문제가 생기면, 기존 결과를 유지하고, 교체 후 문제가 있으면 보존한 이전 버전으로 복구합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.508384542015847
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-concurrency/598067ec-78d0-4777-9d0f-92b60b291556.json",
+          "output": "백필이 현재 정기 작업의 출력 구간과 겹칠 때, **임시 출력의 구간**을 확인하고 제한합니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.3125747500453144
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-checkpoint/c139f135-ca15-458c-b6ce-4e6ea911faca.json",
+          "output": "중단된 백필 작업을 필요한 범위부터 다시 시작하려면 필요한 범위의 날짜 구간과 실행 ID를 기록하나요.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.4263677910203114
+        },
+        {
+          "case_id": "unknown-weather",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-weather/fe3c48f6-ea8d-482e-aa72-4fc7d0c08518.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.07963066699448973
+        },
+        {
+          "case_id": "unknown-food",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-food/a6c11bf2-e360-4ec6-9e45-aa88943d02d6.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.12428716599242762
+        },
+        {
+          "case_id": "unknown-private-incident",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-private-incident/cdd788fb-47b5-4ae1-b753-bb708b58eff3.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13295562495477498
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-private-backfill/36c3696a-c946-45b7-8ba9-1ab4944adcf0.json",
+          "output": "이 문서는 백필 작업의 실제 출력 위치와 지난 실행 ID를 설명하지 않습니다. 정보가 부족하다고 말하세요.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": false,
+          "behavior_pass": false,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 2.2707624579779804
+        },
+        {
+          "case_id": "unknown-planet",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-planet/6460bb4f-5344-4bf6-8abe-aae137e448fd.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.12813708296744153
+        }
+      ]
+    },
+    "manual_review": {
+      "batch_id": "14bb628b-4207-4eef-8602-3f3e8e389f3b",
+      "reviewer": "assistant",
+      "criteria": "Unchanged development-v1 rubric; all required facts, no unsupported claims; format separate",
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "중복 이벤트 상황과 중복 반영 방지·정합성을 설명한다. 다만 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-definition",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "반복 실행의 최종 효과가 한 번과 같다는 정의를 충족한다. 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-sales",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "중복 효과는 언급하지만 ID 확인 및 원자적 매출·이력 반영 방법을 누락했다. 금지 주장은 없으나 방법 설명이 불충분하고 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "ID 확인과 결과 반영의 원자적 수행이 중복 효과를 막는다는 관계를 설명한다. 한 문장이다."
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "재시도를 금지해야 한다고 답해 원문과 정반대이며, 중복 반영 방지 설명도 없다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-policy",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "최대 횟수 5회를 간격으로 잘못 설명한다. backoff/jitter를 누락하고 한 문장으로 답한다."
+        },
+        {
+          "case_id": "retry-jitter",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "간격 증가와 무작위 지연을 누락했다. backoff/jitter 자체가 무한 반복을 피하게 한다는 설명은 횟수/시간 예산의 역할과 혼동한다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-auth",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "입력/설정 수정 필요를 누락했다. 즉시 같은 요청을 반복하지 않는다는 규칙을 재시도를 고려하지 않는다는 더 넓은 주장으로 확장했다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-timeout",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "타임아웃이 미처리의 증거가 아니라는 점을 누락하고, 중복 반영 방지 대신 요청 반복 자체를 막는 것으로 설명한다. 한 문장이다."
+        },
+        {
+          "case_id": "retry-unknown-seconds",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "관련 문서에서 정확한 초 값이 없음을 설명해야 하나 검색에서 보류했다. 수치를 지어내지는 않았다. 생성이 없으므로 형식은 N/A다."
+        },
+        {
+          "case_id": "backfill-prepare",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "대상 날짜 구간과 입력/코드 버전 및 출력 위치 대신 현재 날짜 구간과 현재 데이터 버전을 답한다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-validation",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "건수·키·중복·필수 값 누락을 누락하고 원자성을 임시 출력의 검증 항목으로 바꿨다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-recovery",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "검증 실패 시 기존 결과 유지, 교체 후 문제 시 이전 버전 복구를 모두 설명한다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "정기 작업과의 출력 중첩 및 덮어쓰기 제한 대신 임시 출력 구간만 제시한다. 저장소 트랜잭션/스냅샷 조건도 누락했고 한 문장이다."
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "날짜 구간과 실행 ID는 언급했으나 필요한 구간과 이미 완료된 구간을 구분하지 못했고 질문형으로 끝난다. 새 수치를 날조하지 않았으나 한 문장이다."
+        },
+        {
+          "case_id": "unknown-weather",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "근거 문서 부족으로 생성 전에 보류했고 날씨 값을 지어내지 않았다."
+        },
+        {
+          "case_id": "unknown-food",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "근거 문서 부족으로 생성 전에 보류했고 추천을 생성하지 않았다."
+        },
+        {
+          "case_id": "unknown-private-incident",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "실제 회사 사고 기록 질문을 생성 전에 보류했고 원인/횟수를 지어내지 않았다."
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "학습용 문서를 선택하고 모델을 실행해 생성 전 보류 기준에 실패했다. 그러나 실제 위치/ID가 없음을 밝히며 값을 날조하지는 않았다. 메타 지시문도 답변에 노출했다."
+        },
+        {
+          "case_id": "unknown-planet",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "근거 문서 부족으로 생성 전에 보류했고 천문학 답변을 생성하지 않았다."
+        }
+      ]
+    },
+    "manual_metrics": {
+      "content_groundedness_pass": 4,
+      "content_denominator": 15,
+      "format_pass": 0,
+      "format_denominator": 14
+    },
+    "performance": {
+      "generated_count": 15,
+      "timing_count": 14,
+      "timing_excluded_case": "idempotency-why",
+      "generation_seconds_median": 0.49848093700711615,
+      "generation_tokens_median": 36.5,
+      "load_seconds_median": 0.5907681039825547,
+      "token_rate_median": 77.22514240947311,
+      "mlx_peak_memory_gb_max": 0.857159836,
+      "truncated_cases": [],
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "generation_seconds": 0.8631515000015497,
+          "generation_tokens": 71,
+          "load_seconds": 0.7512324579874985,
+          "mlx_peak_memory_gb": 0.849786628
+        },
+        {
+          "case_id": "idempotency-definition",
+          "generation_seconds": 0.631011082965415,
+          "generation_tokens": 28,
+          "load_seconds": 0.6152940840111114,
+          "mlx_peak_memory_gb": 0.851933136
+        },
+        {
+          "case_id": "idempotency-sales",
+          "generation_seconds": 0.7067690410185605,
+          "generation_tokens": 69,
+          "load_seconds": 0.5789651250233874,
+          "mlx_peak_memory_gb": 0.857159836
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "generation_seconds": 0.623256541963201,
+          "generation_tokens": 40,
+          "load_seconds": 0.6088888329686597,
+          "mlx_peak_memory_gb": 0.8510811
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "generation_seconds": 0.369867334025912,
+          "generation_tokens": 14,
+          "load_seconds": 0.5903757080086507,
+          "mlx_peak_memory_gb": 0.843724208
+        },
+        {
+          "case_id": "retry-policy",
+          "generation_seconds": 0.42601554200518876,
+          "generation_tokens": 33,
+          "load_seconds": 0.5826550000347197,
+          "mlx_peak_memory_gb": 0.769811088
+        },
+        {
+          "case_id": "retry-jitter",
+          "generation_seconds": 0.5830979170277715,
+          "generation_tokens": 58,
+          "load_seconds": 0.5691792090074159,
+          "mlx_peak_memory_gb": 0.766812476
+        },
+        {
+          "case_id": "retry-auth",
+          "generation_seconds": 0.41406308399746194,
+          "generation_tokens": 35,
+          "load_seconds": 0.563854290987365,
+          "mlx_peak_memory_gb": 0.769811156
+        },
+        {
+          "case_id": "retry-timeout",
+          "generation_seconds": 0.5341679580160417,
+          "generation_tokens": 47,
+          "load_seconds": 0.5959139170008712,
+          "mlx_peak_memory_gb": 0.769811224
+        },
+        {
+          "case_id": "backfill-prepare",
+          "generation_seconds": 0.49039154103957117,
+          "generation_tokens": 38,
+          "load_seconds": 0.5911604999564588,
+          "mlx_peak_memory_gb": 0.800516676
+        },
+        {
+          "case_id": "backfill-validation",
+          "generation_seconds": 0.4527701670303941,
+          "generation_tokens": 29,
+          "load_seconds": 0.6104241660214029,
+          "mlx_peak_memory_gb": 0.801811148
+        },
+        {
+          "case_id": "backfill-recovery",
+          "generation_seconds": 0.5851922089932486,
+          "generation_tokens": 46,
+          "load_seconds": 0.6225366669823416,
+          "mlx_peak_memory_gb": 0.8078735
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "generation_seconds": 0.4392869590083137,
+          "generation_tokens": 33,
+          "load_seconds": 0.5839859160478227,
+          "mlx_peak_memory_gb": 0.8078735
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "generation_seconds": 0.5065703329746611,
+          "generation_tokens": 39,
+          "load_seconds": 0.6043472079909407,
+          "mlx_peak_memory_gb": 0.80266332
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "generation_seconds": 0.4164922499912791,
+          "generation_tokens": 30,
+          "load_seconds": 0.5862482500378974,
+          "mlx_peak_memory_gb": 0.794454392
+        }
+      ]
+    }
+  },
+  "candidate": {
+    "manifest": {
+      "schema_version": "development-evaluation.v1",
+      "batch_id": "8ad2d99c-87d9-418b-861c-d4e56eed3888",
+      "created_at": "2026-10-06T13:24:01.014893+00:00",
+      "operator": "assistant",
+      "dataset_sha256": "7ff04c6a382d6f49edd0efca03867b10b261f43a2ce616cd34baab180e4a76be",
+      "dataset_kind": "development; not held-out",
+      "case_count": 20,
+      "search_only": false,
+      "offline": true,
+      "prompt_variant": "baseline",
+      "timeout_seconds": 120,
+      "settings": {
+        "temperature": 0.0,
+        "max_tokens": 256,
+        "seed": 42,
+        "enable_thinking": false
+      },
+      "model_profile": "qwen3-4b",
+      "model_id": "mlx-community/Qwen3-4B-4bit",
+      "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+      "source_sha256": {
+        "cli.py": "1b8d749ce6ddd58d66261d3336d2a0914bcd0e74ebd89219719d50b46e846994",
+        "context.py": "996f0ca6b3bb4c542f6b2a16052dfa102ba7602a2792ae546ddc8dd9a714ba12",
+        "retrieval.py": "5192f87564cf2f17effc83c025d4678f6c0d3a7a6c89ce57652c5828c2c54363",
+        "evaluation.py": "9c3aba00e1f01e0d10a02c3b7f45f9984b3d51f23ad48ada09e066ccce8fac82"
+      },
+      "uv_lock_sha256": "116ddf1540bf2471347b8296a1b33686c8d436a7b8cf7537a26da86726b4c2dd",
+      "corpus_manifest": [
+        {
+          "name": "backfill.md",
+          "sha256": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c"
+        },
+        {
+          "name": "idempotency.md",
+          "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4"
+        },
+        {
+          "name": "retry.md",
+          "sha256": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+        }
+      ],
+      "corpus_sha256": "f2f4bb57d077f28694a4c20dd6db67654fc4baaabdb0c5d57b4eb2230cd2d6d5"
+    },
+    "summary": {
+      "status": "completed",
+      "batch_id": "8ad2d99c-87d9-418b-861c-d4e56eed3888",
+      "metrics": {
+        "total": 20,
+        "executed_ok": 20,
+        "errors": 0,
+        "retrieval_pass": 18,
+        "behavior_pass": 18,
+        "answerable": {
+          "total": 15,
+          "retrieval_pass": 14
+        },
+        "out_of_scope": {
+          "total": 5,
+          "retrieval_pass": 4
+        },
+        "answer_quality": "not_scored; review each answer against the rubric"
+      },
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-why/fa8007f2-024e-47fc-b449-cd119f3025a4.json",
+          "output": "데이터 파이프라인에서 멱등성이 필요한 이유는 같은 작업이 여러 번 수행될 때 결과가 중복되어 데이터 정합성을 유지하기 위해서이다. 멱등한 처리를 통해 재시도나 중복 이벤트를 허용하면서도 데이터의 일관성을 보장할 수 있다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 7.173564083001111
+        },
+        {
+          "case_id": "idempotency-definition",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-definition/69c938d5-f4c7-4e57-b3a6-815f38abe6a4.json",
+          "output": "멱등성은 같은 작업을 여러 번 수행할 때 최종 효과가 한 번 수행한 것과 같은 성질을 보장한다. 즉, 같은 작업을 반복하더라도 결과는 중복되지 않고 안정적으로 유지된다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 6.343420416989829
+        },
+        {
+          "case_id": "idempotency-sales",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-sales/2be3c05f-d78c-4e08-8dcf-39d676daa698.json",
+          "output": "같은 주문 이벤트가 재전송될 때마다 매출을 더하면 실제 주문보다 더 많은 매출이 집계되어 데이터가 불일치하게 되는 문제가 생긴다. 이 문제는 같은 주문 이벤트를 식별할 수 있는 고유 ID를 사용하여 중복을 확인하고, 매출 반영과 처리 이력 저장을 하나의 트랜잭션으로 수행함으로써 방지할 수 있다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 8.138721207971685
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-atomic/8555971c-808a-484a-9240-594132429d02.json",
+          "output": "멱등한 처리에서 이벤트 ID 확인과 결과 반영을 원자적으로 수행해야 하는 이유는 같은 이벤트가 여러 번 처리될 경우 데이터 중복과 정합성 문제를 방지하기 위해서이다. 이벤트 ID를 통해 중복 여부를 확인하고, 결과 반영과 처리 이력 저장을 하나의 트랜잭션으로 수행하면 재시도 시 중복 효과를 막을 수 있다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 7.948147124960087
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "expected_source": "idempotency.md",
+          "execution_status": "ok",
+          "run_file": "cases/idempotency-recovery/1dcf130e-94c3-4a0a-aded-c156a119b1f1.json",
+          "output": "아니요, 멱등성을 위해 장애 후 재시도를 금지해야 하지 않습니다. 멱등한 처리는 재시도를 허용하면서도 중복 효과를 방지하기 위해 이벤트 식별자와 트랜잭션 기반의 처리 방식을 사용합니다. 재시도를 금지하면 장애 복구가 어렵고, 데이터 처리의 신뢰성과 효율성을 저하시킬 수 있습니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "idempotency.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 8.135498917021323
+        },
+        {
+          "case_id": "retry-policy",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-policy/e3371cb3-e5b8-4491-b733-dbe5f48accf3.json",
+          "output": "재시도 간격은 일시적인 네트워크 오류나 서비스 과부하로 인한 실패 시 exponential backoff와 무작위 지연인 jitter를 적용해 점차 늘린다. 최대 시도 횟수는 예시에서 5회로 정해져 있다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 10.036100833036471
+        },
+        {
+          "case_id": "retry-jitter",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-jitter/5b9449b6-3298-4718-9c64-ea8579d067dd.json",
+          "output": "재시도 간격에 exponential backoff와 jitter를 적용하는 이유는 일시적인 오류를 처리하면서 요청이 과도하게 몰리는 것을 방지하기 위해서이다. 이 방법은 재시도 간격을 점차 늘려 서버의 부하를 줄이고, 요청의 중복을 방지하여 시스템의 안정성을 높인다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 9.650376708013937
+        },
+        {
+          "case_id": "retry-auth",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-auth/c29a6348-fbb8-4d75-9f2d-6b1b44b69faf.json",
+          "output": "아니요. API 권한 오류나 잘못된 요청처럼 입력 또는 설정을 수정해야 하는 실패는 즉시 같은 요청을 반복하지 않습니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 7.087986333994195
+        },
+        {
+          "case_id": "retry-timeout",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-timeout/188b9b2f-ab08-42b8-9272-14d053b71e80.json",
+          "output": "API 요청 타임아웃 후 쓰기 요청을 다시 보내기 전에, 같은 요청이 두 번 반영되지 않도록 설계돼 있는지 확인해야 한다. 재시도 전략은 일시적인 오류 처리를 위해 설계되었으므로, 타임아웃 후 재시도 시 요청의 중복을 방지하기 위한 검사를 수행해야 한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "retry.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 9.50720024999464
+        },
+        {
+          "case_id": "retry-unknown-seconds",
+          "expected_source": "retry.md",
+          "execution_status": "ok",
+          "run_file": "cases/retry-unknown-seconds/39c4d5bf-cefa-4208-a46d-9310f403cb28.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": false,
+          "behavior_pass": false,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13046341598965228
+        },
+        {
+          "case_id": "backfill-prepare",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-prepare/ff6003a6-5465-4559-96e6-6b4f35e06d90.json",
+          "output": "백필 시작 전에 고정해야 할 대상 구간은 대상 날짜 구간이며, 버전 정보는 입력 데이터 버전과 처리 코드 버전이다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 7.19290008302778
+        },
+        {
+          "case_id": "backfill-validation",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-validation/b2299e1b-fa5b-4bc0-b35d-7577ea888f9a.json",
+          "output": "백필 임시 출력에서 파티션 교체 전에 건수, 고유 키, 중복, 필수 값 누락을 검증한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 6.931740458006971
+        },
+        {
+          "case_id": "backfill-recovery",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-recovery/804477ea-3079-4a96-8cc7-dbcd3c26510d.json",
+          "output": "백필 검증이 실패하거나 파티션 교체 후 문제가 생기면, 기존 결과를 유지하고, 교체 후 문제가 있으면 보존한 이전 버전으로 복구한다. 완료된 날짜 구간과 실행 ID를 기록하여 중단된 작업을 필요한 범위부터 다시 시작한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 7.820493417035323
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-concurrency/984edc42-a54d-4b9c-87ea-e9efc3c1da49.json",
+          "output": "백필이 현재 정기 작업의 출력 구간과 겹칠 때, 해당 구간이 과거 작업과 중복되지 않도록 확인하고, 범위를 제한한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 6.9035361660062335
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "expected_source": "backfill.md",
+          "execution_status": "ok",
+          "run_file": "cases/backfill-checkpoint/b561c2a7-3e39-40cf-b823-3874b78efdec.json",
+          "output": "중단된 백필 작업을 필요한 범위부터 다시 시작하려면 완료된 날짜 구간과 실행 ID를 기록해야 한다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 6.25008591695223
+        },
+        {
+          "case_id": "unknown-weather",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-weather/49e78e0b-095f-4bde-af47-533e09b64bd6.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13557874999241903
+        },
+        {
+          "case_id": "unknown-food",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-food/2ff4fc03-e5e8-4e68-9067-632d021a57a6.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.1332356670172885
+        },
+        {
+          "case_id": "unknown-private-incident",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-private-incident/7dbb182b-5cca-4346-b50b-02185e60aef6.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.13204412499908358
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-private-backfill/ad745d29-d948-4344-b226-ec824290ef7e.json",
+          "output": "제공된 참고 내용에는 실제 출력 위치와 지난 실행 ID에 대한 정보가 없습니다. 따라서 해당 정보를 확인할 수 없습니다.",
+          "inference_status": "generated",
+          "max_tokens_reached": false,
+          "selected_source": "backfill.md",
+          "retrieval_pass": false,
+          "behavior_pass": false,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 5.7202284159720875
+        },
+        {
+          "case_id": "unknown-planet",
+          "expected_source": null,
+          "execution_status": "ok",
+          "run_file": "cases/unknown-planet/b8d6bc0e-9fac-4304-ab2b-91cfca8ae197.json",
+          "output": "관련 문서를 명확히 선택하지 못해 답변을 보류합니다. 질문을 구체화해 주세요.",
+          "inference_status": "abstained",
+          "max_tokens_reached": null,
+          "selected_source": null,
+          "retrieval_pass": true,
+          "behavior_pass": true,
+          "answer_quality": "unreviewed",
+          "wall_seconds": 0.12819220800884068
+        }
+      ]
+    },
+    "manual_review": {
+      "batch_id": "8ad2d99c-87d9-418b-861c-d4e56eed3888",
+      "reviewer": "assistant",
+      "criteria": "Unchanged development-v1 rubric; all required facts, no unsupported claims; format separate",
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "반복 실행으로 결과가 중복될 수 있는 상황과, 재시도/중복 이벤트를 허용하면서 일관성을 보장한다는 효과를 연결한다. 첫 문장은 어색하지만 중복 위험에 대응해 정합성을 유지한다는 전체 의미로 판정했다. 두 문장이며 표현 명료성은 개선 여지가 있다."
+        },
+        {
+          "case_id": "idempotency-definition",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "반복 실행의 최종 효과가 한 번과 같고 중복되지 않는다는 정의를 두 문장으로 설명한다."
+        },
+        {
+          "case_id": "idempotency-sales",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "중복 매출 집계와 고유 ID 확인, 매출 반영/처리 이력 저장의 단일 트랜잭션을 모두 두 문장으로 설명한다."
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "ID 확인과 결과/이력 반영을 하나의 트랜잭션으로 처리해 재시도 중복 효과를 막는다고 설명한다. 두 문장이다."
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "재시도를 금지하지 않고 ID와 트랜잭션 처리로 중복 효과를 방지함을 설명한다. 다만 세 문장이라 형식은 실패다."
+        },
+        {
+          "case_id": "retry-policy",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "간격은 exponential backoff와 jitter, 예시의 최대 시도 횟수는 5회로 구분한다. 고정 초 값을 날조하지 않았고 두 문장이다."
+        },
+        {
+          "case_id": "retry-jitter",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "pass",
+          "rationale": "간격 증가와 요청 집중 완화는 설명하지만 jitter의 무작위 지연을 누락했다. backoff/jitter가 요청 중복을 방지한다는 문서에 없는 효과를 주장한다. 형식은 두 문장이다."
+        },
+        {
+          "case_id": "retry-auth",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "입력/설정을 수정해야 하는 권한 오류/잘못된 요청은 즉시 같은 요청을 반복하지 않는다고 설명한다. 아니요를 포함해 두 문장이다."
+        },
+        {
+          "case_id": "retry-timeout",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "중복 반영 방지 확인은 설명하지만 타임아웃이 서버 미처리의 증거가 아니라는 필수 사실을 누락했다. 반대 사실을 단정하지는 않았으며 두 문장이다."
+        },
+        {
+          "case_id": "retry-unknown-seconds",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "관련 문서 선택 실패로 생성 전에 보류했다. 정확한 초 값이 문서에 없다는 근거 기반 답변에는 도달하지 못했지만 값을 지어내지는 않았다."
+        },
+        {
+          "case_id": "backfill-prepare",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "날짜 구간과 입력/코드 버전은 맞지만 고정 루브릭의 출력 위치를 누락했다. 새 사실을 지어내지는 않았고 한 문장이다."
+        },
+        {
+          "case_id": "backfill-validation",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "건수, 고유 키, 중복, 필수 값 누락 검사를 모두 답했다. 한 문장이라 형식만 실패다."
+        },
+        {
+          "case_id": "backfill-recovery",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "pass",
+          "rationale": "검증 실패 시 기존 결과 유지와 교체 후 이전 버전 복구를 모두 설명한다. 두 번째 문장의 완료 구간/실행 ID 기록도 문서에 있다. 두 문장이다."
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "facts": "fail",
+          "groundedness": "fail",
+          "format": "fail",
+          "rationale": "정기 작업과 백필의 출력 구간 중첩을 확인해야 하는데 과거 작업과 중복되지 않는지로 대상을 바꿨다. 덮어쓰기 방지 및 저장소 트랜잭션/스냅샷 조건을 충분히 설명하지 않는다. 한 문장이다."
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "fail",
+          "rationale": "완료된 날짜 구간과 실행 ID를 기록한다고 정확히 답했다. 한 문장이라 형식은 실패다."
+        },
+        {
+          "case_id": "unknown-weather",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "생성 전에 보류하고 날씨/기온을 지어내지 않았다."
+        },
+        {
+          "case_id": "unknown-food",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "생성 전에 보류하고 추천을 생성하지 않았다."
+        },
+        {
+          "case_id": "unknown-private-incident",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "생성 전에 보류하고 실제 회사 사고 기록을 지어내지 않았다."
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "facts": "fail",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "학습용 문서를 선택하고 모델을 실행해 생성 전 보류 기준은 실패했다. 답변은 실제 출력 위치와 실행 ID가 없다고 명확히 밝혔고 값을 날조하지 않았다."
+        },
+        {
+          "case_id": "unknown-planet",
+          "facts": "pass",
+          "groundedness": "pass",
+          "format": "N/A",
+          "rationale": "생성 전에 보류하고 천문학 답변을 생성하지 않았다."
+        }
+      ]
+    },
+    "manual_metrics": {
+      "content_groundedness_pass": 10,
+      "content_denominator": 15,
+      "format_pass": 9,
+      "format_denominator": 14
+    },
+    "performance": {
+      "generated_count": 15,
+      "timing_count": 14,
+      "timing_excluded_case": "idempotency-why",
+      "generation_seconds_median": 4.162267833511578,
+      "generation_tokens_median": 62.0,
+      "load_seconds_median": 1.5280524165427778,
+      "token_rate_median": 13.433436544937251,
+      "mlx_peak_memory_gb_max": 2.976842724,
+      "truncated_cases": [],
+      "cases": [
+        {
+          "case_id": "idempotency-why",
+          "generation_seconds": 4.018820333993062,
+          "generation_tokens": 72,
+          "load_seconds": 1.8319510000292212,
+          "mlx_peak_memory_gb": 2.963440564
+        },
+        {
+          "case_id": "idempotency-definition",
+          "generation_seconds": 3.3650244579766877,
+          "generation_tokens": 52,
+          "load_seconds": 1.2365439589484595,
+          "mlx_peak_memory_gb": 2.971403224
+        },
+        {
+          "case_id": "idempotency-sales",
+          "generation_seconds": 5.125115624978207,
+          "generation_tokens": 101,
+          "load_seconds": 1.292788874998223,
+          "mlx_peak_memory_gb": 2.976842724
+        },
+        {
+          "case_id": "idempotency-atomic",
+          "generation_seconds": 4.564176792046055,
+          "generation_tokens": 96,
+          "load_seconds": 1.5784859999548644,
+          "mlx_peak_memory_gb": 2.970895316
+        },
+        {
+          "case_id": "idempotency-recovery",
+          "generation_seconds": 4.952645374985877,
+          "generation_tokens": 105,
+          "load_seconds": 1.4320210000150837,
+          "mlx_peak_memory_gb": 2.956182432
+        },
+        {
+          "case_id": "retry-policy",
+          "generation_seconds": 6.570450666011311,
+          "generation_tokens": 72,
+          "load_seconds": 1.489806916040834,
+          "mlx_peak_memory_gb": 2.892759704
+        },
+        {
+          "case_id": "retry-jitter",
+          "generation_seconds": 6.206877916993108,
+          "generation_tokens": 89,
+          "load_seconds": 1.6349685830064118,
+          "mlx_peak_memory_gb": 2.88573096
+        },
+        {
+          "case_id": "retry-auth",
+          "generation_seconds": 3.9093133329879493,
+          "generation_tokens": 35,
+          "load_seconds": 1.4322561249719001,
+          "mlx_peak_memory_gb": 2.894135964
+        },
+        {
+          "case_id": "retry-timeout",
+          "generation_seconds": 5.8178420420154,
+          "generation_tokens": 85,
+          "load_seconds": 1.7671679590130225,
+          "mlx_peak_memory_gb": 2.89467664
+        },
+        {
+          "case_id": "backfill-prepare",
+          "generation_seconds": 4.005552834016271,
+          "generation_tokens": 39,
+          "load_seconds": 1.4474771249806508,
+          "mlx_peak_memory_gb": 2.937586444
+        },
+        {
+          "case_id": "backfill-validation",
+          "generation_seconds": 3.117155999992974,
+          "generation_tokens": 36,
+          "load_seconds": 1.5662979170447215,
+          "mlx_peak_memory_gb": 2.940617492
+        },
+        {
+          "case_id": "backfill-recovery",
+          "generation_seconds": 4.318982833006885,
+          "generation_tokens": 76,
+          "load_seconds": 1.6158638329943642,
+          "mlx_peak_memory_gb": 2.949006116
+        },
+        {
+          "case_id": "backfill-concurrency",
+          "generation_seconds": 3.4394903750508092,
+          "generation_tokens": 43,
+          "load_seconds": 1.7357678749831393,
+          "mlx_peak_memory_gb": 2.949006116
+        },
+        {
+          "case_id": "backfill-checkpoint",
+          "generation_seconds": 2.9533982920111157,
+          "generation_tokens": 37,
+          "load_seconds": 1.5829902910045348,
+          "mlx_peak_memory_gb": 2.945123104
+        },
+        {
+          "case_id": "unknown-private-backfill",
+          "generation_seconds": 2.7848667909856886,
+          "generation_tokens": 29,
+          "load_seconds": 1.2302100000088103,
+          "mlx_peak_memory_gb": 2.93180288
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "equal_manifest_fields": [
+      "dataset_sha256",
+      "corpus_sha256",
+      "settings",
+      "source_sha256",
+      "prompt_variant",
+      "uv_lock_sha256",
+      "timeout_seconds",
+      "offline",
+      "search_only"
+    ],
+    "messages_equal": true,
+    "input_token_hashes_equal": true,
+    "retrieval_selections_equal": true,
+    "improved": [
+      "backfill-checkpoint",
+      "backfill-validation",
+      "idempotency-recovery",
+      "idempotency-sales",
+      "retry-auth",
+      "retry-policy"
+    ],
+    "regressed": [],
+    "decision": "Recommend explicit qwen3-4b for next development stage; retain 0.6B CLI default for reproducibility",
+    "limitations": [
+      "Development set only, 20 questions, 15 generated, one seed",
+      "Same assistant authored and reviewed rubric; no independent agreement measure",
+      "Timing n=14 excludes first generated case; output lengths and host load vary",
+      "4B is a different trained checkpoint, not parameter-count-only causal proof",
+      "Search failures, missing facts, unsupported claims and sentence-count failures remain"
+    ]
+  },
+  "validation": {
+    "pytest": "62 passed",
+    "ruff": "passed",
+    "baseline_outputs_preserved": true
+  }
+}

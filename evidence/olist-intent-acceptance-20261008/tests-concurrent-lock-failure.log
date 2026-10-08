@@ -1,0 +1,52 @@
+........................................................................ [ 11%]
+.....................F.................................................. [ 23%]
+........................................................................ [ 35%]
+........................................................................ [ 47%]
+........................................................................ [ 59%]
+........................................................................ [ 71%]
+........................................................................ [ 83%]
+........................................................................ [ 95%]
+...........................                                              [100%]
+=================================== FAILURES ===================================
+___________ test_owned_model_timeout_reaps_process_and_releases_lock ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10a5ba540>
+
+    def test_owned_model_timeout_reaps_process_and_releases_lock(monkeypatch):
+        import subprocess
+        import sys
+    
+        from llm_ops_lab.marketing import offline_model
+    
+        real_popen = subprocess.Popen
+        owned = []
+    
+        def sleeping_worker(*args, **kwargs):
+            process = real_popen([sys.executable, "-u", "-c",
+                                  'import time; print(\'{"identity": {}}\'); time.sleep(60)'],
+                                 **kwargs)
+            owned.append(process)
+            return process
+    
+        monkeypatch.setattr(offline_model.subprocess, "Popen", sleeping_worker)
+>       with offline_model.OfflineModel() as model:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_marketing_agent.py:122: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <llm_ops_lab.marketing.offline_model.OfflineModel object at 0x10a5b9130>
+
+    def __enter__(self):
+        try:
+            self.lock = (Path(tempfile.gettempdir()) / "llm-ops-marketing-inference.lock").open("a")
+            try:
+                fcntl.flock(self.lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+>               raise ValueError("marketing inference worker already active") from None
+E               ValueError: marketing inference worker already active
+
+src/llm_ops_lab/marketing/offline_model.py:33: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_marketing_agent.py::test_owned_model_timeout_reaps_process_and_releases_lock
+1 failed, 602 passed in 76.73s (0:01:16)

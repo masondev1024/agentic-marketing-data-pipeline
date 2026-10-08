@@ -1,0 +1,141 @@
+{
+  "schema_version": "marketing-ac2-verification.v1",
+  "acceptance_criterion": 2,
+  "verdict": "passed_local_ac2",
+  "project_verdict": "not_evaluated_by_this_dispatch",
+  "operator": "assistant",
+  "learner_executed": false,
+  "authoritative_sources": [
+    "AGENTS.md",
+    "work/marketing-aws-implementation-brief.md"
+  ],
+  "tests": {
+    "total": 297,
+    "marketing": 61,
+    "existing_regressions": 236,
+    "failed": 0,
+    "warnings": 1,
+    "warning": "Existing StarletteDeprecationWarning about httpx test client; product CLI success stderr is empty in subprocess tests."
+  },
+  "commands_run": [
+    "python scripts/verify_marketing_ac2.py -- uv run --locked pytest",
+    "python scripts/verify_marketing_ac2.py -- uv run --locked pytest -q",
+    "python scripts/verify_marketing_ac2.py -- uv run --locked ruff check .",
+    "python scripts/verify_marketing_ac2.py -- uv run --locked python scripts/marketing_ac2_evidence.py --check"
+  ],
+  "requirement_evidence": [
+    {
+      "id": "AC2.contracts",
+      "source": "work/marketing-aws-implementation-brief.md: milestone 1",
+      "text": "Two deterministic synthetic accounts, declared grain/keys, strict integer KRW, UTC source/ingestion/as-of and KST dates. Schema, attribution and refund definitions are versioned.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/contracts.py",
+        "data/marketing/v1/contract.json"
+      ],
+      "verification": "tests/test_marketing_pipeline.py: frozen inputs, strict schema, KST boundary and machine-readable contract tests",
+      "verdict": "pass"
+    },
+    {
+      "id": "AC2.exact_duplicate",
+      "source": "Seed AC 2 duplicate contract; brief milestone 2",
+      "text": "Identical complete spend key/version/payload with spend_krw=10000 twice gives one Silver row and Gold spend 10000; rerunning preserves artifact bytes.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/pipeline.py:process_spend_snapshots"
+      ],
+      "verification": "test_exact_10000_duplicate_entry_point_and_idempotence; reviewed exact_duplicate in evidence/marketing-ac2-data-product.json",
+      "verdict": "pass"
+    },
+    {
+      "id": "AC2.arithmetic",
+      "source": "work/marketing-aws-implementation-brief.md: milestones 2 and 6",
+      "text": "Actual DuckDB SQL and Parquet match separately frozen hand-derived account/campaign expectations. Refund aggregation precedes order/campaign joins; shared IDs across accounts do not fan out.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/transform.sql",
+        "data/marketing/v1/acceptance-expected.json",
+        "data/marketing/v1/acceptance-freeze.json"
+      ],
+      "verification": "test_full_frozen_arithmetic_parquet_and_lineage; test_order_refund_revisions_and_fanout",
+      "verdict": "pass"
+    },
+    {
+      "id": "AC2.backfill",
+      "source": "work/marketing-aws-implementation-brief.md: milestone 2",
+      "text": "Late orders/refunds remain excluded until as_of advances, then restate original order dates. Corrected cumulative spend selects latest snapshot then revision; repeated complete-window publication is idempotent.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/pipeline.py:publish_dataset",
+        "src/llm_ops_lab/marketing/contracts.py:normalize_spend"
+      ],
+      "verification": "test_frozen_backfill_asof_and_restatement; test_frozen_business_scenarios; test_snapshot_selection_not_sum_ingestion_or_revision_only",
+      "verdict": "pass"
+    },
+    {
+      "id": "AC2.atomic_failure",
+      "source": "work/marketing-aws-implementation-brief.md: milestone 2",
+      "text": "Same-version payload conflicts, schema problems and missing mappings block/quarantine the batch, preserving previous manifest and data. Local flock excludes simultaneous writers. Injected precommit and caught post-swap fsync failures, process kill and replay are tested.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/pipeline.py:publish_dataset",
+        "src/llm_ops_lab/marketing/pipeline.py:commit_pointer"
+      ],
+      "verification": "test_block_quarantine_and_preserve_previous_bytes; test_post_pointer_sync_failure_restores_old_publication; test_process_kill_before_pointer_commit_and_recovery; test_single_writer_across_processes",
+      "verdict": "pass"
+    },
+    {
+      "id": "AC2.metadata_report",
+      "source": "work/marketing-aws-implementation-brief.md: milestone 2",
+      "text": "Immutable manifest records raw/SQL/artifact hashes, row counts, source coverage, as_of and metric definitions. Report shows campaign/account metrics and source watermarks; incomplete/stale/zero-spend facts keep ROAS unknown.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/pipeline.py:marketer_report",
+        "docs/marketing/acceptance-report.md"
+      ],
+      "verification": "test_report_unknown_stale_and_incomplete_and_failed_attempt; test_old_source_watermark_not_hidden_by_fresh_asof; test_missing_coverage_exposes_unknown_watermark; evidence/marketing-ac2-data-product.json",
+      "verdict": "pass"
+    },
+    {
+      "id": "AC2.regression",
+      "source": "AGENTS.md and work/marketing-aws-implementation-brief.md: compatibility constraints",
+      "text": "New module CLI leaves existing CLI/API source unchanged. Required locked pytest, pytest -q and Ruff passed in external temporary copies; observer fingerprints the original source. CLI failures return JSON on stderr and nonzero exit.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/__main__.py",
+        "scripts/verify_marketing_ac2.py"
+      ],
+      "verification": "297 tests passed, including 61 marketing tests and 236 prior tests; Ruff passed. Existing localhost:8000 and model workers were not used.",
+      "verdict": "pass"
+    },
+    {
+      "id": "AC2.retry_standalone_contract",
+      "source": "Seed AC 2 retry counterexample; work/marketing-aws-implementation-brief.md: milestones 1 and 2",
+      "text": "The original exact-field validator rejected self-describing spend records. A separate strict v1 path now preserves source metadata, deduplicates complete payloads, rejects conflicts and reports silver_row_count. Internal bundles and frozen fixtures remain unchanged.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/contracts.py:normalize_standalone_spend",
+        "src/llm_ops_lab/marketing/pipeline.py:process_spend_snapshots"
+      ],
+      "verification": "17 added test cases cover standalone 10000 duplication/replay, revisions, metadata conflicts, malformed inputs, mixed formats, account isolation, and byte-identical preservation of a published product. Five positive/conflict cases first reproduced the original schema failure. Final full suite: 296 passed.",
+      "verdict": "pass"
+    },
+    {
+      "id": "AC2.retry_exact_response",
+      "source": "Seed AC 2 retry 2 counterexample; work/marketing-aws-implementation-brief.md: milestone 2",
+      "text": "The duplicate arithmetic was correct but the public response included an extra silver payload. Return exactly gold and silver_row_count; verify Silver records through normalization and published Parquet. Frozen fixtures and transformation policies are unchanged.",
+      "implementation": [
+        "src/llm_ops_lab/marketing/pipeline.py:process_spend_snapshots"
+      ],
+      "verification": "test_spend_entry_point_exact_public_result reproduced the extra-key failure before the fix. Full suite after the fix: 297 passed, one existing Starlette deprecation warning; Ruff passed.",
+      "verdict": "pass"
+    }
+  ],
+  "artifacts": [
+    "evidence/marketing-ac2-data-product.json",
+    "docs/marketing/acceptance-report.md",
+    "docs/marketing/data-product.md"
+  ],
+  "auditable_defaults": [
+    "Local POSIX filesystem only; one writer, bounded 31-day full-window replacement per root.",
+    "32 accounts, 100000 rows/table, 32 MiB CLI input, DuckDB 1 thread and 512MB, freshness 86400 seconds are implementation defaults, not measured production SLAs."
+  ],
+  "limitations": [
+    "Coverage is a source assertion, not an independent proof that an upstream feed has delivered all business events.",
+    "Development and acceptance sets share a small deterministic scenario structure; no unseen production benchmark claim.",
+    "Process/power loss after atomic pointer swap may leave either complete snapshot current. Simultaneous device/rollback failure is outside the tested filesystem fault model.",
+    "This dispatch does not implement or validate model agents, LangGraph or AWS. No learner competency or production operations claim."
+  ]
+}

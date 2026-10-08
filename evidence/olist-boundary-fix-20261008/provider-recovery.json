@@ -1,0 +1,6 @@
+{
+  "failed_stage": "acceptance",
+  "status": "provider_rate_limited_after_10_returned_calls",
+  "automatic_retries": 0,
+  "recovery": "Fresh full batch after cooldown, 2 seconds between calls; previous partial results preserved; max128 total including probes. Stop on next availability failure."
+}

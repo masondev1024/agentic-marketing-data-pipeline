@@ -1,0 +1,11 @@
+{
+  "created_at": "2026-10-08T00:20:06.957269+00:00",
+  "purpose": "Freeze before first transfer evaluation; no tuning against transfer outcomes",
+  "sha256": {
+    "data/olist/investigation-personas-v1.json": "6106668d1914e8f9a1757865077b42fb6dce0023f892bae21e15d7f08e4018af",
+    "src/llm_ops_lab/olist/agent.py": "635a73dee0c334fb4ff34de19d251b07cdc00b49c8b5b3c0a506bbdc99a311ac",
+    "src/llm_ops_lab/olist/agent_prompt.txt": "e01b41abb461ff11f3a8c0508571e39b8b3636b4c79cf2bba43fba45e7787448",
+    "src/llm_ops_lab/olist/evaluation.py": "e9e7a4f0a55b9d8ead6f20b2006e92c70c1d800cbef4ab37ea09e9e18bae795d",
+    "src/llm_ops_lab/olist/eval_manifest.py": "8c8b0b064732a434ca28b080b942e8000fb4730136eb9f794a2b63a1f9476331"
+  }
+}

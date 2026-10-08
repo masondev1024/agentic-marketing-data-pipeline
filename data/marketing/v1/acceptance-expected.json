@@ -1,0 +1,30 @@
+{
+  "version": "marketing-acceptance.v1",
+  "derivation": "Hand arithmetic frozen before scoring. See docs/marketing/data-product.md. Synthetic finite cases, not an unseen benchmark.",
+  "base_account": [
+    {"account_id":"alpha","business_date":"2026-09-20","spend_krw":15000,"order_count":3,"gross_sales_krw":60000,"refund_krw":7000,"net_attributed_sales_krw":53000,"roas_numerator":53000,"roas_denominator":15000},
+    {"account_id":"alpha","business_date":"2026-09-21","spend_krw":10000,"order_count":2,"gross_sales_krw":20000,"refund_krw":0,"net_attributed_sales_krw":20000,"roas_numerator":20000,"roas_denominator":10000},
+    {"account_id":"beta","business_date":"2026-09-20","spend_krw":8000,"order_count":1,"gross_sales_krw":16000,"refund_krw":0,"net_attributed_sales_krw":16000,"roas_numerator":16000,"roas_denominator":8000},
+    {"account_id":"beta","business_date":"2026-09-21","spend_krw":8000,"order_count":1,"gross_sales_krw":4000,"refund_krw":0,"net_attributed_sales_krw":4000,"roas_numerator":4000,"roas_denominator":8000}
+  ],
+  "base_campaign": [
+    ["alpha","c1","2026-09-20",10000,2,50000,7000,43000],
+    ["alpha","c2","2026-09-20",5000,1,10000,0,10000],
+    ["alpha","c1","2026-09-21",10000,1,12000,0,12000],
+    ["alpha","c2","2026-09-21",0,1,8000,0,8000],
+    ["beta","c1","2026-09-20",8000,1,16000,0,16000],
+    ["beta","c1","2026-09-21",8000,1,4000,0,4000]
+  ],
+  "scenario_expectations": {
+    "duplicate":{"same_as_base":true,"silver_spend_rows":6},
+    "corrected_spend":{"account_id":"alpha","business_date":"2026-09-21","spend_krw":12000,"net_attributed_sales_krw":20000},
+    "late_order":{"as_of":"2026-09-25T12:00:00Z","account_id":"alpha","business_date":"2026-09-21","gross_sales_krw":26000,"order_count":3,"net_attributed_sales_krw":26000},
+    "late_refund":{"as_of":"2026-09-25T12:00:00Z","account_id":"alpha","business_date":"2026-09-20","refund_krw":10000,"net_attributed_sales_krw":50000},
+    "zero_spend":{"account_id":"alpha","business_date":"2026-09-21","spend_krw":0,"roas":null},
+    "incomplete":{"account_id":"alpha","business_date":"2026-09-21","complete":false,"roas":null},
+    "observed_decline":{"alpha_roas_day1":[53000,15000],"alpha_roas_day2":[20000,10000],"causality":"unknown"},
+    "conflict":{"blocked":"payload_conflict"},
+    "missing_mapping":{"blocked":"missing_mapping"},
+    "schema_error":{"blocked":"type"}
+  }
+}

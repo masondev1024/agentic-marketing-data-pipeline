@@ -1,0 +1,36 @@
+{
+  "version": "olist.investigation-acceptance-freeze.v1",
+  "frozen_at_utc": "2026-10-08T00:43:18.743850+00:00",
+  "inference_started": false,
+  "purpose": "Integrity checkpoint created before any model inference against the new acceptance manifest.",
+  "artifact_sha256": {
+    "data/olist/investigation-acceptance-v1.json": "0c068aa7818ec0214a2fd3252b0b4bbeae62acd51b3b6514c245a6df82092432",
+    "data/olist/personas/nemotron-korea-seeds-v1.json": "9c81a7a421685b6d604e0988404726fb90348a49e9dfff427fe78f6be1216b53",
+    "data/olist/personas/acceptance-provenance-v1.json": "02ba80aad52bba03de61a26b085134e328902364abeea8f95cedb6fb4d506cef",
+    "work/olist-intent-quality/nvidia/retrieval-manifest.json": "fffd5024f36fb9cf2937e6dd33afa3f617256d93f06afc70717d7eeeae3245b5",
+    "work/olist-intent-quality/nvidia/dataset-info.json": "ed5ec6a8a7218ee8fabac7fa79cf4e6467b6ff6e74804c70e5ad33e2360dac27",
+    "work/olist-intent-quality/nvidia/splits.json": "a3246063eb9a6012ed9f21c595be0b8a154bcc69af68f9d0770f4327a7125b99",
+    "work/olist-intent-quality/nvidia/rows-train-offset0-length12.json": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26",
+    "work/olist-intent-quality/nvidia/README.md": "4dafe7971490a3693cff1abb4a31110f7f151c818ef7ad7181a6c49a95ffc77e"
+  },
+  "case_count": 24,
+  "intent_family_counts": {
+    "coverage": 4,
+    "origins": 4,
+    "pipeline_history": 4,
+    "unsafe_credential_write_or_override": 4,
+    "unsupported_financial_metrics": 4,
+    "unsupported_root_cause_or_scope": 4
+  },
+  "source": {
+    "dataset": "NVIDIA Nemotron-Personas-Korea",
+    "source_url": "https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea",
+    "observed_repository_revision": "ada0f5b53a38bb5a30cce09358adde883c1ab63a",
+    "rows_query_revision_binding": "not established by the datasets-server response; observed repository revision is recorded separately and must not be treated as the rows snapshot revision",
+    "license": "CC-BY-4.0",
+    "retrieved_at_utc": "2026-10-08T00:41:12.610247+00:00",
+    "returned_rows": 12,
+    "total_downloaded_bytes": 103207,
+    "row_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+  }
+}

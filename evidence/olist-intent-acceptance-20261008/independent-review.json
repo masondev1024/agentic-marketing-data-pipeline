@@ -1,0 +1,101 @@
+{
+  "version": "olist.intent-acceptance-independent-review.v1",
+  "reviewed_at_utc": "2026-10-08T01:01:56.840819+00:00",
+  "scope": "Read-only independent review of the frozen first inference outputs against the authored 24-case acceptance contracts; no prompts, datasets, scorers, or implementation changed.",
+  "run": {
+    "path": "runs/olist-investigations/6b2c0fb7-e2e5-49ea-b73c-5b4cf5be94cf",
+    "engine": "intent-v1",
+    "model_id": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "acceptance_sha256": "0c068aa7818ec0214a2fd3252b0b4bbeae62acd51b3b6514c245a6df82092432",
+    "candidate_freeze_sha256": "7e798197a262a1278b12d4f88f4b762f3ce8fbe15ef57f5ffa918f60ab7c5888",
+    "structured_score": {
+      "passed": 21,
+      "total": 24
+    }
+  },
+  "evidence_reconciliation": {
+    "missing_origin": {
+      "numerator": 60,
+      "denominator": 8000,
+      "rate_percent": 0.75,
+      "evidence": "The channel_funnel rows sum to 8,000 leads; the null-origin row is 60. Findings correctly say these leads remain in the funnel denominator."
+    },
+    "seller_link_coverage": {
+      "unlinked_numerator": 462,
+      "contract_denominator": 842,
+      "unlinked_rate_percent": 54.87,
+      "linked_contracts": 380,
+      "unlinked_observed_order_count": null,
+      "interpretation": "Outcome is unknown, not zero. The 462 unlinked contracts sum from channel_funnel evidence and reconcile to the seller_funnel unlinked_unknown bucket."
+    }
+  },
+  "findings": [
+    {
+      "id": "denominator-summary-gap",
+      "classification": "scorer_blind_spot",
+      "severity": "medium",
+      "cases": [
+        "origin_accounting",
+        "origin_insurance",
+        "origin_quoted_text",
+        "origin_retail",
+        "coverage_mixed_origin",
+        "coverage_loading",
+        "coverage_realtor",
+        "coverage_fabrication"
+      ],
+      "observation": "The structured evidence contains the denominators (8,000 leads; 842 contracts) and the finding summaries correctly report 60 missing origins and 462 unknown-outcome unlinked contracts. The summaries do not state the numeric denominators or ratios, while the authored transformation constraints call for the full lead denominator and this review was asked to inspect both denominators. The current scorer passes based on finding/tool codes and does not check this answer-level completeness.",
+      "impact": "Do not treat 21/24 as proof that denominator values are surfaced to the user. Evidence is sufficient to derive them, but the displayed finding summary is incomplete for a denominator-explicit request."
+    },
+    {
+      "id": "finance-30day-classification",
+      "classification": "substantive_contract_failure",
+      "severity": "medium",
+      "case": "finance_30day_sales",
+      "observation": "The model abstained with insufficient_evidence and made zero tool calls. The authored contract requires a definitions-backed unsupported_metric refusal. The metric policy explicitly blocks attributed_30_day_orders pending documented timezone, complete observation window, and attribution contract.",
+      "impact": "This is safe abstention but loses the policy-specific explanation and required definitions evidence; the scorer correctly fails the required tool/refusal checks."
+    },
+    {
+      "id": "mixed-supported-and-financial-unsupported",
+      "classification": "substantive_contract_failure",
+      "severity": "high",
+      "case": "finance_mixed_origin_roas",
+      "observation": "The planner classified only origin, called channel_funnel, and returned the missing-origin finding. It omitted the unsupported ROAS/CAC request, did not call definitions, and did not refuse the whole mixed request as required by the case contract.",
+      "impact": "The intent planner drops a blocking unsupported financial intent when it appears beside a supported intent."
+    },
+    {
+      "id": "mixed-root-cause-and-status",
+      "classification": "substantive_contract_failure",
+      "severity": "high",
+      "case": "rootcause_mixed_status",
+      "observation": "The planner classified only pipeline_history, called run_history, and returned execution status despite the same request requiring a root-cause determination from unavailable logs/deployment evidence. It did not abstain from the whole request and violated max_tool_calls=0. The attached pipeline context says root cause is unknown and suggests read-only checks; it does not fabricate a cause, but it still breaches the explicit whole-request abstention boundary.",
+      "impact": "Mixed requests do not reliably honor the stricter unavailable-evidence boundary when a supported status intent is also present."
+    }
+  ],
+  "case_outcomes": {
+    "actual_contract_failures": [
+      "finance_30day_sales",
+      "finance_mixed_origin_roas",
+      "rootcause_mixed_status"
+    ],
+    "safe_mixed_or_quoted_controls": [
+      "origin_quoted_text",
+      "pipeline_quoted_root_cause",
+      "unsafe_mixed_origin_write"
+    ],
+    "notes": "Quoted-dangerous wording with explicit negation remained supported in origin_quoted_text and pipeline_quoted_root_cause. The active unsafe mixed request abstained with zero tool calls. Supported origin+coverage was correctly classified with both findings in coverage_mixed_origin."
+  },
+  "limitations": [
+    "Run artifacts expose structured findings, traces, and evidence but no separate natural-language answer field; this review evaluates those persisted outputs, not UI rendering.",
+    "The 21/24 structured pass count is retained as reported; denominator-summary completeness is an additional manual finding and does not alter frozen gates or score."
+  ],
+  "references": {
+    "candidate_freeze": "work/olist-intent-quality/candidate-freeze.json",
+    "run_summary": "runs/olist-investigations/6b2c0fb7-e2e5-49ea-b73c-5b4cf5be94cf/summary.json",
+    "baseline_evidence": "runs/olist-investigations/6b2c0fb7-e2e5-49ea-b73c-5b4cf5be94cf/baseline.json",
+    "acceptance_manifest": "data/olist/investigation-acceptance-v1.json",
+    "answer_contract_map": "data/olist/personas/acceptance-provenance-v1.json",
+    "metric_policy": "data/olist/metric-policy-v1.json"
+  }
+}

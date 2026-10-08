@@ -1,0 +1,114 @@
+{
+  "schema_version": "marketing.v1",
+  "schemas": {
+    "campaigns": {
+      "account_id": "str",
+      "campaign_id": "str",
+      "name": "str"
+    },
+    "spend_snapshots": {
+      "account_id": "str",
+      "source": "str",
+      "revision": "int",
+      "event_time": "str",
+      "ingested_at": "str",
+      "snapshot_id": "str",
+      "campaign_id": "str",
+      "business_date": "str",
+      "snapshot_at": "str",
+      "spend_krw": "int"
+    },
+    "orders": {
+      "account_id": "str",
+      "source": "str",
+      "revision": "int",
+      "event_time": "str",
+      "ingested_at": "str",
+      "order_id": "str",
+      "campaign_id": "str",
+      "gross_sales_krw": "int"
+    },
+    "refunds": {
+      "account_id": "str",
+      "source": "str",
+      "revision": "int",
+      "event_time": "str",
+      "ingested_at": "str",
+      "refund_id": "str",
+      "order_id": "str",
+      "refund_krw": "int"
+    },
+    "coverage": {
+      "account_id": "str",
+      "business_date": "str",
+      "source": "str",
+      "complete": "bool",
+      "through_utc": "str"
+    }
+  },
+  "keys": {
+    "campaigns": [
+      "account_id",
+      "campaign_id"
+    ],
+    "spend_snapshots": [
+      "account_id",
+      "source",
+      "snapshot_id",
+      "revision"
+    ],
+    "orders": [
+      "account_id",
+      "source",
+      "order_id",
+      "revision"
+    ],
+    "refunds": [
+      "account_id",
+      "source",
+      "refund_id",
+      "revision"
+    ],
+    "coverage": [
+      "account_id",
+      "business_date",
+      "source"
+    ],
+    "silver_spend": [
+      "account_id",
+      "campaign_id",
+      "business_date"
+    ]
+  },
+  "policies": {
+    "same_version": "same business payload collapses; differing payload blocks publication",
+    "delivery": "earliest ingested_at retained for otherwise identical payload",
+    "as_of": "only rows ingested_at <= as_of are visible",
+    "refunds": "latest event revisions restate original order KST date; total <= gross",
+    "schema": "exact fields and types; unknown fields block; future evolution requires new version",
+    "missing_mapping": "block whole batch; preserve current; quarantine raw input",
+    "coverage": "missing or false source coverage makes partition incomplete; report unknown",
+    "publication": "one local flock writer; immutable artifacts; atomic CURRENT pointer",
+    "backfill": "full replacement of same scope/window; no as_of regression"
+  },
+  "metrics": {
+    "version": "marketing-metrics.v1",
+    "currency": "KRW integer",
+    "timezone": "Asia/Seoul",
+    "attribution": "synthetic single campaign per order; not causal attribution",
+    "spend_krw": "latest cumulative snapshot_at, then latest revision; never sum snapshots",
+    "gross_sales_krw": "sum latest visible order gross amount on original KST order date",
+    "refund_krw": "sum latest visible refund events, restated on original KST order date",
+    "net_attributed_sales_krw": "gross_sales_krw - refund_krw",
+    "observed_roas": "net_attributed_sales_krw / spend_krw; null if spend is zero",
+    "roas": "observed_roas only if all source coverage complete; otherwise null",
+    "coverage": "source assertion through UTC watermark; not independent proof of completeness"
+  },
+  "safe_default_limits": {
+    "accounts": 32,
+    "days": 31,
+    "rows_per_table": 100000,
+    "cli_input_bytes": 33554432,
+    "freshness_seconds": 86400
+  }
+}

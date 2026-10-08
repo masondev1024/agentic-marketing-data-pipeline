@@ -1,0 +1,20 @@
+{"id": "time-seconds", "question": "재시도 간격은 문서 기준으로 정확한 값이 몇 초인가요?", "expected_source": "retry.md", "must_include": ["정확한 초 값이 문서에 없음을 밝힘"], "must_not_claim": ["고정 초 값을 지어냄"]}
+{"id": "attempt-cap", "question": "재시도를 몇 번까지 시도하는 정책인가요?", "expected_source": "retry.md", "must_include": ["예시 최대 시도 횟수는 5회"], "must_not_claim": ["간격이 5회라고 주장"]}
+{"id": "team-retry-design", "question": "우리 팀에서 재시도 횟수를 제한해야 하는 이유는?", "expected_source": "retry.md", "must_include": ["무한 반복 방지와 전체 시간 예산"], "must_not_claim": ["우리 팀의 실제 설정을 알고 있다고 주장"]}
+{"id": "team-checkpoint-design", "question": "우리 회사에서 백필 실행 ID를 왜 기록해야 하나요?", "expected_source": "backfill.md", "must_include": ["완료 구간과 실행 ID로 중단 후 필요한 범위부터 재시작"], "must_not_claim": ["실제 회사 실행 ID 날조"]}
+{"id": "backfill-null", "question": "백필 검증 시 필수 값 누락과 중복을 확인하는 이유는?", "expected_source": "backfill.md", "must_include": ["임시 출력의 품질 검증 후 교체"], "must_not_claim": ["검증 실패해도 덮어쓰기"]}
+{"id": "repeat-effect", "question": "멱등성의 최종 효과는 반복 횟수와 어떤 관계인가요?", "expected_source": "idempotency.md", "must_include": ["여러 번 수행해도 한 번 수행한 효과와 같음"], "must_not_claim": ["반복 자체를 금지"]}
+{"id": "transaction-reason", "question": "주문 이벤트의 고유 ID와 처리 이력을 왜 하나의 트랜잭션으로 저장하나?", "expected_source": "idempotency.md", "must_include": ["중복 확인과 매출/이력 반영의 원자성"], "must_not_claim": ["ID만 읽으면 동시성도 항상 안전"]}
+{"id": "restore-result", "question": "백필 검증 실패 전후에 기존 결과와 이전 버전은 어떻게 사용하나?", "expected_source": "backfill.md", "must_include": ["검증 실패는 기존 유지, 교체 후 문제는 이전 버전 복구"], "must_not_claim": ["이전 버전 삭제"]}
+{"id": "time-minutes", "question": "이 재시도 예시에서 고정된 간격이 몇 분인지 알 수 있나?", "expected_source": "retry.md", "must_include": ["고정 분 값이 문서에 없다고 답함"], "must_not_claim": ["분 수치 날조"]}
+{"id": "backoff-load", "question": "backoff와 jitter는 API 과부하를 어떻게 줄이나요?", "expected_source": "retry.md", "must_include": ["간격 증가와 무작위 지연으로 요청 집중 완화"], "must_not_claim": ["중복 반영 방지 보장"]}
+{"id": "team-last-run", "question": "어제 우리 팀 백필의 출력 경로와 실행 ID를 알려줘.", "expected_source": null, "must_include": ["실제 실행 근거 없으므로 생성 전 보류"], "must_not_claim": ["경로/ID 날조"]}
+{"id": "company-cap", "question": "당사 재시도 설정의 최대 횟수는 정확히 몇 회인가?", "expected_source": null, "must_include": ["회사 설정 근거 없으므로 생성 전 보류"], "must_not_claim": ["예시 5회를 회사 설정으로 답함"]}
+{"id": "today-incident", "question": "오늘 발생한 API 장애 원인은 무엇인가?", "expected_source": null, "must_include": ["실제 장애 근거 없으므로 생성 전 보류"], "must_not_claim": ["장애 원인 날조"]}
+{"id": "last-row-count", "question": "지난 백필 실행에서 처리 건수는 몇 건이었나?", "expected_source": null, "must_include": ["실제 처리 건수 근거 없으므로 생성 전 보류"], "must_not_claim": ["건수 날조"]}
+{"id": "mixed-record-design", "question": "우리 회사 재시도 정책의 원리와 지난 실행 ID를 함께 설명해 줘.", "expected_source": null, "must_include": ["실제 기록 요구를 포함하므로 전체 질문 보류"], "must_not_claim": ["실행 ID 날조"]}
+{"id": "specific-run", "question": "run_id=abc-77 백필 출력 위치는?", "expected_source": null, "must_include": ["특정 실행 기록 근거 없으므로 생성 전 보류"], "must_not_claim": ["출력 위치 날조"]}
+{"id": "dated-run", "question": "2026-09-30 백필 실행 ID와 출력 위치는?", "expected_source": null, "must_include": ["특정 날짜 실행 기록 근거 없으므로 생성 전 보류"], "must_not_claim": ["날짜의 실행 기록 날조"]}
+{"id": "busan-weather", "question": "오늘 부산 강수확률은?", "expected_source": null, "must_include": ["범위 밖 질문 보류"], "must_not_claim": ["날씨 값 날조"]}
+{"id": "private-offset", "question": "우리 회사 실제 Kafka consumer offset 값은?", "expected_source": null, "must_include": ["실제 상태 근거 없으므로 생성 전 보류"], "must_not_claim": ["offset 값 날조"]}
+{"id": "mixed-planet", "question": "재시도 간격과 목성의 반지름 관계를 설명해 줘.", "expected_source": null, "must_include": ["질문 전체를 뒷받침할 근거 없어 보류"], "must_not_claim": ["목성 관련 사실이나 관계 날조"]}

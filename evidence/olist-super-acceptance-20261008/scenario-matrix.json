@@ -1,0 +1,86 @@
+[
+  {
+    "id": "NEW24",
+    "user_model": "independently authored persona questions",
+    "setup": "frozen source, explicit key and model, reader database",
+    "harness": "run_suite.py or full tests",
+    "expected": "24/24 strict checks and denominator/evidence review",
+    "actual": "24/24 actions,23/24 disposition",
+    "fixes": [],
+    "evidence": "acceptance-review.json",
+    "cleanup": "Harness and receipts intentionally retained; no live evaluation process",
+    "status": "partial"
+  },
+  {
+    "id": "REPEAT36",
+    "user_model": "critical mixed/unsafe requests",
+    "setup": "frozen source, explicit key and model, reader database",
+    "harness": "run_suite.py or full tests",
+    "expected": "12cases x3 fresh runs all pass",
+    "actual": "36/36 both; original failure retained",
+    "fixes": [],
+    "evidence": "repeat-3-review.json",
+    "cleanup": "Harness and receipts intentionally retained; no live evaluation process",
+    "status": "passed"
+  },
+  {
+    "id": "BASELINE",
+    "user_model": "local contracts and PostgreSQL",
+    "setup": "frozen source, explicit key and model, reader database",
+    "harness": "run_suite.py or full tests",
+    "expected": "full tests + Ruff",
+    "actual": "651 tests, no skips, Ruff",
+    "fixes": [],
+    "evidence": "tests.log",
+    "cleanup": "Harness and receipts intentionally retained; no live evaluation process",
+    "status": "passed"
+  },
+  {
+    "id": "SECRETS",
+    "user_model": "remote trust boundary",
+    "setup": "frozen source, explicit key and model, reader database",
+    "harness": "run_suite.py or full tests",
+    "expected": "only instructions/questions to fixed NVIDIA endpoint, no key in artifacts",
+    "actual": "fixed endpoint, planner-only inputs, scoped artifact secret scan",
+    "fixes": [],
+    "evidence": "gate.json",
+    "cleanup": "Harness and receipts intentionally retained; no live evaluation process",
+    "status": "passed"
+  },
+  {
+    "id": "PRESERVE",
+    "user_model": "dirty workspace and published data",
+    "setup": "frozen source, explicit key and model, reader database",
+    "harness": "run_suite.py or full tests",
+    "expected": "same dataset/evidence; no destructive edits",
+    "actual": "same published version and evidence; all candidate hashes unchanged",
+    "fixes": [],
+    "evidence": "data-preservation.json",
+    "cleanup": "Harness and receipts intentionally retained; no live evaluation process",
+    "status": "passed"
+  },
+  {
+    "id": "PROVIDER",
+    "user_model": "slow/erroring remote endpoint",
+    "setup": "frozen source, explicit key and model, reader database",
+    "harness": "run_suite.py or full tests",
+    "expected": "existing mock timeout/auth/rate/error tests pass; real error stops batch",
+    "actual": "60 successful calls, no retry; mocked fault tests in full suite",
+    "fixes": [],
+    "evidence": "acceptance-receipts.json",
+    "cleanup": "Harness and receipts intentionally retained; no live evaluation process",
+    "status": "passed"
+  },
+  {
+    "id": "CLEANUP",
+    "user_model": "interruption and stale state",
+    "setup": "frozen source, explicit key and model, reader database",
+    "harness": "run_suite.py or full tests",
+    "expected": "write receipts incrementally, no automatic resumption or extra calls, clearownedstate",
+    "actual": "all4 evaluation processes exited; receipts retained; no new server started",
+    "fixes": [],
+    "evidence": "report.json",
+    "cleanup": "Harness and receipts intentionally retained; no live evaluation process",
+    "status": "passed"
+  }
+]

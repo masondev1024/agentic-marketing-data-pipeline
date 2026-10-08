@@ -1,0 +1,8 @@
+{
+  "artifact_sha256": {
+    "data/olist/investigation-super-acceptance-v1.json": "c4df539aa4c872445c0f6feb0a2db3ae565682ef8fdd4189516e33417294ff74",
+    "data/olist/investigation-boundary-acceptance-v1.json": "e9eecdec89d0b87243677f7437a605929ae82f2c1f0290e1bbbe99cfc327f86a",
+    "work/olist-boundary/critical-repeat.json": "5448ff035f8161da5eb6246c118e78f1dc9e4926fc8cc2c1408552d34da7e487",
+    "work/olist-boundary/all-semantic-contracts.json": "69645134f63ab523e6a8a71989a7963d926a1c6f471d42e1df5c952797728dec"
+  }
+}

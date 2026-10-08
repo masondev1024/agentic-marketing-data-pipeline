@@ -1,0 +1,98 @@
+{
+  "ac": 5,
+  "verdict": "passed",
+  "scope": "local deterministic graph recovery only",
+  "actor": "assistant",
+  "learner_execution_claimed": false,
+  "real_model_experiment_claimed": false,
+  "authority": "work/marketing-aws-implementation-brief.md sections 5 and 6",
+  "versions": {
+    "langgraph": "1.0.10",
+    "langgraph-checkpoint-sqlite": "3.0.3"
+  },
+  "fixture_revision": "marketing-acceptance.v1",
+  "frozen_sha256": {
+    "acceptance.json": "abb92bfa733e623f79d5185846f95adf9343cf29e58c05314612b2d821001c57",
+    "acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81"
+  },
+  "test_count": 17,
+  "cases": [
+    {
+      "test": "test_new_process_review_preserves_frozen_facts_scope_budget_and_evidence[accept]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_new_process_review_preserves_frozen_facts_scope_budget_and_evidence[reject]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_thread_isolation_and_changed_inputs_fail_without_execution",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_concurrent_process_resume_is_rejected_without_change",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_stale_or_changed_source_cannot_be_approved[publish]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_stale_or_changed_source_cannot_be_approved[artifact]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_stale_or_changed_source_cannot_be_approved[manifest]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_human_wait_does_not_refresh_old_evidence",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_frozen_unsafe_cases_abstain_without_review[incomplete]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_frozen_unsafe_cases_abstain_without_review[zero_spend]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_process_death_unknown_tool_outcome_is_terminal_and_budgets_not_reset[reserved]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_process_death_unknown_tool_outcome_is_terminal_and_budgets_not_reset[tool_returned]",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_process_death_after_journal_before_checkpoint_reuses_completed_action",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_review_crash_replay_has_single_record_and_conflicting_decision_rejected",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_restart_cannot_reset_elapsed_execution_budget",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_invalid_review_and_corrupt_database_return_structured_failure",
+      "outcome": "passed"
+    },
+    {
+      "test": "test_acceptance_freeze_hashes_remain_exact",
+      "outcome": "passed"
+    }
+  ],
+  "pytest_summary": "17 passed in 55.29s",
+  "unexpected_stderr": false,
+  "recovery_policy": {
+    "pending_action": "terminal unknown; conservatively exhaust remaining budget",
+    "completed_action": "reuse journal result and evidence without another debit",
+    "review_replay": "single local record; conflicting decisions rejected",
+    "scope": "exact thread/snapshot/account/dates/limits binding",
+    "external_side_effects": "none; no exactly-once guarantee claimed"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "diagnostic_mode": "model_planned_investigation",
+  "model_executed": true,
+  "model_execution_status": "returned",
+  "status": "abstained",
+  "stop_reason": "model_abstained",
+  "dataset_version": null,
+  "evidence": [],
+  "findings": [],
+  "limitations": [
+    "insufficient_evidence"
+  ],
+  "trace": [
+    {
+      "stage": "plan",
+      "output_sha256": "b2a47739f55cae943f2c75fe505ff67fd0aa36620adb68737cf45ce0eea319d0",
+      "generation_seconds": 0.41768170800060034,
+      "disposition": "unsafe",
+      "intents": []
+    }
+  ],
+  "usage": {
+    "generation_attempts": 1,
+    "generations": 1,
+    "tool_calls": 0,
+    "prompt_tokens": 696,
+    "output_tokens": 9
+  },
+  "model": {
+    "model_id": "nvidia/nemotron-3-super-120b-a12b",
+    "model_revision": null,
+    "provider": "nvidia_hosted",
+    "revision_pinned": false,
+    "enable_thinking": false
+  },
+  "model_id": "nvidia/nemotron-3-super-120b-a12b",
+  "model_revision": null,
+  "prompt": {
+    "version": "olist-intent.v7",
+    "sha256": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3"
+  },
+  "prompt_sha256": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3",
+  "metric_policy": {
+    "version": "olist.metrics.v1",
+    "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+  },
+  "request_plan": {
+    "disposition": "unsafe",
+    "intents": []
+  }
+}

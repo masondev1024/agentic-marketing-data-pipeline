@@ -1,0 +1,94 @@
+{
+  "schema_version": "marketing-ac3-verification.v1",
+  "acceptance_criterion": 3,
+  "operator": "assistant",
+  "scope": "local diagnostic boundary only; no model inference or persisted graph claim",
+  "authority": [
+    "AGENTS.md",
+    "work/marketing-aws-implementation-brief.md",
+    "Seed AC3"
+  ],
+  "verdict": "AC3 verified; no whole-project verdict",
+  "commands_run": [
+    "python3 scripts/verify_marketing_ac2.py -- uv run --locked pytest",
+    "python3 scripts/verify_marketing_ac2.py -- uv run --locked pytest -q",
+    "python3 scripts/verify_marketing_ac2.py -- uv run --locked ruff check ."
+  ],
+  "tests_passed": [
+    "python3 scripts/verify_marketing_ac2.py -- uv run --locked pytest",
+    "python3 scripts/verify_marketing_ac2.py -- uv run --locked pytest -q"
+  ],
+  "results": [
+    {
+      "command": "python3 scripts/verify_marketing_ac2.py -- uv run --locked pytest",
+      "exit_code": 0,
+      "tests_passed": 364,
+      "warnings": 1
+    },
+    {
+      "command": "python3 scripts/verify_marketing_ac2.py -- uv run --locked pytest -q",
+      "exit_code": 0,
+      "tests_passed": 364,
+      "warnings": 1
+    },
+    {
+      "command": "python3 scripts/verify_marketing_ac2.py -- uv run --locked ruff check .",
+      "exit_code": 0,
+      "result": "All checks passed!"
+    }
+  ],
+  "focused_tests": {
+    "module": "tests/test_marketing_diagnostics.py",
+    "passed": 67
+  },
+  "warning": "Existing FastAPI/Starlette TestClient httpx deprecation; not hidden or suppressed.",
+  "isolation": "Existing observer copied the project to an external temporary directory, ran locked commands there, and confirmed source fingerprints unchanged. No model worker or port 8000 used.",
+  "learner_execution": "not established by this attempt",
+  "model_executed": false,
+  "test_doubles": "Explicit scripted subprocess hang/crash/invalid JSON and injected tool-output fixtures. Not LLM evidence.",
+  "requirement_evidence": [
+    {
+      "source": "brief section 3 / AC3",
+      "text": "Scope and Snapshot are frozen; manifest/artifact hashes and metric schema are validated. Only scoped immutable bytes enter the fixed parameterized SQL worker. Account/date escapes, changed publication, returned-dict mutation and cross-scope evidence tests pass."
+    },
+    {
+      "source": "brief sections 3,6 / AC3",
+      "text": "Four read-only tools with exact request fields and empty parameters. Invalid JSON, duplicate keys, nonfinite values, SQL/shell/network/write tools and injection are refused before worker execution; invalid requests close the session."
+    },
+    {
+      "source": "brief section 3 / AC3",
+      "text": "Action, tool, protocol-token, row, input/output and wall limits are enforced. Repeated immutable tools terminate with no_progress. Real owned scripted subprocess timeout/cancel/crash tests verify kill/reap and concurrent dispatch refusal."
+    },
+    {
+      "source": "brief section 3 / AC3",
+      "text": "Numerical claims must exactly match issued metric evidence. Supported comparisons require metrics/quality/freshness. Incomplete, stale and zero-spend cases abstain; causality is unknown and proposed actions are empty. Unsupported conclusions and forged facts are rejected."
+    },
+    {
+      "source": "Seed AC3 CLI requirement",
+      "text": "Additive diagnose CLI tested in new processes: valid request has empty stderr/code 0; unauthorized tool, invalid JSON and scope widening have structured stderr/nonzero code. Product bytes unchanged. Existing CLI/API regressions pass in full suite."
+    }
+  ],
+  "auditable_defaults": [
+    {
+      "source": "brief requires limit categories without numeric values",
+      "decision": "Local engineering ceilings: 1 account, 31 dates/rows, 8 actions, 6 calls, 30s session, 5s tool, 4096 input bytes, 16384 output bytes, 32768 conservative protocol token units; callers can only tighten. These are not user-supplied thresholds."
+    },
+    {
+      "source": "current AC scope",
+      "decision": "No LLM execution, graph, cloud, promotion criteria or future-AC implementation added. UTF-8 protocol debit is not actual model token telemetry; inference owner must separately enforce tokenizer budgets."
+    }
+  ],
+  "files_sha256": {
+    "src/llm_ops_lab/marketing/diagnostics.py": "b6c7f1e401ab5fec84d4da95da6dca769738240fce49c9fd1991936c8c4f1168",
+    "src/llm_ops_lab/marketing/diagnostic_worker.py": "3824ea0a42068a2181f9f5c1d93c564ba68a3c3e0a9568edb7f0697dc86393b5",
+    "src/llm_ops_lab/marketing/diagnostic_cli.py": "10adf8375c8162e1723e054a59f367f10dbd053c97bbd49caad2a27a5779b258",
+    "src/llm_ops_lab/marketing/__main__.py": "44b54753168c12b013bf01a7970802cf2c27bd6c45edcb15f576186d01b1c76e",
+    "tests/test_marketing_diagnostics.py": "993f898abc2c69c9defbe7c2c56acee682c6315df82de81d3de34482b448b309",
+    "docs/marketing/diagnostic-interface.md": "68e8c86e2855fc73b861dd90cab46f33013bcf712ca02a1bf77659874bf47a50"
+  },
+  "frozen_inputs_sha256": {
+    "data/marketing/v1/acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81",
+    "data/marketing/v1/acceptance-freeze.json": "38ca9dc922588ada7fbb101e2f730ba9ec2225f97895b1fe530aa72c15c2c6f0",
+    "data/marketing/v1/acceptance.json": "abb92bfa733e623f79d5185846f95adf9343cf29e58c05314612b2d821001c57"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "prompt_sha256": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3",
+  "expected": "unavailable_root_cause",
+  "calls": [
+    {
+      "index": 0,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 1,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 2,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 3,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 4,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 5,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 6,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 7,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 8,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    },
+    {
+      "index": 9,
+      "status": "returned",
+      "labels": [
+        "unavailable_root_cause"
+      ],
+      "disposition": "unavailable_root_cause",
+      "passed": true,
+      "prompt_tokens": 715,
+      "output_tokens": 13
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+name: llm-ops-olist
+services:
+  postgres:
+    image: postgres:17.11-bookworm@sha256:3645570cccdfa447589da9f57dd740faa29b30938e861289a5574b6ca6b03826
+    restart: "no"
+    ports:
+      - "127.0.0.1:${OLIST_PG_PORT:-55432}:5432"
+    environment:
+      POSTGRES_DB: olist
+      POSTGRES_PASSWORD_FILE: /run/secrets/admin_password
+      POSTGRES_INITDB_ARGS: --data-checksums
+    secrets:
+      - admin_password
+      - writer_password
+      - reader_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/olist/init-roles.sql:/docker-entrypoint-initdb.d/10-roles.sql:ro
+    command: ["postgres", "-c", "shared_buffers=128MB", "-c", "work_mem=8MB", "-c", "max_connections=20"]
+    mem_limit: 1g
+    cpus: 1.0
+    shm_size: 128mb
+    pids_limit: 128
+    stop_grace_period: 30s
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d olist"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "2"
+volumes:
+  postgres_data:
+secrets:
+  admin_password:
+    file: ./work/olist/secrets/admin.txt
+  writer_password:
+    file: ./work/olist/secrets/writer.txt
+  reader_password:
+    file: ./work/olist/secrets/reader.txt

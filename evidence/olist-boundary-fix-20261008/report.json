@@ -1,0 +1,71 @@
+{
+  "schema_version": "olist.boundary-fix.v1",
+  "decision": "bounded_hosted_classifier_candidate_passed_not_http_deployment",
+  "prompt_version": "olist-intent.v7",
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "server_revision_pinned": false,
+  "baseline_reproduction": {
+    "correct": 6,
+    "total": 10
+  },
+  "rejected_v6_probe": {
+    "correct": 0,
+    "total": 10
+  },
+  "accepted_v7_probe": {
+    "correct": 10,
+    "total": 10
+  },
+  "stages": [
+    {
+      "stage": "regression",
+      "passed": 24,
+      "total": 24
+    },
+    {
+      "stage": "acceptance-retry",
+      "passed": 16,
+      "total": 16
+    },
+    {
+      "stage": "repeat-1",
+      "passed": 12,
+      "total": 12
+    },
+    {
+      "stage": "repeat-2",
+      "passed": 12,
+      "total": 12
+    }
+  ],
+  "completed_evaluation_cases": 64,
+  "completed_evaluation_passed": 64,
+  "total_final_candidate_checked_cases_including_probe": 74,
+  "actual_provider_attempts_including_diagnostics": 105,
+  "actual_provider_returned_including_diagnostics": 104,
+  "provider_rate_limit_failures": 1,
+  "automatic_network_retries": 0,
+  "partial_batch_policy": "10 returned cases before 429 preserved but excluded from completed acceptance score; one paced full restart passed",
+  "service_default": "action-v5",
+  "cloud_deployment": false,
+  "raw_data_changed": false,
+  "historical_error_preserved": true,
+  "test_status": "passed",
+  "tests": {
+    "passed": 671,
+    "skipped": 0,
+    "seconds": 88.67,
+    "includes_actual_postgresql": true,
+    "checkout": "staged-only publication copy with documented bootstrap"
+  },
+  "ruff": "passed",
+  "publication": {
+    "repository": "https://github.com/masondev1024/agentic-marketing-data-pipeline",
+    "visibility": "public",
+    "branches": [
+      "main",
+      "dev"
+    ],
+    "remote_ci": "tracked by GitHub Actions; not claimed by this local receipt"
+  }
+}

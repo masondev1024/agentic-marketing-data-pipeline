@@ -1,0 +1,31 @@
+{
+  "scope": "Super hosted classification + local read-only Olist engine, not production HTTP deployment",
+  "frozen_at": "2026-10-08T01:20:22.648768+00:00",
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "enable_thinking": false,
+  "temperature": 0,
+  "seed": 42,
+  "max_tokens": 256,
+  "acceptance_required": 24,
+  "critical_refusal_count": 12,
+  "additional_fresh_repeat_runs": 3,
+  "required_all_checks_pass": true,
+  "manual_review_required": true,
+  "max_total_provider_calls": 120,
+  "no_prompt_tuning": true,
+  "stop_on_auth_rate_limit_service_failure": true,
+  "service_default_unchanged": true,
+  "source_sha256": {
+    "src/llm_ops_lab/olist/intent_agent.py": "9e0f0da403f5940c78665903d49c5d6212ef59f0dc7a2d400b60772fe17056c7",
+    "src/llm_ops_lab/olist/intent_plan.py": "80183ff5baabfb99472d47473be09ccf5c4c9306f611dbefab1444f0a1058f1b",
+    "src/llm_ops_lab/olist/intent_prompt.txt": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6",
+    "src/llm_ops_lab/olist/nvidia_planner.py": "73a49039793310cc0e473002283552df00fc5fde278fb34f493d0d1baf738a34",
+    "src/llm_ops_lab/olist/evaluation.py": "04092ef89e58fa06266935342eef0a63819bb1db86f9bccde9a4aa55e2b1f5f8",
+    "src/llm_ops_lab/olist/eval_manifest.py": "35154a4cd20684da0942edf097f6aaaa3d534c37518974065a58be24acb39c6e",
+    "src/llm_ops_lab/olist/tool_session.py": "03fc9a435e91374a17486dbc3a6781a9c4a18d7ce980582d94894a0fbd2bb5fb",
+    "src/llm_ops_lab/olist/diagnostics.py": "eb975b616962ce93b6e8730a1d50f3efc2f4bb66c1f983396b9998c6808fd5db",
+    "src/llm_ops_lab/olist/agent.py": "635a73dee0c334fb4ff34de19d251b07cdc00b49c8b5b3c0a506bbdc99a311ac",
+    "uv.lock": "eb79d9976bcf0bcc46cabc431a0541ac022c112be5b00bb0bf79329732a553df",
+    "data/olist/metric-policy-v1.json": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": "olist.investigation-local.v2",
+  "verified_at": "2026-10-07T12:21:49.662254+00:00",
+  "product_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "validation": {
+    "pytest": {
+      "passed": 496,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 68.42,
+      "real_postgresql_tests": 13,
+      "command": "uv run --locked pytest -q (OLIST_TEST_ADMIN_DSN injected privately by local wrapper)"
+    },
+    "ruff": "passed",
+    "real_postgresql_snapshot_and_role_checks": "passed",
+    "real_postgresql_pipeline_context": "passed",
+    "actual_model_evaluation": "not_run",
+    "actual_model_http_e2e": "not_run"
+  },
+  "model_gate": {
+    "status": "pending",
+    "reason": "macOS memory pressure warning",
+    "kern.memorystatus_vm_pressure_level": 2,
+    "new_model_process_started": false
+  },
+  "boundaries": {
+    "diagnosis": "Model-directed fixed tool selection with host-validated code rendering; model quality unverified.",
+    "lineage": "Fixed pipeline dependency map; no durable model-loop checkpoint or autonomous recovery.",
+    "aws": "Readiness design only; no resources provisioned.",
+    "currency_timezone": "Unresolved; no verified financial or 30-day attribution metrics."
+  },
+  "source_sha256": {
+    "src/llm_ops_lab/olist/agent.py": "f9f8e260a620ed128e43c552983af697ed060d0366a77fe0c7fb222d64cdeb98",
+    "src/llm_ops_lab/olist/tool_session.py": "03fc9a435e91374a17486dbc3a6781a9c4a18d7ce980582d94894a0fbd2bb5fb",
+    "src/llm_ops_lab/olist/agent_prompt.txt": "b86f6ee9c02ad2939907752b2d1c2dfc492edf2dd44133f79b71bf9ed3a9ece8",
+    "src/llm_ops_lab/olist/lineage.py": "219b7f196198ea9509aef9a70fdc8a2b0ec1b4dc62e33694bea15ccf30cdfc82",
+    "src/llm_ops_lab/olist/evaluation.py": "ad1f59171a9ddabeae9713018fab60440dfbde9209027f3b8f014c12c35c4c83",
+    "src/llm_ops_lab/olist/__main__.py": "4c50eb14a90a147ccae2c928306df728690552370156afcba91e062a5e879658",
+    "src/llm_ops_lab/api.py": "e266e7fff34f13e94c60ac744d71f4e214b31b6baa9687025254c99735039285",
+    "src/llm_ops_lab/service.py": "4f848791d29ca3394adfd290fd587a84145e5b46287f31351520cc53b68a5e35",
+    "src/llm_ops_lab/service_worker.py": "bf0ad62fb06223c925ebfa3d335f325e015fe3c2992f5cb17ca20ed5db989fb1",
+    "data/olist/metric-policy-v1.json": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9",
+    "data/olist/investigation-eval-v1.json": "09615a89bd97c1c159d8b2215c1c51212b06d636cb5985c7dc63efd87aff9cd2",
+    "uv.lock": "eb79d9976bcf0bcc46cabc431a0541ac022c112be5b00bb0bf79329732a553df"
+  },
+  "preservation": {
+    "raw_contract_unchanged": true,
+    "published_version_unchanged": true,
+    "old_release_evidence_unchanged": true,
+    "commit_push_or_pr": false
+  }
+}

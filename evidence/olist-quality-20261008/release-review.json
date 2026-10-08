@@ -1,0 +1,78 @@
+{
+  "verified_at": "2026-10-08T00:32:27.229652+00:00",
+  "selected_prompt": "olist-agent.v5",
+  "model_quality": {
+    "strict_smoke": {
+      "passed": 5,
+      "total": 6
+    },
+    "strict_personas": {
+      "passed": 6,
+      "total": 12
+    },
+    "gate": "not_passed",
+    "basis": "stricter post-run scoring of real stored v5 responses; not fresh inference or independent held-out accuracy"
+  },
+  "http": {
+    "passed": 16,
+    "total": 16,
+    "source_restored_to_tested_v5": true
+  },
+  "automated_tests": {
+    "passed": 550,
+    "skipped": 0,
+    "real_postgresql_tests": 13,
+    "seconds": 72.52,
+    "ruff": "passed"
+  },
+  "data_preserved": true,
+  "owned_processes_cleaned": true,
+  "source_sha256": {
+    "src/llm_ops_lab/olist/agent.py": "635a73dee0c334fb4ff34de19d251b07cdc00b49c8b5b3c0a506bbdc99a311ac",
+    "src/llm_ops_lab/olist/agent_prompt.txt": "e01b41abb461ff11f3a8c0508571e39b8b3636b4c79cf2bba43fba45e7787448",
+    "src/llm_ops_lab/olist/evaluation.py": "dd5fd13d3f9a58b0f5607d5615f06fcf4470cf46475eef7853355e5f4ed2af3e",
+    "src/llm_ops_lab/olist/eval_manifest.py": "c2d784828cac01e346e77d5b1802a6499e17478ce15e18e94113a39fdc8a8d94",
+    "src/llm_ops_lab/olist/diagnostics.py": "eb975b616962ce93b6e8730a1d50f3efc2f4bb66c1f983396b9998c6808fd5db",
+    "src/llm_ops_lab/olist/tool_session.py": "03fc9a435e91374a17486dbc3a6781a9c4a18d7ce980582d94894a0fbd2bb5fb",
+    "src/llm_ops_lab/olist/lineage.py": "219b7f196198ea9509aef9a70fdc8a2b0ec1b4dc62e33694bea15ccf30cdfc82",
+    "src/llm_ops_lab/olist/config.py": "897289b8e11d4e03f7f9f8ff8a5e7dea65fe6bbf89191e69e1967f2481827a1e",
+    "src/llm_ops_lab/marketing/offline_model.py": "3dfd178b3e214f811b53d06f315ea86556db04d115d28bb329bdaab6bdbeb423",
+    "src/llm_ops_lab/marketing/model_worker.py": "b98cc4849d163af13b97ac0cc85728d2bf430c94027973e66a8d152677a8ec50",
+    "src/llm_ops_lab/inference.py": "0c932f721e82dcda3c0d716aae731303de7ee70f57046dc0a124b5246a84935e",
+    "src/llm_ops_lab/cli.py": "222fa3390734b1b1b2690d8751a164530344a44f0fb2eb2ca9e9f8d99af5e31a",
+    "data/olist/metric-policy-v1.json": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9",
+    "uv.lock": "eb79d9976bcf0bcc46cabc431a0541ac022c112be5b00bb0bf79329732a553df",
+    "src/llm_ops_lab/api.py": "e266e7fff34f13e94c60ac744d71f4e214b31b6baa9687025254c99735039285",
+    "src/llm_ops_lab/service.py": "4f848791d29ca3394adfd290fd587a84145e5b46287f31351520cc53b68a5e35",
+    "src/llm_ops_lab/service_worker.py": "bf0ad62fb06223c925ebfa3d335f325e015fe3c2992f5cb17ca20ed5db989fb1",
+    "data/olist/investigation-personas-v1.json": "6106668d1914e8f9a1757865077b42fb6dce0023f892bae21e15d7f08e4018af",
+    "data/olist/investigation-personas-v2.json": "84da7d9d75825ed39be58f185663e6d76ef5f6925d2ff621ef2d2cb3acac60d4",
+    "data/olist/investigation-eval-v2.json": "de0647e86c2b3c1510940952550b290670d838d637a9bf49c77b7647a742fe71"
+  },
+  "original_model_identity": {
+    "model_id": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "mlx_lm_version": "0.32.0",
+    "mlx_version": "0.32.3",
+    "load_seconds": 1.7207210829947144
+  },
+  "changes": [
+    "exact available actions",
+    "host-validated finding/evidence choices",
+    "shared one-repair budget",
+    "strict versioned persona manifests",
+    "precision and no-tool refusal scoring",
+    "execution source fingerprints"
+  ],
+  "not_claimed": [
+    "NVIDIA dataset integration",
+    "fine-tuning",
+    "independent held-out quality",
+    "production readiness",
+    "AWS deployment"
+  ],
+  "remaining": [
+    "request scope and relevance verification",
+    "new evaluation questions frozen independently before subsequent tuning"
+  ]
+}

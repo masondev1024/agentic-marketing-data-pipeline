@@ -1,0 +1,143 @@
+{
+  "schema_version": "olist.intent-release-review.v1",
+  "recorded_at": "2026-10-08T01:10:11.115955+00:00",
+  "decision": "quality_gate_failed_do_not_promote",
+  "default_engine": "action-v5",
+  "candidate_engine": "intent-v1",
+  "candidate_prompt": {
+    "version": "olist-intent.v5",
+    "sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6"
+  },
+  "scope": "Local bounded read-only Olist investigation; not deployed production SLA",
+  "development": {
+    "passed": 18,
+    "total": 18
+  },
+  "first_independent_acceptance": {
+    "passed": 21,
+    "total": 24,
+    "freeze_matches": true
+  },
+  "exposed_regression": {
+    "passed": 21,
+    "total": 24,
+    "not_new_holdout": true
+  },
+  "failures": [
+    {
+      "case_id": "finance_30day_sales",
+      "failed_checks": [
+        "required_tools",
+        "same_published_version",
+        "expected_refusal"
+      ]
+    },
+    {
+      "case_id": "finance_mixed_origin_roas",
+      "failed_checks": [
+        "required_tools",
+        "expected_refusal"
+      ]
+    },
+    {
+      "case_id": "rootcause_mixed_status",
+      "failed_checks": [
+        "tool_scope",
+        "expected_abstention"
+      ]
+    }
+  ],
+  "critical_repeats": {
+    "executed": false,
+    "reason": "First acceptance gate failed; no promotion claim"
+  },
+  "post_acceptance_repairs": [
+    "Observed numerator and denominator added to host-rendered output",
+    "Clean observation codes registered for evaluator expectations",
+    "Opt-in CLI and HTTP intent engine, default unchanged",
+    "Optional NVIDIA evaluation-only adapter; no remote calls"
+  ],
+  "observed_counts": {
+    "origin_accounting": {
+      "numerator": 60,
+      "denominator": 8000,
+      "unit": "leads",
+      "scope": "published_channel_aggregate"
+    },
+    "coverage_loading": {
+      "numerator": 462,
+      "denominator": 842,
+      "unit": "contracts",
+      "scope": "published_channel_aggregate"
+    }
+  },
+  "validation": {
+    "pytest_passed": 650,
+    "pytest_seconds": 76.48,
+    "pytest_skipped": 0,
+    "postgres_suite_enabled": true,
+    "ruff": "All checks passed!",
+    "real_model_http": {
+      "passed": 16,
+      "total": 16,
+      "deadline_fault": "SIGSTOP owned worker"
+    },
+    "nvidia_mock_tests": 37,
+    "nvidia_actual_calls": 0
+  },
+  "remote_pilot": {
+    "status": "awaiting_user_key_model_and_trial_availability",
+    "cases": 6,
+    "max_calls": 12,
+    "sends": "Planner instructions and evaluation questions only",
+    "not_sent": "Database evidence or connection credentials in model messages"
+  },
+  "data_preservation": {
+    "same_published_version": true,
+    "same_evidence": true,
+    "status": "completed",
+    "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+  },
+  "source_sha256_final": {
+    "src/llm_ops_lab/olist/agent.py": "635a73dee0c334fb4ff34de19d251b07cdc00b49c8b5b3c0a506bbdc99a311ac",
+    "src/llm_ops_lab/olist/agent_prompt.txt": "e01b41abb461ff11f3a8c0508571e39b8b3636b4c79cf2bba43fba45e7787448",
+    "src/llm_ops_lab/olist/evaluation.py": "04092ef89e58fa06266935342eef0a63819bb1db86f9bccde9a4aa55e2b1f5f8",
+    "src/llm_ops_lab/olist/eval_manifest.py": "35154a4cd20684da0942edf097f6aaaa3d534c37518974065a58be24acb39c6e",
+    "src/llm_ops_lab/olist/diagnostics.py": "eb975b616962ce93b6e8730a1d50f3efc2f4bb66c1f983396b9998c6808fd5db",
+    "src/llm_ops_lab/olist/tool_session.py": "03fc9a435e91374a17486dbc3a6781a9c4a18d7ce980582d94894a0fbd2bb5fb",
+    "src/llm_ops_lab/olist/lineage.py": "219b7f196198ea9509aef9a70fdc8a2b0ec1b4dc62e33694bea15ccf30cdfc82",
+    "src/llm_ops_lab/olist/config.py": "897289b8e11d4e03f7f9f8ff8a5e7dea65fe6bbf89191e69e1967f2481827a1e",
+    "src/llm_ops_lab/olist/intent_agent.py": "9e0f0da403f5940c78665903d49c5d6212ef59f0dc7a2d400b60772fe17056c7",
+    "src/llm_ops_lab/olist/intent_plan.py": "80183ff5baabfb99472d47473be09ccf5c4c9306f611dbefab1444f0a1058f1b",
+    "src/llm_ops_lab/olist/intent_prompt.txt": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6",
+    "src/llm_ops_lab/olist/nvidia_planner.py": "53e58fefa075e800e55bb0afd5dfe865abc293734abeb1432dc7eccb69d3fc35",
+    "src/llm_ops_lab/marketing/offline_model.py": "3dfd178b3e214f811b53d06f315ea86556db04d115d28bb329bdaab6bdbeb423",
+    "src/llm_ops_lab/marketing/model_worker.py": "b98cc4849d163af13b97ac0cc85728d2bf430c94027973e66a8d152677a8ec50",
+    "src/llm_ops_lab/inference.py": "0c932f721e82dcda3c0d716aae731303de7ee70f57046dc0a124b5246a84935e",
+    "src/llm_ops_lab/cli.py": "222fa3390734b1b1b2690d8751a164530344a44f0fb2eb2ca9e9f8d99af5e31a",
+    "data/olist/metric-policy-v1.json": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9",
+    "uv.lock": "eb79d9976bcf0bcc46cabc431a0541ac022c112be5b00bb0bf79329732a553df",
+    "src/llm_ops_lab/service.py": "c01de54915e587c418724d499647aec064ecd4b25dc4623ee0f04b73d442ed12",
+    "src/llm_ops_lab/service_worker.py": "f493ed876a3317d0f5c8b03364d1f3be63fcb06ed4ce2aa3e164e99970989f8d",
+    "src/llm_ops_lab/api.py": "c0ddf5ad7994737e9c42f3a2051c4f08e390dc2161cebe628f681a83ed872a20",
+    "src/llm_ops_lab/olist/__main__.py": "f629f42891c4a69e7029651901cbbc0015b6c70d65298c70f4eb023de95c267f"
+  },
+  "model": {
+    "model_id": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "mlx_lm_version": "0.32.0",
+    "mlx_version": "0.32.3",
+    "load_seconds": 1.524146334035322
+  },
+  "persona_source": {
+    "dataset": "NVIDIA Nemotron-Personas-Korea",
+    "source_url": "https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea",
+    "observed_repository_revision": "ada0f5b53a38bb5a30cce09358adde883c1ab63a",
+    "rows_query_revision_binding": "not established by the datasets-server response; observed repository revision is recorded separately and must not be treated as the rows snapshot revision",
+    "license": "CC-BY-4.0",
+    "retrieved_at_utc": "2026-10-08T00:41:12.610247+00:00",
+    "returned_rows": 12,
+    "total_downloaded_bytes": 103207,
+    "row_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+  }
+}

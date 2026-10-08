@@ -1,0 +1,14 @@
+{
+  "scope": "files selected in Git index, checked using their current bytes before final staging",
+  "file_count": 615,
+  "actual_local_credential_matches": [],
+  "excluded_roots": [
+    "work",
+    "runs",
+    ".omx",
+    ".ouroboros",
+    ".venv"
+  ],
+  "full_persona_responses_excluded": true,
+  "raw_olist_rows_or_archives_staged": false
+}

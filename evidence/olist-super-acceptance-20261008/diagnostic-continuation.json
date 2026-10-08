@@ -1,0 +1,6 @@
+{
+  "reason": "Structural24/24 and exact safe actions pass; one incorrect refusal label. Planned repeats now diagnose label consistency. Acceptance criteria are unchanged; results cannot erase first-run failure.",
+  "allow_only_structural_passed_stages": true,
+  "same_failure_limit": 3,
+  "max_total_provider_calls": 120
+}

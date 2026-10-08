@@ -1,0 +1,42 @@
+[project]
+name = "llm-ops-lab"
+version = "0.1.0"
+description = "A measured, beginner-friendly path from local LLM inference to a grounded operations assistant"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "duckdb==1.4.3",
+    "fastapi>=0.142.2",
+    "langgraph==1.0.10",
+    "langgraph-checkpoint-sqlite==3.0.3",
+    "psycopg[binary]==3.3.3",
+    "uvicorn>=0.54.0",
+]
+
+[project.optional-dependencies]
+local = ["mlx-lm; sys_platform == 'darwin' and platform_machine == 'arm64'"]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest",
+    "ruff",
+]
+
+[project.scripts]
+llm-lab = "llm_ops_lab.cli:main"
+llm-lab-serve = "llm_ops_lab.api:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+# Frozen historical harness snapshots are evidence, not maintained source.
+extend-exclude = ["evidence"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

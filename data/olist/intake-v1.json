@@ -1,0 +1,370 @@
+{
+  "schema_version": "olist-preparation.v1",
+  "prepared_at": "2026-10-07T11:06:28.775163+00:00",
+  "operator": "assistant",
+  "status": "downloaded_profiled_not_integrated",
+  "datasets": [
+    {
+      "dataset": "olistbr/brazilian-ecommerce",
+      "source_url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/olistbr/brazilian-ecommerce",
+      "fetched_at": "2026-10-07T11:03:29.148510+00:00",
+      "authentication_used": false,
+      "http_status": 200,
+      "members": [
+        "olist_customers_dataset.csv",
+        "olist_geolocation_dataset.csv",
+        "olist_order_items_dataset.csv",
+        "olist_order_payments_dataset.csv",
+        "olist_order_reviews_dataset.csv",
+        "olist_orders_dataset.csv",
+        "olist_products_dataset.csv",
+        "olist_sellers_dataset.csv",
+        "product_category_name_translation.csv"
+      ],
+      "status": "downloaded",
+      "bytes": 44717580,
+      "sha256": "967e41e04fc306fe604e2a693f488995a8b41e5047418f8a5c8e4abd6deca784",
+      "local_path": "work/olist-intake/brazilian-ecommerce.zip",
+      "upstream_version": "not_resolved; exact local bytes pinned by SHA256",
+      "license_as_listed": "CC BY-NC-SA 4.0",
+      "publisher": "Olist"
+    },
+    {
+      "dataset": "olistbr/marketing-funnel-olist",
+      "source_url": "https://www.kaggle.com/datasets/olistbr/marketing-funnel-olist",
+      "download_url": "https://www.kaggle.com/api/v1/datasets/download/olistbr/marketing-funnel-olist",
+      "fetched_at": "2026-10-07T11:03:38.080420+00:00",
+      "authentication_used": false,
+      "http_status": 200,
+      "members": [
+        "olist_closed_deals_dataset.csv",
+        "olist_marketing_qualified_leads_dataset.csv"
+      ],
+      "status": "downloaded",
+      "bytes": 284562,
+      "sha256": "d476efe8d16ab267ce10535859ed3dd2d6e186bbb50c9d405a1e7bc05c200171",
+      "local_path": "work/olist-intake/marketing-funnel-olist.zip",
+      "upstream_version": "not_resolved; exact local bytes pinned by SHA256",
+      "license_as_listed": "CC BY-NC-SA 4.0",
+      "publisher": "Olist"
+    }
+  ],
+  "profile": {
+    "schema_version": "olist-intake-profile.v1",
+    "operator": "assistant",
+    "status": "raw_download_and_exploratory_profile_only",
+    "files": [
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "olist_customers_dataset.csv",
+        "bytes": 9033957,
+        "sha256": "983a422239e1712ded753b3bf9ecf47dc73f144d306029dcfa99e70a226883d2",
+        "rows": 99441,
+        "columns": [
+          "customer_id",
+          "customer_unique_id",
+          "customer_zip_code_prefix",
+          "customer_city",
+          "customer_state"
+        ],
+        "candidate_key": [
+          "customer_id"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {},
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/olist_customers_dataset.csv"
+      },
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "olist_geolocation_dataset.csv",
+        "bytes": 61273883,
+        "sha256": "b514f6fc991b9566aeba02aa5d67e2c3630f034b60a0e05aa0d082a3b66d88d6",
+        "rows": 1000163,
+        "columns": [
+          "geolocation_zip_code_prefix",
+          "geolocation_lat",
+          "geolocation_lng",
+          "geolocation_city",
+          "geolocation_state"
+        ],
+        "candidate_key": null,
+        "duplicate_candidate_keys": null,
+        "empty_values": {},
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/olist_geolocation_dataset.csv"
+      },
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "olist_order_items_dataset.csv",
+        "bytes": 15438671,
+        "sha256": "0bc4d068c4fe38cbb01bd90e8746e3c613fe7b4baef75fab7b0e329701c3e279",
+        "rows": 112650,
+        "columns": [
+          "order_id",
+          "order_item_id",
+          "product_id",
+          "seller_id",
+          "shipping_limit_date",
+          "price",
+          "freight_value"
+        ],
+        "candidate_key": [
+          "order_id",
+          "order_item_id"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {},
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/olist_order_items_dataset.csv"
+      },
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "olist_order_payments_dataset.csv",
+        "bytes": 5777138,
+        "sha256": "4f713964f2815dbbaa40b9488268c55aac3627bfce5aa96cf58d1f3616de3cc0",
+        "rows": 103886,
+        "columns": [
+          "order_id",
+          "payment_sequential",
+          "payment_type",
+          "payment_installments",
+          "payment_value"
+        ],
+        "candidate_key": [
+          "order_id",
+          "payment_sequential"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {},
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/olist_order_payments_dataset.csv"
+      },
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "olist_order_reviews_dataset.csv",
+        "bytes": 14451670,
+        "sha256": "012b61c7593e34f51fa614efdf802b9c7056ce6aae5307ddb93236e7cfc797d7",
+        "rows": 99224,
+        "columns": [
+          "review_id",
+          "order_id",
+          "review_score",
+          "review_comment_title",
+          "review_comment_message",
+          "review_creation_date",
+          "review_answer_timestamp"
+        ],
+        "candidate_key": null,
+        "duplicate_candidate_keys": null,
+        "empty_values": {
+          "review_comment_title": 87656,
+          "review_comment_message": 58247
+        },
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/olist_order_reviews_dataset.csv"
+      },
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "olist_orders_dataset.csv",
+        "bytes": 17654914,
+        "sha256": "8df58ef3d2d7e9944010f7beecd9b75367f5588ec6e3c91cec19ae3345ef9ecf",
+        "rows": 99441,
+        "columns": [
+          "order_id",
+          "customer_id",
+          "order_status",
+          "order_purchase_timestamp",
+          "order_approved_at",
+          "order_delivered_carrier_date",
+          "order_delivered_customer_date",
+          "order_estimated_delivery_date"
+        ],
+        "candidate_key": [
+          "order_id"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {
+          "order_approved_at": 160,
+          "order_delivered_carrier_date": 1783,
+          "order_delivered_customer_date": 2965
+        },
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/olist_orders_dataset.csv",
+        "observed_time_ranges": {
+          "order_purchase_timestamp": {
+            "min": "2016-09-04 21:15:19",
+            "max": "2018-10-17 17:30:18",
+            "timezone": "not encoded in CSV; unresolved"
+          }
+        }
+      },
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "olist_products_dataset.csv",
+        "bytes": 2379446,
+        "sha256": "3e6569628a17fbc75fd206ee357b59e20364b9afa90f5b6cd5b4d624c58aa9cc",
+        "rows": 32951,
+        "columns": [
+          "product_id",
+          "product_category_name",
+          "product_name_lenght",
+          "product_description_lenght",
+          "product_photos_qty",
+          "product_weight_g",
+          "product_length_cm",
+          "product_height_cm",
+          "product_width_cm"
+        ],
+        "candidate_key": [
+          "product_id"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {
+          "product_category_name": 610,
+          "product_name_lenght": 610,
+          "product_description_lenght": 610,
+          "product_photos_qty": 610,
+          "product_weight_g": 2,
+          "product_length_cm": 2,
+          "product_height_cm": 2,
+          "product_width_cm": 2
+        },
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/olist_products_dataset.csv"
+      },
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "olist_sellers_dataset.csv",
+        "bytes": 174703,
+        "sha256": "1f643d2b950373b85735e7794b20986f528d7a000432e7c6f9bcbb44d0846a0e",
+        "rows": 3095,
+        "columns": [
+          "seller_id",
+          "seller_zip_code_prefix",
+          "seller_city",
+          "seller_state"
+        ],
+        "candidate_key": [
+          "seller_id"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {},
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/olist_sellers_dataset.csv"
+      },
+      {
+        "dataset": "brazilian-ecommerce",
+        "file": "product_category_name_translation.csv",
+        "bytes": 2613,
+        "sha256": "a81f0d1f27b27e7293f761bc79e3ce8f348ee39c4b3ed3e49bde38f478586278",
+        "rows": 71,
+        "columns": [
+          "product_category_name",
+          "product_category_name_english"
+        ],
+        "candidate_key": [
+          "product_category_name"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {},
+        "local_path": "work/olist-intake/raw/brazilian-ecommerce/product_category_name_translation.csv"
+      },
+      {
+        "dataset": "marketing-funnel-olist",
+        "file": "olist_closed_deals_dataset.csv",
+        "bytes": 171352,
+        "sha256": "1433f402d8fff00ca167579de641d9525f6e846368958c166f699ef1b0c31f3d",
+        "rows": 842,
+        "columns": [
+          "mql_id",
+          "seller_id",
+          "sdr_id",
+          "sr_id",
+          "won_date",
+          "business_segment",
+          "lead_type",
+          "lead_behaviour_profile",
+          "has_company",
+          "has_gtin",
+          "average_stock",
+          "business_type",
+          "declared_product_catalog_size",
+          "declared_monthly_revenue"
+        ],
+        "candidate_key": [
+          "mql_id"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {
+          "business_segment": 1,
+          "lead_type": 6,
+          "lead_behaviour_profile": 177,
+          "has_company": 779,
+          "has_gtin": 778,
+          "average_stock": 776,
+          "business_type": 10,
+          "declared_product_catalog_size": 773
+        },
+        "local_path": "work/olist-intake/raw/marketing-funnel-olist/olist_closed_deals_dataset.csv",
+        "observed_time_ranges": {
+          "won_date": {
+            "min": "2017-12-05 02:00:00",
+            "max": "2018-11-14 18:04:19",
+            "timezone": "not encoded in CSV; unresolved"
+          }
+        }
+      },
+      {
+        "dataset": "marketing-funnel-olist",
+        "file": "olist_marketing_qualified_leads_dataset.csv",
+        "bytes": 703836,
+        "sha256": "5537753b7549ce4068e52e2402c29f2773c5375fc0575520ae8f3f301f666573",
+        "rows": 8000,
+        "columns": [
+          "mql_id",
+          "first_contact_date",
+          "landing_page_id",
+          "origin"
+        ],
+        "candidate_key": [
+          "mql_id"
+        ],
+        "duplicate_candidate_keys": 0,
+        "empty_values": {
+          "origin": 60
+        },
+        "local_path": "work/olist-intake/raw/marketing-funnel-olist/olist_marketing_qualified_leads_dataset.csv",
+        "observed_time_ranges": {
+          "first_contact_date": {
+            "min": "2017-06-14",
+            "max": "2018-05-31",
+            "timezone": "not encoded in CSV; unresolved"
+          }
+        }
+      }
+    ],
+    "join_coverage": {
+      "released_mql_rows": 8000,
+      "closed_deal_rows": 842,
+      "closed_deal_mql_not_in_released_leads": 0,
+      "unique_closed_sellers": 842,
+      "closed_sellers_in_commerce": 380,
+      "closed_sellers_not_in_commerce": 462,
+      "item_sellers_missing_dimension": 0,
+      "item_orders_missing_dimension": 0,
+      "scope": "coverage in these two released samples only; absence does not prove no business activity"
+    },
+    "interpretation": "Candidate keys and empty strings are observations, not a validated source contract. No revenue, ROAS, refunds or causal marketing metric published."
+  },
+  "verification": {
+    "zip_crc": "passed for both archives",
+    "all_csvs": "UTF-8 parsed; rectangular rows",
+    "hashes": "download ZIP and extracted CSV SHA256 recorded",
+    "credentials_used": false,
+    "cloud_provisioned": false,
+    "existing_synthetic_fixture_changed": false,
+    "independent_check": "DuckDB confirms nine candidate-key table counts and 380 matched sellers; all ZIP/CSV hashes rechecked; synthetic acceptance freeze unchanged."
+  },
+  "interpretation_limits": [
+    "Historical anonymized public samples; not a live source or complete company census.",
+    "Unmatched sellers are unknown coverage, not zero sales.",
+    "No actual ad spend or refund ledger; no ROAS, CAC, refund-adjusted revenue or causal attribution.",
+    "Source currency/timezone require documented interpretation before normalized financial metrics.",
+    "Upstream numeric dataset versions were not resolved; exact bytes pinned by SHA256.",
+    "Existing 419-test proof belongs to the previous synthetic local release, not this real-data integration."
+  ]
+}

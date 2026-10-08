@@ -1,0 +1,238 @@
+{
+  "model_executed": false,
+  "diagnostic_mode": "deterministic",
+  "status": "completed",
+  "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "evidence": [
+    {
+      "evidence_id": "d0cf683cb4711cc0a63453c76cdddb1b8a43ded3bc17fed7068ad3559f3efbbd",
+      "tool": "version_evidence",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": {
+        "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+        "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+        "contract_version": "olist.raw.v1",
+        "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+        "published_at": "2026-10-07T11:43:59.903303+00:00",
+        "quality_status": "passed",
+        "check_count": 113,
+        "failed_check_count": 0,
+        "warning_count": 2
+      }
+    },
+    {
+      "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+      "tool": "channel_funnel",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": [
+        {
+          "origin": null,
+          "lead_count": 60,
+          "contract_count": 14,
+          "linked_contract_count": 4,
+          "unlinked_contract_count": 10
+        },
+        {
+          "origin": "direct_traffic",
+          "lead_count": 499,
+          "contract_count": 56,
+          "linked_contract_count": 31,
+          "unlinked_contract_count": 25
+        },
+        {
+          "origin": "display",
+          "lead_count": 118,
+          "contract_count": 6,
+          "linked_contract_count": 2,
+          "unlinked_contract_count": 4
+        },
+        {
+          "origin": "email",
+          "lead_count": 493,
+          "contract_count": 15,
+          "linked_contract_count": 6,
+          "unlinked_contract_count": 9
+        },
+        {
+          "origin": "organic_search",
+          "lead_count": 2296,
+          "contract_count": 271,
+          "linked_contract_count": 113,
+          "unlinked_contract_count": 158
+        },
+        {
+          "origin": "other",
+          "lead_count": 150,
+          "contract_count": 4,
+          "linked_contract_count": 2,
+          "unlinked_contract_count": 2
+        },
+        {
+          "origin": "other_publicities",
+          "lead_count": 65,
+          "contract_count": 3,
+          "linked_contract_count": 0,
+          "unlinked_contract_count": 3
+        },
+        {
+          "origin": "paid_search",
+          "lead_count": 1586,
+          "contract_count": 195,
+          "linked_contract_count": 101,
+          "unlinked_contract_count": 94
+        },
+        {
+          "origin": "referral",
+          "lead_count": 284,
+          "contract_count": 24,
+          "linked_contract_count": 9,
+          "unlinked_contract_count": 15
+        },
+        {
+          "origin": "social",
+          "lead_count": 1350,
+          "contract_count": 75,
+          "linked_contract_count": 31,
+          "unlinked_contract_count": 44
+        },
+        {
+          "origin": "unknown",
+          "lead_count": 1099,
+          "contract_count": 179,
+          "linked_contract_count": 81,
+          "unlinked_contract_count": 98
+        }
+      ]
+    },
+    {
+      "evidence_id": "2bd8739ca252b824bfe656b6ba5923d1c48b60d82d46409ab6ae662d3fab645e",
+      "tool": "seller_funnel",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": [
+        {
+          "coverage_state": "linked_sample",
+          "contract_count": 380,
+          "contracts_with_observed_order_count": 380,
+          "observed_order_count": 4518
+        },
+        {
+          "coverage_state": "unlinked_unknown",
+          "contract_count": 462,
+          "contracts_with_observed_order_count": 0,
+          "observed_order_count": null
+        }
+      ]
+    },
+    {
+      "evidence_id": "f270d2d6ba35e64bda942bbb7a52994b3db2765e670324044c4a82242f26749a",
+      "tool": "run_history",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": [
+        {
+          "run_id": "6d82a0cf-816e-468b-a901-c024e3b9e60a",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "status": "reused",
+          "step": "complete",
+          "error_code": null,
+          "started_at": "2026-10-07T11:45:09.560277+00:00",
+          "finished_at": "2026-10-07T11:45:14.065301+00:00"
+        },
+        {
+          "run_id": "65bad562-391a-4d54-b4f2-822a0374e06d",
+          "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+          "status": "published",
+          "step": "complete",
+          "error_code": null,
+          "started_at": "2026-10-07T11:43:55.418837+00:00",
+          "finished_at": "2026-10-07T11:43:59.903303+00:00"
+        },
+        {
+          "run_id": "38ace663-aec0-4bdc-92fb-7a7ced58edef",
+          "version_id": "05a3a7ceb2ec97cc60f681509796eb9abdab2dd1041a2cd2a7f97fc8f67f044e",
+          "status": "failed",
+          "step": "mart",
+          "error_code": "QueryCanceled",
+          "started_at": "2026-10-07T11:41:20.449047+00:00",
+          "finished_at": "2026-10-07T11:43:27.658922+00:00"
+        },
+        {
+          "run_id": "1291db18-e32c-4b5a-be39-4d4bd8593090",
+          "version_id": "83435f85ae1da236ec641b29bc753f04be9ede796c3257124f5b8fa2bd9e020c",
+          "status": "reused",
+          "step": "complete",
+          "error_code": null,
+          "started_at": "2026-10-07T11:39:20.215204+00:00",
+          "finished_at": "2026-10-07T11:39:24.572299+00:00"
+        },
+        {
+          "run_id": "56e53cfd-5c87-4099-a22b-ded95f8650dd",
+          "version_id": "83435f85ae1da236ec641b29bc753f04be9ede796c3257124f5b8fa2bd9e020c",
+          "status": "published",
+          "step": "complete",
+          "error_code": null,
+          "started_at": "2026-10-07T11:37:49.499767+00:00",
+          "finished_at": "2026-10-07T11:37:54.024647+00:00"
+        }
+      ]
+    },
+    {
+      "evidence_id": "05bd0566dc788ef05a3217d87c756befa28d7d0538b46e0205aecee31d8fbcbd",
+      "tool": "definitions",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": {
+        "lead_count": "Source-sample leads grouped by origin; a null origin is retained.",
+        "contract_count": "Observed closed deals joined to leads by mql_id in this sample.",
+        "linked_contract_count": "Contracts whose seller_id appears in the commerce seller sample.",
+        "unlinked_contract_count": "Contracts whose seller is absent from the commerce sample; outcome coverage is unknown.",
+        "observed_order_count": "Distinct orders observed for a linked seller across the source sample; not time-attributed."
+      }
+    }
+  ],
+  "findings": [
+    {
+      "code": "published_quality_warnings",
+      "severity": "info",
+      "summary": "The published quality report records 2 warning-status checks.",
+      "evidence_ids": [
+        "d0cf683cb4711cc0a63453c76cdddb1b8a43ded3bc17fed7068ad3559f3efbbd"
+      ]
+    },
+    {
+      "code": "missing_origin_leads",
+      "severity": "info",
+      "summary": "60 leads have no observed origin; they remain in the funnel denominator.",
+      "evidence_ids": [
+        "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+      ]
+    },
+    {
+      "code": "seller_sample_coverage_unknown",
+      "severity": "info",
+      "summary": "462 contracts are not linked to the commerce seller sample; their order outcome is unknown, not zero.",
+      "evidence_ids": [
+        "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+      ]
+    },
+    {
+      "code": "recent_pipeline_failures",
+      "severity": "warning",
+      "summary": "1 of the latest five runs failed before the investigation start; this history is operational evidence and does not invalidate the published last-good version.",
+      "evidence_ids": [
+        "f270d2d6ba35e64bda942bbb7a52994b3db2765e670324044c4a82242f26749a"
+      ]
+    },
+    {
+      "code": "published_sample_only",
+      "severity": "info",
+      "summary": "Counts describe this published historical sample. Missing seller links and source timestamps do not establish business outcomes or timezone-based windows.",
+      "evidence_ids": [
+        "d0cf683cb4711cc0a63453c76cdddb1b8a43ded3bc17fed7068ad3559f3efbbd"
+      ]
+    }
+  ],
+  "limitations": [
+    "source_timezone_unresolved",
+    "source_currency_unresolved",
+    "sample_completeness_unknown"
+  ]
+}

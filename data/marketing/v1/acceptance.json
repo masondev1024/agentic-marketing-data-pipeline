@@ -1,0 +1,282 @@
+{
+  "schema_version": "marketing.v1",
+  "fixture_revision": "marketing-acceptance.v1",
+  "as_of": "2026-09-23T12:00:00Z",
+  "date_start": "2026-09-20",
+  "date_end": "2026-09-21",
+  "accounts": [
+    "alpha",
+    "beta"
+  ],
+  "campaigns": [
+    {
+      "account_id": "alpha",
+      "campaign_id": "c1",
+      "name": "synthetic-alpha-c1"
+    },
+    {
+      "account_id": "alpha",
+      "campaign_id": "c2",
+      "name": "synthetic-alpha-c2"
+    },
+    {
+      "account_id": "beta",
+      "campaign_id": "c1",
+      "name": "synthetic-beta-c1"
+    }
+  ],
+  "spend_snapshots": [
+    {
+      "account_id": "alpha",
+      "campaign_id": "c1",
+      "source": "spend",
+      "snapshot_id": "c1-2026-09-20",
+      "business_date": "2026-09-20",
+      "snapshot_at": "2026-09-20T15:00:00Z",
+      "revision": 1,
+      "event_time": "2026-09-20T15:01:00Z",
+      "ingested_at": "2026-09-20T15:02:00Z",
+      "spend_krw": 10000
+    },
+    {
+      "account_id": "alpha",
+      "campaign_id": "c2",
+      "source": "spend",
+      "snapshot_id": "c2-2026-09-20",
+      "business_date": "2026-09-20",
+      "snapshot_at": "2026-09-20T15:00:00Z",
+      "revision": 1,
+      "event_time": "2026-09-20T15:01:00Z",
+      "ingested_at": "2026-09-20T15:02:00Z",
+      "spend_krw": 5000
+    },
+    {
+      "account_id": "beta",
+      "campaign_id": "c1",
+      "source": "spend",
+      "snapshot_id": "c1-2026-09-20",
+      "business_date": "2026-09-20",
+      "snapshot_at": "2026-09-20T15:00:00Z",
+      "revision": 1,
+      "event_time": "2026-09-20T15:01:00Z",
+      "ingested_at": "2026-09-20T15:02:00Z",
+      "spend_krw": 8000
+    },
+    {
+      "account_id": "alpha",
+      "campaign_id": "c1",
+      "source": "spend",
+      "snapshot_id": "c1-2026-09-21",
+      "business_date": "2026-09-21",
+      "snapshot_at": "2026-09-21T15:00:00Z",
+      "revision": 1,
+      "event_time": "2026-09-21T15:01:00Z",
+      "ingested_at": "2026-09-21T15:02:00Z",
+      "spend_krw": 10000
+    },
+    {
+      "account_id": "alpha",
+      "campaign_id": "c2",
+      "source": "spend",
+      "snapshot_id": "c2-2026-09-21",
+      "business_date": "2026-09-21",
+      "snapshot_at": "2026-09-21T15:00:00Z",
+      "revision": 1,
+      "event_time": "2026-09-21T15:01:00Z",
+      "ingested_at": "2026-09-21T15:02:00Z",
+      "spend_krw": 0
+    },
+    {
+      "account_id": "beta",
+      "campaign_id": "c1",
+      "source": "spend",
+      "snapshot_id": "c1-2026-09-21",
+      "business_date": "2026-09-21",
+      "snapshot_at": "2026-09-21T15:00:00Z",
+      "revision": 1,
+      "event_time": "2026-09-21T15:01:00Z",
+      "ingested_at": "2026-09-21T15:02:00Z",
+      "spend_krw": 8000
+    }
+  ],
+  "orders": [
+    {
+      "account_id": "alpha",
+      "campaign_id": "c1",
+      "order_id": "o1",
+      "source": "orders",
+      "event_time": "2026-09-20T02:00:00Z",
+      "ingested_at": "2026-09-20T02:01:00Z",
+      "revision": 1,
+      "gross_sales_krw": 30000
+    },
+    {
+      "account_id": "alpha",
+      "campaign_id": "c1",
+      "order_id": "o2",
+      "source": "orders",
+      "event_time": "2026-09-20T02:00:00Z",
+      "ingested_at": "2026-09-20T02:01:00Z",
+      "revision": 1,
+      "gross_sales_krw": 20000
+    },
+    {
+      "account_id": "alpha",
+      "campaign_id": "c2",
+      "order_id": "o3",
+      "source": "orders",
+      "event_time": "2026-09-20T02:00:00Z",
+      "ingested_at": "2026-09-20T02:01:00Z",
+      "revision": 1,
+      "gross_sales_krw": 10000
+    },
+    {
+      "account_id": "alpha",
+      "campaign_id": "c1",
+      "order_id": "o4",
+      "source": "orders",
+      "event_time": "2026-09-21T02:00:00Z",
+      "ingested_at": "2026-09-21T02:01:00Z",
+      "revision": 1,
+      "gross_sales_krw": 12000
+    },
+    {
+      "account_id": "alpha",
+      "campaign_id": "c2",
+      "order_id": "o5",
+      "source": "orders",
+      "event_time": "2026-09-21T02:00:00Z",
+      "ingested_at": "2026-09-21T02:01:00Z",
+      "revision": 1,
+      "gross_sales_krw": 8000
+    },
+    {
+      "account_id": "beta",
+      "campaign_id": "c1",
+      "order_id": "o1",
+      "source": "orders",
+      "event_time": "2026-09-20T02:00:00Z",
+      "ingested_at": "2026-09-20T02:01:00Z",
+      "revision": 1,
+      "gross_sales_krw": 16000
+    },
+    {
+      "account_id": "beta",
+      "campaign_id": "c1",
+      "order_id": "o2",
+      "source": "orders",
+      "event_time": "2026-09-21T02:00:00Z",
+      "ingested_at": "2026-09-21T02:01:00Z",
+      "revision": 1,
+      "gross_sales_krw": 4000
+    }
+  ],
+  "refunds": [
+    {
+      "account_id": "alpha",
+      "order_id": "o1",
+      "refund_id": "r1",
+      "source": "refunds",
+      "revision": 1,
+      "refund_krw": 5000,
+      "event_time": "2026-09-21T03:00:00Z",
+      "ingested_at": "2026-09-21T03:01:00Z"
+    },
+    {
+      "account_id": "alpha",
+      "order_id": "o1",
+      "refund_id": "r2",
+      "source": "refunds",
+      "revision": 1,
+      "refund_krw": 2000,
+      "event_time": "2026-09-21T03:00:00Z",
+      "ingested_at": "2026-09-21T03:01:00Z"
+    }
+  ],
+  "coverage": [
+    {
+      "account_id": "alpha",
+      "business_date": "2026-09-20",
+      "source": "spend",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "alpha",
+      "business_date": "2026-09-20",
+      "source": "orders",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "alpha",
+      "business_date": "2026-09-20",
+      "source": "refunds",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "alpha",
+      "business_date": "2026-09-21",
+      "source": "spend",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "alpha",
+      "business_date": "2026-09-21",
+      "source": "orders",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "alpha",
+      "business_date": "2026-09-21",
+      "source": "refunds",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "beta",
+      "business_date": "2026-09-20",
+      "source": "spend",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "beta",
+      "business_date": "2026-09-20",
+      "source": "orders",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "beta",
+      "business_date": "2026-09-20",
+      "source": "refunds",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "beta",
+      "business_date": "2026-09-21",
+      "source": "spend",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "beta",
+      "business_date": "2026-09-21",
+      "source": "orders",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    },
+    {
+      "account_id": "beta",
+      "business_date": "2026-09-21",
+      "source": "refunds",
+      "complete": true,
+      "through_utc": "2026-09-23T12:00:00Z"
+    }
+  ]
+}

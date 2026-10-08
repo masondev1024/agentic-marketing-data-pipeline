@@ -1,0 +1,1145 @@
+[
+  {
+    "name": "investigation_200",
+    "passed": true,
+    "data": {
+      "http": 200,
+      "request_id": "55978589-57c4-4673-9031-ecb097569266",
+      "body": {
+        "request_id": "55978589-57c4-4673-9031-ecb097569266",
+        "status": "completed",
+        "model_executed": true,
+        "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+        "evidence": [
+          {
+            "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+            "tool": "version_evidence",
+            "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+            "data": {
+              "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+              "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+              "contract_version": "olist.raw.v1",
+              "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+              "published_at": "2026-10-07T11:43:59.903303+00:00",
+              "quality_status": "passed",
+              "check_count": 113,
+              "failed_check_count": 0,
+              "warning_count": 2,
+              "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+            }
+          },
+          {
+            "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+            "tool": "channel_funnel",
+            "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+            "data": [
+              {
+                "origin": null,
+                "lead_count": 60,
+                "contract_count": 14,
+                "linked_contract_count": 4,
+                "unlinked_contract_count": 10
+              },
+              {
+                "origin": "direct_traffic",
+                "lead_count": 499,
+                "contract_count": 56,
+                "linked_contract_count": 31,
+                "unlinked_contract_count": 25
+              },
+              {
+                "origin": "display",
+                "lead_count": 118,
+                "contract_count": 6,
+                "linked_contract_count": 2,
+                "unlinked_contract_count": 4
+              },
+              {
+                "origin": "email",
+                "lead_count": 493,
+                "contract_count": 15,
+                "linked_contract_count": 6,
+                "unlinked_contract_count": 9
+              },
+              {
+                "origin": "organic_search",
+                "lead_count": 2296,
+                "contract_count": 271,
+                "linked_contract_count": 113,
+                "unlinked_contract_count": 158
+              },
+              {
+                "origin": "other",
+                "lead_count": 150,
+                "contract_count": 4,
+                "linked_contract_count": 2,
+                "unlinked_contract_count": 2
+              },
+              {
+                "origin": "other_publicities",
+                "lead_count": 65,
+                "contract_count": 3,
+                "linked_contract_count": 0,
+                "unlinked_contract_count": 3
+              },
+              {
+                "origin": "paid_search",
+                "lead_count": 1586,
+                "contract_count": 195,
+                "linked_contract_count": 101,
+                "unlinked_contract_count": 94
+              },
+              {
+                "origin": "referral",
+                "lead_count": 284,
+                "contract_count": 24,
+                "linked_contract_count": 9,
+                "unlinked_contract_count": 15
+              },
+              {
+                "origin": "social",
+                "lead_count": 1350,
+                "contract_count": 75,
+                "linked_contract_count": 31,
+                "unlinked_contract_count": 44
+              },
+              {
+                "origin": "unknown",
+                "lead_count": 1099,
+                "contract_count": 179,
+                "linked_contract_count": 81,
+                "unlinked_contract_count": 98
+              }
+            ]
+          }
+        ],
+        "findings": [
+          {
+            "code": "missing_origin_leads",
+            "severity": "info",
+            "summary": "60 leads have no observed origin; they remain in the funnel denominator.",
+            "evidence_ids": [
+              "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+            ]
+          }
+        ],
+        "trace": [
+          {
+            "output_sha256": "1a9e076e1ce8c4d6e877679359f259cf2892ba64ccb71d21fa107589c0826198",
+            "generation_seconds": 2.937589749984909,
+            "first_generation_event_seconds": 2.657279542007018,
+            "prompt_token_ids_sha256": "af263753a6a1e6a16bd7ed4d3e344f50e1759ff5883ea29e395b48f4c81e9820",
+            "model_id": "mlx-community/Qwen3-4B-4bit",
+            "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+            "selected_action": "tool",
+            "selected_tool": "channel_funnel"
+          },
+          {
+            "output_sha256": "b63ba2dfbb70d901eeaa67384a5fd7a713de56ea3949738cd598100273fbbdfd",
+            "generation_seconds": 3.2262828330276534,
+            "first_generation_event_seconds": 2.686524917022325,
+            "prompt_token_ids_sha256": "ec99eee33726d930e3841b4069368e6f1205eaf8aff8371032932f6315e00365",
+            "model_id": "mlx-community/Qwen3-4B-4bit",
+            "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+            "selected_action": "finish",
+            "finding_codes": [
+              "missing_origin_leads"
+            ],
+            "limitation_codes": []
+          }
+        ],
+        "usage": {
+          "generations": 2,
+          "tool_calls": 1,
+          "prompt_tokens": 1765,
+          "output_tokens": 46
+        },
+        "limitations": [
+          "source_timezone_unresolved",
+          "source_currency_unresolved",
+          "sample_completeness_unknown"
+        ],
+        "diagnostic_mode": "model_tool_agent",
+        "stop_reason": "completed",
+        "pipeline_context": null,
+        "metric_policy": {
+          "version": "olist.metrics.v1",
+          "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+        },
+        "model": {
+          "id": "mlx-community/Qwen3-4B-4bit",
+          "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+        },
+        "prompt": {
+          "version": "olist-agent.v3",
+          "sha256": "707bb0580e60643d17278d528bc138360abcfe8686e58655c6633f8e2b53cf26"
+        },
+        "timing": {
+          "queue_seconds": 4.841695772483945e-05,
+          "request_seconds": 6.293099250004161,
+          "processing_seconds": 6.289524374995381
+        }
+      }
+    }
+  },
+  {
+    "name": "shared_worker_legacy_200",
+    "passed": true,
+    "data": {
+      "response": {
+        "http": 200,
+        "request_id": "927003da-5d7a-4f7a-9784-502731548f71",
+        "body": {
+          "request_id": "927003da-5d7a-4f7a-9784-502731548f71",
+          "status": "generated",
+          "answer": "멱등성은 같은 작업을 여러 번 수행할 때 최종 효과가 한 번 수행한 것과 같은 성질을 보장한다. 즉, 같은 작업을 반복하더라도 결과는 중복되지 않고 안정적으로 유지된다.",
+          "answer_mode": "direct",
+          "sources": [
+            {
+              "source": "/Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/data/runbooks/idempotency.md",
+              "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4",
+              "size_bytes": 1257,
+              "encoding": "utf-8"
+            }
+          ],
+          "citations": [],
+          "answer_sentences": [],
+          "retrieval_reason": "selected",
+          "abstention_reason": null,
+          "validation": {
+            "quote_membership": "not_checked",
+            "semantic_quality": "unverified"
+          },
+          "model_executed": true,
+          "model": {
+            "id": "mlx-community/Qwen3-4B-4bit",
+            "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+          },
+          "truncated": false,
+          "usage": {
+            "prompt_tokens": 479,
+            "output_tokens": 52
+          },
+          "timing": {
+            "queue_seconds": 6.841699359938502e-05,
+            "request_seconds": 2.3576642500120215,
+            "generation_seconds": 2.3085066250059754,
+            "retrieval_seconds": 0.00952337501803413
+          }
+        }
+      },
+      "metrics": {
+        "ready": true,
+        "state": "ready",
+        "worker_pid": 36857,
+        "active": 0,
+        "queued": 0,
+        "capacity": 3,
+        "restarts": 0,
+        "counters": {
+          "accepted": 2,
+          "completed": 2,
+          "timeouts": 0,
+          "overloaded": 0,
+          "worker_failures": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "extra_fields",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "1077900d-d1e4-4c9c-8303-acefc994773c",
+        "error": {
+          "code": "invalid_request"
+        }
+      }
+    }
+  },
+  {
+    "name": "duplicate_json",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "12cca648-a3f0-491d-823d-4c49957ae5dc",
+        "error": {
+          "code": "invalid_json_object"
+        }
+      }
+    }
+  },
+  {
+    "name": "malformed_json",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "bbae1d6a-3aef-4c39-8374-56c90ac0b4d3",
+        "error": {
+          "code": "invalid_json_object"
+        }
+      }
+    }
+  },
+  {
+    "name": "oversized_question",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "602a6576-4fcb-4bec-ad48-326b3ae0ad59",
+        "error": {
+          "code": "invalid_request"
+        }
+      }
+    }
+  },
+  {
+    "name": "unicode_surrogate",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "f5b110bf-70d3-4563-8ec2-ff639e3e39d0",
+        "error": {
+          "code": "invalid_request"
+        }
+      }
+    }
+  },
+  {
+    "name": "path_version",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "a33d52c6-9071-4342-a408-05e970e03abf",
+        "error": {
+          "code": "invalid_request"
+        }
+      }
+    }
+  },
+  {
+    "name": "bounded_concurrency",
+    "passed": true,
+    "data": {
+      "responses": [
+        {
+          "http": 200,
+          "request_id": "4f8d6582-2a79-43e8-abd0-81f0c2fa9d14",
+          "body": {
+            "request_id": "4f8d6582-2a79-43e8-abd0-81f0c2fa9d14",
+            "status": "completed",
+            "model_executed": true,
+            "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+            "evidence": [
+              {
+                "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+                "tool": "version_evidence",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": {
+                  "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                  "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+                  "contract_version": "olist.raw.v1",
+                  "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+                  "published_at": "2026-10-07T11:43:59.903303+00:00",
+                  "quality_status": "passed",
+                  "check_count": 113,
+                  "failed_check_count": 0,
+                  "warning_count": 2,
+                  "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+                }
+              },
+              {
+                "evidence_id": "ada4072fc50ded0e02d5ccd4bdf2317a79251adc62318c0fd32faf1198a97d63",
+                "tool": "definitions",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": {
+                  "metric_definitions": {
+                    "lead_count": "Source-sample leads grouped by origin; a null origin is retained.",
+                    "contract_count": "Observed closed deals joined to leads by mql_id in this sample.",
+                    "linked_contract_count": "Contracts whose seller_id appears in the commerce seller sample.",
+                    "unlinked_contract_count": "Contracts whose seller is absent from the commerce sample; outcome coverage is unknown.",
+                    "observed_order_count": "Distinct orders observed for a linked seller across the source sample; not time-attributed."
+                  },
+                  "metric_policy": {
+                    "policy_version": "olist.metrics.v1",
+                    "reviewed_at": "2026-10-07",
+                    "scope": "historical Olist Kaggle samples; not current production commerce",
+                    "currency": {
+                      "status": "unresolved",
+                      "value": null,
+                      "reason": "Pinned CSV files have no currency field. Current Olist product documentation is not proof of the currency of these historical exports."
+                    },
+                    "timezone": {
+                      "status": "unresolved",
+                      "value": null,
+                      "reason": "Exported timestamps have no UTC offset or IANA timezone. Seller location is not timestamp provenance."
+                    },
+                    "coverage": {
+                      "status": "sample_only",
+                      "complete_through": null,
+                      "reason": "Maximum observed timestamp is not a completeness watermark. Unlinked sellers have unknown order outcomes."
+                    },
+                    "allowed": [
+                      "sample_lead_count",
+                      "sample_contract_count",
+                      "sample_linked_contract_count",
+                      "sample_unlinked_contract_count",
+                      "sample_missing_origin_count",
+                      "seller_distinct_observed_order_count"
+                    ],
+                    "conditional": {
+                      "source_clock_pre_post_contract_count": "Only naive source-clock comparison; timezone alignment and business attribution are unverified."
+                    },
+                    "blocked": {
+                      "currency_denominated_revenue": [
+                        "documented_source_currency",
+                        "revenue_status_and_refund_definition"
+                      ],
+                      "attributed_30_day_orders": [
+                        "documented_source_timezone",
+                        "complete_observation_window",
+                        "attribution_contract"
+                      ],
+                      "roas": [
+                        "ad_spend",
+                        "attributed_revenue",
+                        "consistent_currency"
+                      ],
+                      "cac": [
+                        "acquisition_cost",
+                        "customer_definition",
+                        "attribution_contract"
+                      ],
+                      "net_revenue": [
+                        "refund_ledger",
+                        "revenue_recognition_contract"
+                      ]
+                    },
+                    "evidence_sources": [
+                      {
+                        "url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+                        "role": "dataset publisher; no timezone or currency confirmation obtained in this review"
+                      },
+                      {
+                        "url": "https://www.kaggle.com/datasets/olistbr/marketing-funnel-olist",
+                        "role": "dataset publisher; cross-sample completeness is not guaranteed"
+                      },
+                      {
+                        "path": "data/olist/contract-v1.json",
+                        "role": "pinned raw column and timestamp contracts"
+                      },
+                      {
+                        "path": "evidence/olist-local-v1.json",
+                        "role": "local observed coverage and validation evidence"
+                      }
+                    ],
+                    "promotion": "Require dataset-specific documentary evidence or explicitly label a scenario assumption; never silently promote an assumption to a verified production metric."
+                  },
+                  "policy_sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+                }
+              },
+              {
+                "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+                "tool": "channel_funnel",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": [
+                  {
+                    "origin": null,
+                    "lead_count": 60,
+                    "contract_count": 14,
+                    "linked_contract_count": 4,
+                    "unlinked_contract_count": 10
+                  },
+                  {
+                    "origin": "direct_traffic",
+                    "lead_count": 499,
+                    "contract_count": 56,
+                    "linked_contract_count": 31,
+                    "unlinked_contract_count": 25
+                  },
+                  {
+                    "origin": "display",
+                    "lead_count": 118,
+                    "contract_count": 6,
+                    "linked_contract_count": 2,
+                    "unlinked_contract_count": 4
+                  },
+                  {
+                    "origin": "email",
+                    "lead_count": 493,
+                    "contract_count": 15,
+                    "linked_contract_count": 6,
+                    "unlinked_contract_count": 9
+                  },
+                  {
+                    "origin": "organic_search",
+                    "lead_count": 2296,
+                    "contract_count": 271,
+                    "linked_contract_count": 113,
+                    "unlinked_contract_count": 158
+                  },
+                  {
+                    "origin": "other",
+                    "lead_count": 150,
+                    "contract_count": 4,
+                    "linked_contract_count": 2,
+                    "unlinked_contract_count": 2
+                  },
+                  {
+                    "origin": "other_publicities",
+                    "lead_count": 65,
+                    "contract_count": 3,
+                    "linked_contract_count": 0,
+                    "unlinked_contract_count": 3
+                  },
+                  {
+                    "origin": "paid_search",
+                    "lead_count": 1586,
+                    "contract_count": 195,
+                    "linked_contract_count": 101,
+                    "unlinked_contract_count": 94
+                  },
+                  {
+                    "origin": "referral",
+                    "lead_count": 284,
+                    "contract_count": 24,
+                    "linked_contract_count": 9,
+                    "unlinked_contract_count": 15
+                  },
+                  {
+                    "origin": "social",
+                    "lead_count": 1350,
+                    "contract_count": 75,
+                    "linked_contract_count": 31,
+                    "unlinked_contract_count": 44
+                  },
+                  {
+                    "origin": "unknown",
+                    "lead_count": 1099,
+                    "contract_count": 179,
+                    "linked_contract_count": 81,
+                    "unlinked_contract_count": 98
+                  }
+                ]
+              }
+            ],
+            "findings": [
+              {
+                "code": "missing_origin_leads",
+                "severity": "info",
+                "summary": "60 leads have no observed origin; they remain in the funnel denominator.",
+                "evidence_ids": [
+                  "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+                ]
+              },
+              {
+                "code": "seller_sample_coverage_unknown",
+                "severity": "info",
+                "summary": "462 contracts are not linked to the commerce seller sample; their order outcome is unknown, not zero.",
+                "evidence_ids": [
+                  "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+                ]
+              }
+            ],
+            "trace": [
+              {
+                "output_sha256": "fae7fc930cf8a7d2bef9841c9f665e6103e94c08d3660ac63f4bc358da43a983",
+                "generation_seconds": 2.577040957985446,
+                "first_generation_event_seconds": 2.316595165990293,
+                "prompt_token_ids_sha256": "b69f7481fa0c064052c4952719fab60978d7d031b7a5a8bfaf966a966427187a",
+                "model_id": "mlx-community/Qwen3-4B-4bit",
+                "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+                "selected_action": "tool",
+                "selected_tool": "definitions"
+              },
+              {
+                "output_sha256": "1a9e076e1ce8c4d6e877679359f259cf2892ba64ccb71d21fa107589c0826198",
+                "generation_seconds": 3.5771596250124276,
+                "first_generation_event_seconds": 3.2612466670107096,
+                "prompt_token_ids_sha256": "15411e97e3abb4a0d97679359138010dce6c8ff93f472606aae04ba8a1efcfc5",
+                "model_id": "mlx-community/Qwen3-4B-4bit",
+                "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+                "selected_action": "tool",
+                "selected_tool": "channel_funnel"
+              },
+              {
+                "output_sha256": "c7934fb2bb0d4ea167203d172ff465c6522ee96ecc537e008703d61131649054",
+                "generation_seconds": 4.092764125030953,
+                "first_generation_event_seconds": 3.375967625004705,
+                "prompt_token_ids_sha256": "73c094b6b78d2cf89e10b5589195949b2cac15c09ff5f726cf83e0b7f6dab6b9",
+                "model_id": "mlx-community/Qwen3-4B-4bit",
+                "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+                "selected_action": "finish",
+                "finding_codes": [
+                  "missing_origin_leads",
+                  "seller_sample_coverage_unknown"
+                ],
+                "limitation_codes": []
+              }
+            ],
+            "usage": {
+              "generations": 3,
+              "tool_calls": 2,
+              "prompt_tokens": 3099,
+              "output_tokens": 68
+            },
+            "limitations": [
+              "source_timezone_unresolved",
+              "source_currency_unresolved",
+              "sample_completeness_unknown"
+            ],
+            "diagnostic_mode": "model_tool_agent",
+            "stop_reason": "completed",
+            "pipeline_context": null,
+            "metric_policy": {
+              "version": "olist.metrics.v1",
+              "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+            },
+            "model": {
+              "id": "mlx-community/Qwen3-4B-4bit",
+              "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+            },
+            "prompt": {
+              "version": "olist-agent.v3",
+              "sha256": "707bb0580e60643d17278d528bc138360abcfe8686e58655c6633f8e2b53cf26"
+            },
+            "timing": {
+              "queue_seconds": 6.158399628475308e-05,
+              "request_seconds": 10.293871459027287,
+              "processing_seconds": 10.2903322079801
+            }
+          }
+        },
+        {
+          "http": 200,
+          "request_id": "d6a677ca-38cf-47df-be57-9a660fb56ba5",
+          "body": {
+            "request_id": "d6a677ca-38cf-47df-be57-9a660fb56ba5",
+            "status": "generated",
+            "answer": "데이터 파이프라인에서 멱등성이 필요한 이유는 같은 작업이 여러 번 수행될 경우 데이터 정합성을 유지하기 위해 중복 효과를 방지하기 위해서이다. 재시도나 중복 이벤트가 발생할 때, 같은 데이터가 처리되어 결과가 중복 반영되는 것을 막기 위해 멱등한 처리가 필요하다.",
+            "answer_mode": "direct",
+            "sources": [
+              {
+                "source": "/Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/data/runbooks/idempotency.md",
+                "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4",
+                "size_bytes": 1257,
+                "encoding": "utf-8"
+              }
+            ],
+            "citations": [],
+            "answer_sentences": [],
+            "retrieval_reason": "selected",
+            "abstention_reason": null,
+            "validation": {
+              "quote_membership": "not_checked",
+              "semantic_quality": "unverified"
+            },
+            "model_executed": true,
+            "model": {
+              "id": "mlx-community/Qwen3-4B-4bit",
+              "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+            },
+            "truncated": false,
+            "usage": {
+              "prompt_tokens": 461,
+              "output_tokens": 81
+            },
+            "timing": {
+              "queue_seconds": 10.290778708003927,
+              "request_seconds": 13.213561625045259,
+              "generation_seconds": 2.9148801660048775,
+              "retrieval_seconds": 0.003161291009746492
+            }
+          }
+        },
+        {
+          "http": 200,
+          "request_id": "79b39553-a5e5-47fc-8770-85d647a73803",
+          "body": {
+            "request_id": "79b39553-a5e5-47fc-8770-85d647a73803",
+            "status": "completed",
+            "model_executed": true,
+            "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+            "evidence": [
+              {
+                "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+                "tool": "version_evidence",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": {
+                  "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                  "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+                  "contract_version": "olist.raw.v1",
+                  "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+                  "published_at": "2026-10-07T11:43:59.903303+00:00",
+                  "quality_status": "passed",
+                  "check_count": 113,
+                  "failed_check_count": 0,
+                  "warning_count": 2,
+                  "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+                }
+              },
+              {
+                "evidence_id": "ada4072fc50ded0e02d5ccd4bdf2317a79251adc62318c0fd32faf1198a97d63",
+                "tool": "definitions",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": {
+                  "metric_definitions": {
+                    "lead_count": "Source-sample leads grouped by origin; a null origin is retained.",
+                    "contract_count": "Observed closed deals joined to leads by mql_id in this sample.",
+                    "linked_contract_count": "Contracts whose seller_id appears in the commerce seller sample.",
+                    "unlinked_contract_count": "Contracts whose seller is absent from the commerce sample; outcome coverage is unknown.",
+                    "observed_order_count": "Distinct orders observed for a linked seller across the source sample; not time-attributed."
+                  },
+                  "metric_policy": {
+                    "policy_version": "olist.metrics.v1",
+                    "reviewed_at": "2026-10-07",
+                    "scope": "historical Olist Kaggle samples; not current production commerce",
+                    "currency": {
+                      "status": "unresolved",
+                      "value": null,
+                      "reason": "Pinned CSV files have no currency field. Current Olist product documentation is not proof of the currency of these historical exports."
+                    },
+                    "timezone": {
+                      "status": "unresolved",
+                      "value": null,
+                      "reason": "Exported timestamps have no UTC offset or IANA timezone. Seller location is not timestamp provenance."
+                    },
+                    "coverage": {
+                      "status": "sample_only",
+                      "complete_through": null,
+                      "reason": "Maximum observed timestamp is not a completeness watermark. Unlinked sellers have unknown order outcomes."
+                    },
+                    "allowed": [
+                      "sample_lead_count",
+                      "sample_contract_count",
+                      "sample_linked_contract_count",
+                      "sample_unlinked_contract_count",
+                      "sample_missing_origin_count",
+                      "seller_distinct_observed_order_count"
+                    ],
+                    "conditional": {
+                      "source_clock_pre_post_contract_count": "Only naive source-clock comparison; timezone alignment and business attribution are unverified."
+                    },
+                    "blocked": {
+                      "currency_denominated_revenue": [
+                        "documented_source_currency",
+                        "revenue_status_and_refund_definition"
+                      ],
+                      "attributed_30_day_orders": [
+                        "documented_source_timezone",
+                        "complete_observation_window",
+                        "attribution_contract"
+                      ],
+                      "roas": [
+                        "ad_spend",
+                        "attributed_revenue",
+                        "consistent_currency"
+                      ],
+                      "cac": [
+                        "acquisition_cost",
+                        "customer_definition",
+                        "attribution_contract"
+                      ],
+                      "net_revenue": [
+                        "refund_ledger",
+                        "revenue_recognition_contract"
+                      ]
+                    },
+                    "evidence_sources": [
+                      {
+                        "url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+                        "role": "dataset publisher; no timezone or currency confirmation obtained in this review"
+                      },
+                      {
+                        "url": "https://www.kaggle.com/datasets/olistbr/marketing-funnel-olist",
+                        "role": "dataset publisher; cross-sample completeness is not guaranteed"
+                      },
+                      {
+                        "path": "data/olist/contract-v1.json",
+                        "role": "pinned raw column and timestamp contracts"
+                      },
+                      {
+                        "path": "evidence/olist-local-v1.json",
+                        "role": "local observed coverage and validation evidence"
+                      }
+                    ],
+                    "promotion": "Require dataset-specific documentary evidence or explicitly label a scenario assumption; never silently promote an assumption to a verified production metric."
+                  },
+                  "policy_sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+                }
+              },
+              {
+                "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+                "tool": "channel_funnel",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": [
+                  {
+                    "origin": null,
+                    "lead_count": 60,
+                    "contract_count": 14,
+                    "linked_contract_count": 4,
+                    "unlinked_contract_count": 10
+                  },
+                  {
+                    "origin": "direct_traffic",
+                    "lead_count": 499,
+                    "contract_count": 56,
+                    "linked_contract_count": 31,
+                    "unlinked_contract_count": 25
+                  },
+                  {
+                    "origin": "display",
+                    "lead_count": 118,
+                    "contract_count": 6,
+                    "linked_contract_count": 2,
+                    "unlinked_contract_count": 4
+                  },
+                  {
+                    "origin": "email",
+                    "lead_count": 493,
+                    "contract_count": 15,
+                    "linked_contract_count": 6,
+                    "unlinked_contract_count": 9
+                  },
+                  {
+                    "origin": "organic_search",
+                    "lead_count": 2296,
+                    "contract_count": 271,
+                    "linked_contract_count": 113,
+                    "unlinked_contract_count": 158
+                  },
+                  {
+                    "origin": "other",
+                    "lead_count": 150,
+                    "contract_count": 4,
+                    "linked_contract_count": 2,
+                    "unlinked_contract_count": 2
+                  },
+                  {
+                    "origin": "other_publicities",
+                    "lead_count": 65,
+                    "contract_count": 3,
+                    "linked_contract_count": 0,
+                    "unlinked_contract_count": 3
+                  },
+                  {
+                    "origin": "paid_search",
+                    "lead_count": 1586,
+                    "contract_count": 195,
+                    "linked_contract_count": 101,
+                    "unlinked_contract_count": 94
+                  },
+                  {
+                    "origin": "referral",
+                    "lead_count": 284,
+                    "contract_count": 24,
+                    "linked_contract_count": 9,
+                    "unlinked_contract_count": 15
+                  },
+                  {
+                    "origin": "social",
+                    "lead_count": 1350,
+                    "contract_count": 75,
+                    "linked_contract_count": 31,
+                    "unlinked_contract_count": 44
+                  },
+                  {
+                    "origin": "unknown",
+                    "lead_count": 1099,
+                    "contract_count": 179,
+                    "linked_contract_count": 81,
+                    "unlinked_contract_count": 98
+                  }
+                ]
+              }
+            ],
+            "findings": [
+              {
+                "code": "missing_origin_leads",
+                "severity": "info",
+                "summary": "60 leads have no observed origin; they remain in the funnel denominator.",
+                "evidence_ids": [
+                  "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+                ]
+              },
+              {
+                "code": "seller_sample_coverage_unknown",
+                "severity": "info",
+                "summary": "462 contracts are not linked to the commerce seller sample; their order outcome is unknown, not zero.",
+                "evidence_ids": [
+                  "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+                ]
+              }
+            ],
+            "trace": [
+              {
+                "output_sha256": "fae7fc930cf8a7d2bef9841c9f665e6103e94c08d3660ac63f4bc358da43a983",
+                "generation_seconds": 2.661739041970577,
+                "first_generation_event_seconds": 2.4120079170097597,
+                "prompt_token_ids_sha256": "b69f7481fa0c064052c4952719fab60978d7d031b7a5a8bfaf966a966427187a",
+                "model_id": "mlx-community/Qwen3-4B-4bit",
+                "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+                "selected_action": "tool",
+                "selected_tool": "definitions"
+              },
+              {
+                "output_sha256": "1a9e076e1ce8c4d6e877679359f259cf2892ba64ccb71d21fa107589c0826198",
+                "generation_seconds": 3.4079916249611415,
+                "first_generation_event_seconds": 3.116463082958944,
+                "prompt_token_ids_sha256": "15411e97e3abb4a0d97679359138010dce6c8ff93f472606aae04ba8a1efcfc5",
+                "model_id": "mlx-community/Qwen3-4B-4bit",
+                "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+                "selected_action": "tool",
+                "selected_tool": "channel_funnel"
+              },
+              {
+                "output_sha256": "c7934fb2bb0d4ea167203d172ff465c6522ee96ecc537e008703d61131649054",
+                "generation_seconds": 4.11125495901797,
+                "first_generation_event_seconds": 3.3745832919958048,
+                "prompt_token_ids_sha256": "73c094b6b78d2cf89e10b5589195949b2cac15c09ff5f726cf83e0b7f6dab6b9",
+                "model_id": "mlx-community/Qwen3-4B-4bit",
+                "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+                "selected_action": "finish",
+                "finding_codes": [
+                  "missing_origin_leads",
+                  "seller_sample_coverage_unknown"
+                ],
+                "limitation_codes": []
+              }
+            ],
+            "usage": {
+              "generations": 3,
+              "tool_calls": 2,
+              "prompt_tokens": 3099,
+              "output_tokens": 68
+            },
+            "limitations": [
+              "source_timezone_unresolved",
+              "source_currency_unresolved",
+              "sample_completeness_unknown"
+            ],
+            "diagnostic_mode": "model_tool_agent",
+            "stop_reason": "completed",
+            "pipeline_context": null,
+            "metric_policy": {
+              "version": "olist.metrics.v1",
+              "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+            },
+            "model": {
+              "id": "mlx-community/Qwen3-4B-4bit",
+              "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+            },
+            "prompt": {
+              "version": "olist-agent.v3",
+              "sha256": "707bb0580e60643d17278d528bc138360abcfe8686e58655c6633f8e2b53cf26"
+            },
+            "timing": {
+              "queue_seconds": 13.213233000016771,
+              "request_seconds": 23.4567050000187,
+              "processing_seconds": 10.239782250020653
+            }
+          }
+        },
+        {
+          "http": 429,
+          "request_id": "6d78ee1a-be7e-4322-9e68-5f89c71218d6",
+          "body": {
+            "request_id": "6d78ee1a-be7e-4322-9e68-5f89c71218d6",
+            "error": {
+              "code": "capacity_exceeded"
+            }
+          }
+        },
+        {
+          "http": 429,
+          "request_id": "dbe478ef-d049-47ec-b24d-9b890ddf7f5e",
+          "body": {
+            "request_id": "dbe478ef-d049-47ec-b24d-9b890ddf7f5e",
+            "error": {
+              "code": "capacity_exceeded"
+            }
+          }
+        },
+        {
+          "http": 429,
+          "request_id": "96082080-6881-4abe-a332-28b30aa87c2a",
+          "body": {
+            "request_id": "96082080-6881-4abe-a332-28b30aa87c2a",
+            "error": {
+              "code": "capacity_exceeded"
+            }
+          }
+        }
+      ],
+      "metrics": {
+        "ready": true,
+        "state": "ready",
+        "worker_pid": 36857,
+        "active": 0,
+        "queued": 0,
+        "capacity": 3,
+        "restarts": 0,
+        "counters": {
+          "accepted": 5,
+          "completed": 5,
+          "timeouts": 0,
+          "overloaded": 3,
+          "worker_failures": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "audit_ids",
+    "passed": true,
+    "data": {
+      "request_ids": [
+        "55978589-57c4-4673-9031-ecb097569266",
+        "927003da-5d7a-4f7a-9784-502731548f71",
+        "1077900d-d1e4-4c9c-8303-acefc994773c",
+        "12cca648-a3f0-491d-823d-4c49957ae5dc",
+        "bbae1d6a-3aef-4c39-8374-56c90ac0b4d3",
+        "602a6576-4fcb-4bec-ad48-326b3ae0ad59",
+        "f5b110bf-70d3-4563-8ec2-ff639e3e39d0",
+        "a33d52c6-9071-4342-a408-05e970e03abf",
+        "4f8d6582-2a79-43e8-abd0-81f0c2fa9d14",
+        "d6a677ca-38cf-47df-be57-9a660fb56ba5",
+        "79b39553-a5e5-47fc-8770-85d647a73803",
+        "6d78ee1a-be7e-4322-9e68-5f89c71218d6",
+        "dbe478ef-d049-47ec-b24d-9b890ddf7f5e",
+        "96082080-6881-4abe-a332-28b30aa87c2a"
+      ],
+      "event_count": 27
+    }
+  },
+  {
+    "name": "durable_run_ids",
+    "passed": true,
+    "data": {
+      "successful_requests": 5
+    }
+  },
+  {
+    "name": "deadline_504",
+    "passed": true,
+    "data": {
+      "http": 504,
+      "request_id": "c90c0377-c873-416d-8f14-6fd479d7ae4c",
+      "body": {
+        "request_id": "c90c0377-c873-416d-8f14-6fd479d7ae4c",
+        "error": {
+          "code": "inference_deadline_exceeded"
+        }
+      }
+    }
+  },
+  {
+    "name": "replacement_worker",
+    "passed": true,
+    "data": {
+      "before": {
+        "ready": true,
+        "state": "ready",
+        "worker_pid": 36940,
+        "active": 0,
+        "queued": 0,
+        "capacity": 3,
+        "restarts": 0,
+        "counters": {
+          "accepted": 0,
+          "completed": 0,
+          "timeouts": 0,
+          "overloaded": 0,
+          "worker_failures": 0
+        }
+      },
+      "after": {
+        "ready": true,
+        "state": "ready",
+        "worker_pid": 36948,
+        "active": 0,
+        "queued": 0,
+        "capacity": 3,
+        "restarts": 1,
+        "counters": {
+          "accepted": 1,
+          "completed": 0,
+          "timeouts": 1,
+          "overloaded": 0,
+          "worker_failures": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "model_generation_after_recovery",
+    "passed": true,
+    "data": {
+      "http": 200,
+      "request_id": "362dbe14-f175-4c06-ad41-a5e3e47b4d06",
+      "body": {
+        "request_id": "362dbe14-f175-4c06-ad41-a5e3e47b4d06",
+        "status": "generated",
+        "answer": "멱",
+        "answer_mode": "direct",
+        "sources": [
+          {
+            "source": "/Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/data/runbooks/idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4",
+            "size_bytes": 1257,
+            "encoding": "utf-8"
+          }
+        ],
+        "citations": [],
+        "answer_sentences": [],
+        "retrieval_reason": "selected",
+        "abstention_reason": null,
+        "validation": {
+          "quote_membership": "not_checked",
+          "semantic_quality": "unverified"
+        },
+        "model_executed": true,
+        "model": {
+          "id": "mlx-community/Qwen3-4B-4bit",
+          "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+        },
+        "truncated": true,
+        "usage": {
+          "prompt_tokens": 479,
+          "output_tokens": 1
+        },
+        "timing": {
+          "queue_seconds": 4.46249614469707e-05,
+          "request_seconds": 1.8086960839573294,
+          "generation_seconds": 1.7664008749998175,
+          "retrieval_seconds": 0.005122750008013099
+        }
+      }
+    }
+  },
+  {
+    "name": "owned_servers_stopped",
+    "passed": true,
+    "data": {
+      "server_pids": [
+        36856,
+        36938
+      ]
+    }
+  },
+  {
+    "name": "workers_and_ports_released",
+    "passed": true,
+    "data": {
+      "remaining_workers": [],
+      "listening_ports": []
+    }
+  }
+]

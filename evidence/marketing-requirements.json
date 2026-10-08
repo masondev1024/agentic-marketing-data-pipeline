@@ -1,0 +1,233 @@
+{
+  "schema_version": "marketing-requirements.v1",
+  "authority_sha256": "d5f0de0d14757f558c60db3f1bdd77fb6a025da34aa7e0b9b2bca3fa7afe3c12",
+  "requirement_evidence": [
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 1,
+      "source_line_sha256": "5c7fa460a9e2c50b7735a74f659b399bdad3b226edc24bca83beb19ac59afe19",
+      "text": "승인된 로컬 구현·검증 범위와 보존/외부 변경 금지. 조력자 수행만 주장한다.",
+      "references": [
+        "AGENTS.md",
+        "docs/marketing/portfolio.md"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 3,
+      "source_line_sha256": "ecae09b0dd39e43856fb2f9885eb9463757dce1c777ae5c6a247d2dcecf417b6",
+      "text": "채용 맥락을 실행 증거와 연결하되 고용주 데이터·운영·채용 성과를 주장하지 않는다.",
+      "references": [
+        "docs/marketing/portfolio.md"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 5,
+      "source_line_sha256": "5a15bbaa3cbf133c21ac9c9c8bbaddc9f325f4efeb90e9f6a5fabb8f55499022",
+      "text": "관측 ROAS 하락과 누락/오류를 구별하고 인과관계와 예산 변경은 금지한다.",
+      "references": [
+        "src/llm_ops_lab/marketing/diagnostics.py",
+        "tests/test_marketing_diagnostics.py"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 7,
+      "source_line_sha256": "70dbbf121d8675901cf6a56115a43c6efc4b71489968a653a3e6e8e2eca1699a",
+      "text": "일곱 단계 산출물과 실행 순서를 유지한다.",
+      "references": [
+        "docs/marketing/README.md",
+        "evidence/marketing-ac6-docs.json"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 8,
+      "source_line_sha256": "3ed1312d985f4664c3b282c6de032cd39d30065c230311454a75c5d742aceb40",
+      "text": "두 계정·grain/keys·정수 KRW·KST/UTC·이벤트/수집/버전·중복/충돌·zero spend·환불·합성 귀속·ROAS·as-of 계약을 버전화한다.",
+      "references": [
+        "data/marketing/v1/contract.json",
+        "docs/marketing/data-product.md",
+        "tests/test_marketing_pipeline.py"
+      ],
+      "verdict": "implemented_with_accepted_dependency_evidence"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 9,
+      "source_line_sha256": "ee6f3671d05a1fef75504700729d59a04bc9a29807dcd3a4878825c92e0b024d",
+      "text": "Bronze 해시, Silver 정규화 후 join, Gold 계정/캠페인 집계. 10000원 중복·fanout·정정·지연/환불 backfill·멱등성·schema/key/conflict 차단·quarantine·원자 게시·실패 이전본 보존·single writer·freshness/lineage·보고서를 검증한다.",
+      "references": [
+        "src/llm_ops_lab/marketing/pipeline.py",
+        "src/llm_ops_lab/marketing/transform.sql",
+        "tests/test_marketing_pipeline.py",
+        "evidence/marketing-ac2-data-product.json"
+      ],
+      "verdict": "implemented_with_accepted_dependency_evidence"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 10,
+      "source_line_sha256": "6e286621b3b4b875327e3ea9de7dd7ace1fb552cac933ac0a4ba7f77cfda3e5a",
+      "text": "고정 SQL allowlist, 불변 scope/snapshot/evidence, schema·출력·시간/도구/토큰 한도·취소·반복 종료, 오류와 unknown 및 사실 검증. 임의 SQL/shell/network/write를 허용하지 않는다.",
+      "references": [
+        "src/llm_ops_lab/marketing/diagnostics.py",
+        "tests/test_marketing_diagnostics.py",
+        "docs/marketing/diagnostic-interface.md"
+      ],
+      "verdict": "implemented_with_accepted_dependency_evidence"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 11,
+      "source_line_sha256": "142f335a86007c2a10ed7ac70718d721fce74ce85f713832499c16a545492cd5",
+      "text": "결정론 기준선과 실제 pinned offline 모델의 JSON 도구 선택. test double 구분, malformed retry·수치/증거/완전성 gate·실패 폐쇄, 사전 등록 승격 미달을 공개한다.",
+      "references": [
+        "src/llm_ops_lab/marketing/agent.py",
+        "tests/test_marketing_agent.py",
+        "evidence/marketing-ac4-experiment.json"
+      ],
+      "verdict": "implemented_with_accepted_dependency_evidence"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 12,
+      "source_line_sha256": "914902019a12ebc5d5b7ace23a40487b7cd95dbb1f1f6ce7198b721f019dc3bd",
+      "text": "LangGraph+SQLite 조건부 노드·제안 review interrupt. 새 프로세스 scope/snapshot/budget/evidence 유지, replay/thread/concurrent/changed input/stale/crash 안전성. 승인/거절은 제안만, exactly-once 외부 보장 없음.",
+      "references": [
+        "src/llm_ops_lab/marketing/graph.py",
+        "tests/test_marketing_graph.py",
+        "docs/marketing/graph-recovery.md",
+        "evidence/marketing-ac5-recovery.json"
+      ],
+      "verdict": "implemented_with_accepted_dependency_evidence"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 13,
+      "source_line_sha256": "a8426a7dce5c1e0b353f7f554b1c438a8197e3ad562e78e579000c84c99dfea0",
+      "text": "개발셋과 별도 frozen acceptance 및 독립 산술. 정상/중복/지연/환불/매핑/정정/불완전/schema/zero/하락 및 scope/injection/JSON/반복/timeout/crash 검증. 동일 snapshot 실제 3사례의 정확성/완전성/오류/보류/호출/지연 기록. 전체 pytest·ruff, 작은 표본·조력자 증거의 한계 유지.",
+      "references": [
+        "data/marketing/v1/acceptance-freeze.json",
+        "data/marketing/v1/acceptance-expected.json",
+        "evidence/marketing-ac4-experiment.json",
+        "scripts/verify_marketing_release.py"
+      ],
+      "verdict": "implemented_with_accepted_dependency_evidence"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 14,
+      "source_line_sha256": "7e4e4c6312f6153c81d38a5dc41780c76193ab6806929bed41965ce97b05f0f1",
+      "text": "한국어 ADR/계약/운영/복구/결과/직무/포트폴리오와 README/status. AWS S3·Glue/Athena·serving·checkpoint·CloudWatch·IAM·암호화·보존·동시성·복구·비용/철거는 설계만. Databricks 구현 제외.",
+      "references": [
+        "docs/marketing/architecture.md",
+        "docs/marketing/operations.md",
+        "docs/marketing/aws-migration.md",
+        "docs/marketing/results.md",
+        "docs/marketing/portfolio.md",
+        "README.md",
+        "docs/status.md"
+      ],
+      "verdict": "implemented_with_accepted_dependency_evidence"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 16,
+      "source_line_sha256": "b4fbb3536d0d0019c6d24557c0f2e447fc5006631a32129b78f183eb98828344",
+      "text": "호환성과 운영 제한을 아래 항목으로 각각 연결한다.",
+      "references": [
+        "scripts/verify_marketing_release.py",
+        "docs/marketing/operations.md"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 17,
+      "source_line_sha256": "7d35c4b3572cedc79834f1dbe2ce1d6ff52afa10ada3d911db9354c1b54090c6",
+      "text": "기존 offline CLI·/v1/answers·retrieval/evidence 계약 유지. 사용자 8000 서비스 미사용. 외부 임시 복사본에서 전체 회귀와 별도 프로세스만 검사한다.",
+      "references": [
+        "tests/test_cli.py",
+        "tests/test_service.py",
+        "tests/test_retrieval_scope.py",
+        "tests/test_evidence.py",
+        "scripts/verify_marketing_release.py"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 18,
+      "source_line_sha256": "d4d36a3abc023d5c1ee15e4edfddafa10c133b27a303b212c2ab171204deed92",
+      "text": "기존 미추적 파일과 checkout 보존. reset/clean/stash/clone/credential dump 없음. 검증 상태는 외부 임시 복사본, 검토 증거만 저장한다.",
+      "references": [
+        "scripts/verify_marketing_release.py",
+        ".gitignore"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 19,
+      "source_line_sha256": "7ac3d18748bb73fd54fbe4f31b487a44b8df9c0e6d2f52826575431c15974c11",
+      "text": "기존 Python3.12/uv 환경과 오프라인 pinned Qwen3-4B revision을 재사용. 단일 inference worker. 현재 AC는 수락된 추론 해시를 검사하고 worker를 추가하지 않는다.",
+      "references": [
+        "pyproject.toml",
+        "uv.lock",
+        "src/llm_ops_lab/marketing/offline_model.py",
+        "evidence/marketing-ac4-experiment.json"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 20,
+      "source_line_sha256": "d39a0a27218eda112af9f6194d0e176b416802d569e29ffa743f11088f24fdd9",
+      "text": "학습자 과거 API 실습은 브리프 기반 역사적 증거이며 현재 마케팅 역량 또는 production SLA로 확장하지 않는다.",
+      "references": [
+        "docs/marketing/portfolio.md"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 21,
+      "source_line_sha256": "958dd0f12d5fa3a7d7d0b806155e8251fbeff86cbaf9eed4caa55307b0e35520",
+      "text": "Kubernetes/Kafka/cloud provision/fine-tuning/vector DB/multi-agent 확장 없이 로컬 수직 통합으로 제한한다.",
+      "references": [
+        "docs/marketing/architecture.md",
+        "pyproject.toml"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 22,
+      "source_line_sha256": "e6366984c99601bb2f361a49234e0f325cf43b774611f94460c9b807d67da6be",
+      "text": "환불일/귀속/분모/지연/정정/stale/쓰기-checkpoint 실패를 검증하고 그래프까지 실제 실행. 운영 한계·실패 이력도 공개한다.",
+      "references": [
+        "tests/test_marketing_review_regressions.py",
+        "tests/test_marketing_docs.py",
+        "docs/marketing/results.md"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md",
+      "line": 25,
+      "source_line_sha256": "af319bf41a2cf4a180ffe279b982469854b04e463a154dd033837e3108f1802d",
+      "text": "최신 사용자 결정: QUALITY-FIRST 로컬 완성, Databricks 제외, AWS 선택 설계만. 실제 과금/배포 금지와 AWS 경험 과장 금지. 재인터뷰하지 않는다.",
+      "references": [
+        "docs/marketing/aws-migration.md",
+        "docs/marketing/portfolio.md"
+      ],
+      "verdict": "reviewed_scope_or_constraint"
+    }
+  ]
+}

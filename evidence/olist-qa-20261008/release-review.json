@@ -1,0 +1,50 @@
+{
+  "verified_at": "2026-10-08T09:08:31.511644+09:00",
+  "model_quality": {
+    "passed": 4,
+    "total": 6,
+    "gate": "not_passed",
+    "prompt_version": "olist-agent.v3",
+    "basis": "developer smoke dataset; not held-out accuracy"
+  },
+  "http": {
+    "passed": 16,
+    "total": 16,
+    "exit_code": 0
+  },
+  "data_preservation": true,
+  "owned_processes_cleaned": true,
+  "source_sha256": {
+    "src/llm_ops_lab/olist/agent.py": "52a74fbc9050e2610f8a03e83e6b3008958cbf002b74837e3c89f8790207639f",
+    "src/llm_ops_lab/olist/agent_prompt.txt": "707bb0580e60643d17278d528bc138360abcfe8686e58655c6633f8e2b53cf26",
+    "src/llm_ops_lab/olist/tool_session.py": "03fc9a435e91374a17486dbc3a6781a9c4a18d7ce980582d94894a0fbd2bb5fb",
+    "src/llm_ops_lab/olist/evaluation.py": "f10f244a713130ad5d5f28f2a94412f90bc7abbb3eb6d5583a05f5a75bb2e78e",
+    "src/llm_ops_lab/api.py": "e266e7fff34f13e94c60ac744d71f4e214b31b6baa9687025254c99735039285",
+    "src/llm_ops_lab/service.py": "4f848791d29ca3394adfd290fd587a84145e5b46287f31351520cc53b68a5e35",
+    "src/llm_ops_lab/service_worker.py": "bf0ad62fb06223c925ebfa3d335f325e015fe3c2992f5cb17ca20ed5db989fb1",
+    "data/olist/metric-policy-v1.json": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9",
+    "data/olist/investigation-eval-v1.json": "09615a89bd97c1c159d8b2215c1c51212b06d636cb5985c7dc63efd87aff9cd2",
+    "uv.lock": "eb79d9976bcf0bcc46cabc431a0541ac022c112be5b00bb0bf79329732a553df"
+  },
+  "model_identity": {
+    "model_id": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "mlx_lm_version": "0.32.0",
+    "mlx_version": "0.32.3",
+    "load_seconds": 1.867659084033221
+  },
+  "remaining": [
+    "coverage and attribution model action failures",
+    "held-out and paraphrase evaluation",
+    "durable Olist loop checkpoints",
+    "AWS deployment"
+  ],
+  "automated_tests": {
+    "passed": 498,
+    "failed": 0,
+    "skipped": 0,
+    "real_postgresql_tests": 13,
+    "seconds": 75.88,
+    "ruff": "passed"
+  }
+}

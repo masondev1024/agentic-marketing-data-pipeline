@@ -1,0 +1,966 @@
+[
+  {
+    "name": "investigation_200",
+    "passed": true,
+    "data": {
+      "http": 200,
+      "request_id": "48a65b95-b406-4823-9219-7fff3cbe51cc",
+      "body": {
+        "request_id": "48a65b95-b406-4823-9219-7fff3cbe51cc",
+        "status": "completed",
+        "model_executed": true,
+        "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+        "evidence": [
+          {
+            "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+            "tool": "version_evidence",
+            "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+            "data": {
+              "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+              "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+              "contract_version": "olist.raw.v1",
+              "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+              "published_at": "2026-10-07T11:43:59.903303+00:00",
+              "quality_status": "passed",
+              "check_count": 113,
+              "failed_check_count": 0,
+              "warning_count": 2,
+              "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+            }
+          },
+          {
+            "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+            "tool": "channel_funnel",
+            "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+            "data": [
+              {
+                "origin": null,
+                "lead_count": 60,
+                "contract_count": 14,
+                "linked_contract_count": 4,
+                "unlinked_contract_count": 10
+              },
+              {
+                "origin": "direct_traffic",
+                "lead_count": 499,
+                "contract_count": 56,
+                "linked_contract_count": 31,
+                "unlinked_contract_count": 25
+              },
+              {
+                "origin": "display",
+                "lead_count": 118,
+                "contract_count": 6,
+                "linked_contract_count": 2,
+                "unlinked_contract_count": 4
+              },
+              {
+                "origin": "email",
+                "lead_count": 493,
+                "contract_count": 15,
+                "linked_contract_count": 6,
+                "unlinked_contract_count": 9
+              },
+              {
+                "origin": "organic_search",
+                "lead_count": 2296,
+                "contract_count": 271,
+                "linked_contract_count": 113,
+                "unlinked_contract_count": 158
+              },
+              {
+                "origin": "other",
+                "lead_count": 150,
+                "contract_count": 4,
+                "linked_contract_count": 2,
+                "unlinked_contract_count": 2
+              },
+              {
+                "origin": "other_publicities",
+                "lead_count": 65,
+                "contract_count": 3,
+                "linked_contract_count": 0,
+                "unlinked_contract_count": 3
+              },
+              {
+                "origin": "paid_search",
+                "lead_count": 1586,
+                "contract_count": 195,
+                "linked_contract_count": 101,
+                "unlinked_contract_count": 94
+              },
+              {
+                "origin": "referral",
+                "lead_count": 284,
+                "contract_count": 24,
+                "linked_contract_count": 9,
+                "unlinked_contract_count": 15
+              },
+              {
+                "origin": "social",
+                "lead_count": 1350,
+                "contract_count": 75,
+                "linked_contract_count": 31,
+                "unlinked_contract_count": 44
+              },
+              {
+                "origin": "unknown",
+                "lead_count": 1099,
+                "contract_count": 179,
+                "linked_contract_count": 81,
+                "unlinked_contract_count": 98
+              }
+            ]
+          }
+        ],
+        "findings": [
+          {
+            "code": "missing_origin_leads",
+            "severity": "info",
+            "summary": "60 leads have no observed origin; they remain in the funnel denominator. Observed denominator: 60/8000 leads in this published sample.",
+            "evidence_ids": [
+              "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+            ],
+            "observed_counts": {
+              "numerator": 60,
+              "denominator": 8000,
+              "unit": "leads",
+              "scope": "published_channel_aggregate"
+            }
+          }
+        ],
+        "trace": [
+          {
+            "stage": "plan",
+            "output_sha256": "8f1f6bfe810f20feade7622a8fcb4831228140887ea48edfb52133f755e4000e",
+            "generation_seconds": 3.32519229198806,
+            "prompt_token_ids_sha256": "511e4481eb430f3a0e15b29c745e3504c6592445e491e4ddcd0767b01b7e5daa",
+            "disposition": "supported",
+            "intents": [
+              "origin"
+            ]
+          },
+          {
+            "stage": "execute",
+            "selected_action": "tool",
+            "selected_tool": "channel_funnel"
+          },
+          {
+            "stage": "render",
+            "finding_codes": [
+              "missing_origin_leads"
+            ]
+          }
+        ],
+        "usage": {
+          "generation_attempts": 1,
+          "generations": 1,
+          "tool_calls": 1,
+          "prompt_tokens": 868,
+          "output_tokens": 7
+        },
+        "limitations": [
+          "source_timezone_unresolved",
+          "source_currency_unresolved",
+          "sample_completeness_unknown"
+        ],
+        "diagnostic_mode": "model_planned_investigation",
+        "request_plan": {
+          "disposition": "supported",
+          "intents": [
+            "origin"
+          ]
+        },
+        "model_execution_status": "returned",
+        "stop_reason": "completed",
+        "pipeline_context": null,
+        "metric_policy": {
+          "version": "olist.metrics.v1",
+          "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+        },
+        "model": {
+          "id": "mlx-community/Qwen3-4B-4bit",
+          "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+        },
+        "prompt": {
+          "version": "olist-intent.v5",
+          "sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6"
+        },
+        "timing": {
+          "queue_seconds": 8.20829882286489e-05,
+          "request_seconds": 3.4821802499936894,
+          "processing_seconds": 3.480472875002306
+        }
+      }
+    }
+  },
+  {
+    "name": "shared_worker_legacy_200",
+    "passed": true,
+    "data": {
+      "response": {
+        "http": 200,
+        "request_id": "ec048199-7945-4cfc-814b-cb853df1ec05",
+        "body": {
+          "request_id": "ec048199-7945-4cfc-814b-cb853df1ec05",
+          "status": "generated",
+          "answer": "멱등성은 같은 작업을 여러 번 수행할 때 최종 효과가 한 번 수행한 것과 같은 성질을 보장한다. 즉, 같은 작업을 반복하더라도 결과는 중복되지 않고 안정적으로 유지된다.",
+          "answer_mode": "direct",
+          "sources": [
+            {
+              "source": "/Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/data/runbooks/idempotency.md",
+              "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4",
+              "size_bytes": 1257,
+              "encoding": "utf-8"
+            }
+          ],
+          "citations": [],
+          "answer_sentences": [],
+          "retrieval_reason": "selected",
+          "abstention_reason": null,
+          "validation": {
+            "quote_membership": "not_checked",
+            "semantic_quality": "unverified"
+          },
+          "model_executed": true,
+          "model": {
+            "id": "mlx-community/Qwen3-4B-4bit",
+            "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+          },
+          "truncated": false,
+          "usage": {
+            "prompt_tokens": 479,
+            "output_tokens": 52
+          },
+          "timing": {
+            "queue_seconds": 6.11250288784504e-05,
+            "request_seconds": 2.3060610000393353,
+            "generation_seconds": 2.270091374986805,
+            "retrieval_seconds": 0.006474082998465747
+          }
+        }
+      },
+      "metrics": {
+        "ready": true,
+        "state": "ready",
+        "worker_pid": 65246,
+        "active": 0,
+        "queued": 0,
+        "capacity": 3,
+        "restarts": 0,
+        "counters": {
+          "accepted": 2,
+          "completed": 2,
+          "timeouts": 0,
+          "overloaded": 0,
+          "worker_failures": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "extra_fields",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "1ce165f3-12e8-40bd-8ac1-4eda1002eacd",
+        "error": {
+          "code": "invalid_request"
+        }
+      }
+    }
+  },
+  {
+    "name": "duplicate_json",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "1d24a8e3-e934-4196-9c20-a6e14201b959",
+        "error": {
+          "code": "invalid_json_object"
+        }
+      }
+    }
+  },
+  {
+    "name": "malformed_json",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "3b43fe1f-36e1-40e7-a759-9f43553c359d",
+        "error": {
+          "code": "invalid_json_object"
+        }
+      }
+    }
+  },
+  {
+    "name": "oversized_question",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "a2b753ba-ab18-44a7-8e8a-a5b95ab374c6",
+        "error": {
+          "code": "invalid_request"
+        }
+      }
+    }
+  },
+  {
+    "name": "unicode_surrogate",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "4e0ec863-7a86-4292-a82d-9fbeeb8c59b8",
+        "error": {
+          "code": "invalid_request"
+        }
+      }
+    }
+  },
+  {
+    "name": "path_version",
+    "passed": true,
+    "data": {
+      "http": 422,
+      "body": {
+        "request_id": "ca30713d-8bf0-4ff9-aa42-13439e0be1ac",
+        "error": {
+          "code": "invalid_request"
+        }
+      }
+    }
+  },
+  {
+    "name": "bounded_concurrency",
+    "passed": true,
+    "data": {
+      "responses": [
+        {
+          "http": 200,
+          "request_id": "094e140b-8853-4721-9e4f-65cbb485287b",
+          "body": {
+            "request_id": "094e140b-8853-4721-9e4f-65cbb485287b",
+            "status": "completed",
+            "model_executed": true,
+            "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+            "evidence": [
+              {
+                "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+                "tool": "version_evidence",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": {
+                  "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                  "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+                  "contract_version": "olist.raw.v1",
+                  "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+                  "published_at": "2026-10-07T11:43:59.903303+00:00",
+                  "quality_status": "passed",
+                  "check_count": 113,
+                  "failed_check_count": 0,
+                  "warning_count": 2,
+                  "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+                }
+              },
+              {
+                "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+                "tool": "channel_funnel",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": [
+                  {
+                    "origin": null,
+                    "lead_count": 60,
+                    "contract_count": 14,
+                    "linked_contract_count": 4,
+                    "unlinked_contract_count": 10
+                  },
+                  {
+                    "origin": "direct_traffic",
+                    "lead_count": 499,
+                    "contract_count": 56,
+                    "linked_contract_count": 31,
+                    "unlinked_contract_count": 25
+                  },
+                  {
+                    "origin": "display",
+                    "lead_count": 118,
+                    "contract_count": 6,
+                    "linked_contract_count": 2,
+                    "unlinked_contract_count": 4
+                  },
+                  {
+                    "origin": "email",
+                    "lead_count": 493,
+                    "contract_count": 15,
+                    "linked_contract_count": 6,
+                    "unlinked_contract_count": 9
+                  },
+                  {
+                    "origin": "organic_search",
+                    "lead_count": 2296,
+                    "contract_count": 271,
+                    "linked_contract_count": 113,
+                    "unlinked_contract_count": 158
+                  },
+                  {
+                    "origin": "other",
+                    "lead_count": 150,
+                    "contract_count": 4,
+                    "linked_contract_count": 2,
+                    "unlinked_contract_count": 2
+                  },
+                  {
+                    "origin": "other_publicities",
+                    "lead_count": 65,
+                    "contract_count": 3,
+                    "linked_contract_count": 0,
+                    "unlinked_contract_count": 3
+                  },
+                  {
+                    "origin": "paid_search",
+                    "lead_count": 1586,
+                    "contract_count": 195,
+                    "linked_contract_count": 101,
+                    "unlinked_contract_count": 94
+                  },
+                  {
+                    "origin": "referral",
+                    "lead_count": 284,
+                    "contract_count": 24,
+                    "linked_contract_count": 9,
+                    "unlinked_contract_count": 15
+                  },
+                  {
+                    "origin": "social",
+                    "lead_count": 1350,
+                    "contract_count": 75,
+                    "linked_contract_count": 31,
+                    "unlinked_contract_count": 44
+                  },
+                  {
+                    "origin": "unknown",
+                    "lead_count": 1099,
+                    "contract_count": 179,
+                    "linked_contract_count": 81,
+                    "unlinked_contract_count": 98
+                  }
+                ]
+              }
+            ],
+            "findings": [
+              {
+                "code": "seller_sample_coverage_unknown",
+                "severity": "info",
+                "summary": "462 contracts are not linked to the commerce seller sample; their order outcome is unknown, not zero. Observed denominator: 462/842 contracts in this published sample.",
+                "evidence_ids": [
+                  "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+                ],
+                "observed_counts": {
+                  "numerator": 462,
+                  "denominator": 842,
+                  "unit": "contracts",
+                  "scope": "published_channel_aggregate"
+                }
+              }
+            ],
+            "trace": [
+              {
+                "stage": "plan",
+                "output_sha256": "11557ff37057763d4c42deeb6ac748fb8c7180011e27a2e7e3c318d0cdb4a61b",
+                "generation_seconds": 2.8381282500340603,
+                "prompt_token_ids_sha256": "572c14cff737e601f9b6be6c98797e2f3c11d60f9f077ae00b8119e942ddce4b",
+                "disposition": "supported",
+                "intents": [
+                  "coverage"
+                ]
+              },
+              {
+                "stage": "execute",
+                "selected_action": "tool",
+                "selected_tool": "channel_funnel"
+              },
+              {
+                "stage": "render",
+                "finding_codes": [
+                  "seller_sample_coverage_unknown"
+                ]
+              }
+            ],
+            "usage": {
+              "generation_attempts": 1,
+              "generations": 1,
+              "tool_calls": 1,
+              "prompt_tokens": 872,
+              "output_tokens": 7
+            },
+            "limitations": [
+              "source_timezone_unresolved",
+              "source_currency_unresolved",
+              "sample_completeness_unknown"
+            ],
+            "diagnostic_mode": "model_planned_investigation",
+            "request_plan": {
+              "disposition": "supported",
+              "intents": [
+                "coverage"
+              ]
+            },
+            "model_execution_status": "returned",
+            "stop_reason": "completed",
+            "pipeline_context": null,
+            "metric_policy": {
+              "version": "olist.metrics.v1",
+              "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+            },
+            "model": {
+              "id": "mlx-community/Qwen3-4B-4bit",
+              "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+            },
+            "prompt": {
+              "version": "olist-intent.v5",
+              "sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6"
+            },
+            "timing": {
+              "queue_seconds": 3.8416997995227575e-05,
+              "request_seconds": 2.8749483749852516,
+              "processing_seconds": 2.87259962502867
+            }
+          }
+        },
+        {
+          "http": 200,
+          "request_id": "50919788-750d-48c1-8332-79831d55bc8b",
+          "body": {
+            "request_id": "50919788-750d-48c1-8332-79831d55bc8b",
+            "status": "generated",
+            "answer": "데이터 파이프라인에서 멱등성이 필요한 이유는 같은 작업이 여러 번 수행될 경우 데이터 정합성을 유지하기 위해 중복 효과를 방지하기 위해서이다. 재시도나 중복 이벤트가 발생할 때, 같은 데이터가 처리되어 결과가 중복 반영되는 것을 막기 위해 멱등한 처리가 필요하다.",
+            "answer_mode": "direct",
+            "sources": [
+              {
+                "source": "/Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/data/runbooks/idempotency.md",
+                "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4",
+                "size_bytes": 1257,
+                "encoding": "utf-8"
+              }
+            ],
+            "citations": [],
+            "answer_sentences": [],
+            "retrieval_reason": "selected",
+            "abstention_reason": null,
+            "validation": {
+              "quote_membership": "not_checked",
+              "semantic_quality": "unverified"
+            },
+            "model_executed": true,
+            "model": {
+              "id": "mlx-community/Qwen3-4B-4bit",
+              "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+            },
+            "truncated": false,
+            "usage": {
+              "prompt_tokens": 461,
+              "output_tokens": 81
+            },
+            "timing": {
+              "queue_seconds": 2.872229625005275,
+              "request_seconds": 5.736885124992114,
+              "generation_seconds": 2.8558670000056736,
+              "retrieval_seconds": 0.0028540000203065574
+            }
+          }
+        },
+        {
+          "http": 200,
+          "request_id": "dc9fdccb-6b00-4bbd-86f7-fe849733a774",
+          "body": {
+            "request_id": "dc9fdccb-6b00-4bbd-86f7-fe849733a774",
+            "status": "completed",
+            "model_executed": true,
+            "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+            "evidence": [
+              {
+                "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+                "tool": "version_evidence",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": {
+                  "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                  "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+                  "contract_version": "olist.raw.v1",
+                  "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+                  "published_at": "2026-10-07T11:43:59.903303+00:00",
+                  "quality_status": "passed",
+                  "check_count": 113,
+                  "failed_check_count": 0,
+                  "warning_count": 2,
+                  "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+                }
+              },
+              {
+                "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+                "tool": "channel_funnel",
+                "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+                "data": [
+                  {
+                    "origin": null,
+                    "lead_count": 60,
+                    "contract_count": 14,
+                    "linked_contract_count": 4,
+                    "unlinked_contract_count": 10
+                  },
+                  {
+                    "origin": "direct_traffic",
+                    "lead_count": 499,
+                    "contract_count": 56,
+                    "linked_contract_count": 31,
+                    "unlinked_contract_count": 25
+                  },
+                  {
+                    "origin": "display",
+                    "lead_count": 118,
+                    "contract_count": 6,
+                    "linked_contract_count": 2,
+                    "unlinked_contract_count": 4
+                  },
+                  {
+                    "origin": "email",
+                    "lead_count": 493,
+                    "contract_count": 15,
+                    "linked_contract_count": 6,
+                    "unlinked_contract_count": 9
+                  },
+                  {
+                    "origin": "organic_search",
+                    "lead_count": 2296,
+                    "contract_count": 271,
+                    "linked_contract_count": 113,
+                    "unlinked_contract_count": 158
+                  },
+                  {
+                    "origin": "other",
+                    "lead_count": 150,
+                    "contract_count": 4,
+                    "linked_contract_count": 2,
+                    "unlinked_contract_count": 2
+                  },
+                  {
+                    "origin": "other_publicities",
+                    "lead_count": 65,
+                    "contract_count": 3,
+                    "linked_contract_count": 0,
+                    "unlinked_contract_count": 3
+                  },
+                  {
+                    "origin": "paid_search",
+                    "lead_count": 1586,
+                    "contract_count": 195,
+                    "linked_contract_count": 101,
+                    "unlinked_contract_count": 94
+                  },
+                  {
+                    "origin": "referral",
+                    "lead_count": 284,
+                    "contract_count": 24,
+                    "linked_contract_count": 9,
+                    "unlinked_contract_count": 15
+                  },
+                  {
+                    "origin": "social",
+                    "lead_count": 1350,
+                    "contract_count": 75,
+                    "linked_contract_count": 31,
+                    "unlinked_contract_count": 44
+                  },
+                  {
+                    "origin": "unknown",
+                    "lead_count": 1099,
+                    "contract_count": 179,
+                    "linked_contract_count": 81,
+                    "unlinked_contract_count": 98
+                  }
+                ]
+              }
+            ],
+            "findings": [
+              {
+                "code": "seller_sample_coverage_unknown",
+                "severity": "info",
+                "summary": "462 contracts are not linked to the commerce seller sample; their order outcome is unknown, not zero. Observed denominator: 462/842 contracts in this published sample.",
+                "evidence_ids": [
+                  "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+                ],
+                "observed_counts": {
+                  "numerator": 462,
+                  "denominator": 842,
+                  "unit": "contracts",
+                  "scope": "published_channel_aggregate"
+                }
+              }
+            ],
+            "trace": [
+              {
+                "stage": "plan",
+                "output_sha256": "11557ff37057763d4c42deeb6ac748fb8c7180011e27a2e7e3c318d0cdb4a61b",
+                "generation_seconds": 2.657914959010668,
+                "prompt_token_ids_sha256": "572c14cff737e601f9b6be6c98797e2f3c11d60f9f077ae00b8119e942ddce4b",
+                "disposition": "supported",
+                "intents": [
+                  "coverage"
+                ]
+              },
+              {
+                "stage": "execute",
+                "selected_action": "tool",
+                "selected_tool": "channel_funnel"
+              },
+              {
+                "stage": "render",
+                "finding_codes": [
+                  "seller_sample_coverage_unknown"
+                ]
+              }
+            ],
+            "usage": {
+              "generation_attempts": 1,
+              "generations": 1,
+              "tool_calls": 1,
+              "prompt_tokens": 872,
+              "output_tokens": 7
+            },
+            "limitations": [
+              "source_timezone_unresolved",
+              "source_currency_unresolved",
+              "sample_completeness_unknown"
+            ],
+            "diagnostic_mode": "model_planned_investigation",
+            "request_plan": {
+              "disposition": "supported",
+              "intents": [
+                "coverage"
+              ]
+            },
+            "model_execution_status": "returned",
+            "stop_reason": "completed",
+            "pipeline_context": null,
+            "metric_policy": {
+              "version": "olist.metrics.v1",
+              "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+            },
+            "model": {
+              "id": "mlx-community/Qwen3-4B-4bit",
+              "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+            },
+            "prompt": {
+              "version": "olist-intent.v5",
+              "sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6"
+            },
+            "timing": {
+              "queue_seconds": 5.736605292011518,
+              "request_seconds": 8.426852167001925,
+              "processing_seconds": 2.688638042018283
+            }
+          }
+        },
+        {
+          "http": 429,
+          "request_id": "fcd449f5-3879-483f-aaab-f8425e816b61",
+          "body": {
+            "request_id": "fcd449f5-3879-483f-aaab-f8425e816b61",
+            "error": {
+              "code": "capacity_exceeded"
+            }
+          }
+        },
+        {
+          "http": 429,
+          "request_id": "5190e342-614d-45ef-a33a-1e5231d152df",
+          "body": {
+            "request_id": "5190e342-614d-45ef-a33a-1e5231d152df",
+            "error": {
+              "code": "capacity_exceeded"
+            }
+          }
+        },
+        {
+          "http": 429,
+          "request_id": "2b64abb4-24ba-4363-9d53-0643453a15f7",
+          "body": {
+            "request_id": "2b64abb4-24ba-4363-9d53-0643453a15f7",
+            "error": {
+              "code": "capacity_exceeded"
+            }
+          }
+        }
+      ],
+      "metrics": {
+        "ready": true,
+        "state": "ready",
+        "worker_pid": 65246,
+        "active": 0,
+        "queued": 0,
+        "capacity": 3,
+        "restarts": 0,
+        "counters": {
+          "accepted": 5,
+          "completed": 5,
+          "timeouts": 0,
+          "overloaded": 3,
+          "worker_failures": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "audit_ids",
+    "passed": true,
+    "data": {
+      "request_ids": [
+        "48a65b95-b406-4823-9219-7fff3cbe51cc",
+        "ec048199-7945-4cfc-814b-cb853df1ec05",
+        "1ce165f3-12e8-40bd-8ac1-4eda1002eacd",
+        "1d24a8e3-e934-4196-9c20-a6e14201b959",
+        "3b43fe1f-36e1-40e7-a759-9f43553c359d",
+        "a2b753ba-ab18-44a7-8e8a-a5b95ab374c6",
+        "4e0ec863-7a86-4292-a82d-9fbeeb8c59b8",
+        "ca30713d-8bf0-4ff9-aa42-13439e0be1ac",
+        "094e140b-8853-4721-9e4f-65cbb485287b",
+        "50919788-750d-48c1-8332-79831d55bc8b",
+        "dc9fdccb-6b00-4bbd-86f7-fe849733a774",
+        "fcd449f5-3879-483f-aaab-f8425e816b61",
+        "5190e342-614d-45ef-a33a-1e5231d152df",
+        "2b64abb4-24ba-4363-9d53-0643453a15f7"
+      ],
+      "event_count": 30
+    }
+  },
+  {
+    "name": "durable_run_ids",
+    "passed": true,
+    "data": {
+      "successful_requests": 5
+    }
+  },
+  {
+    "name": "deadline_504",
+    "passed": true,
+    "data": {
+      "fault": "SIGSTOP owned worker",
+      "response": {
+        "http": 504,
+        "request_id": "b0b37def-17c8-4d06-955a-c9ac1df4c1f9",
+        "body": {
+          "request_id": "b0b37def-17c8-4d06-955a-c9ac1df4c1f9",
+          "error": {
+            "code": "inference_deadline_exceeded"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "replacement_worker",
+    "passed": true,
+    "data": {
+      "before": {
+        "ready": true,
+        "state": "ready",
+        "worker_pid": 65342,
+        "active": 0,
+        "queued": 0,
+        "capacity": 3,
+        "restarts": 0,
+        "counters": {
+          "accepted": 0,
+          "completed": 0,
+          "timeouts": 0,
+          "overloaded": 0,
+          "worker_failures": 0
+        }
+      },
+      "after": {
+        "ready": true,
+        "state": "ready",
+        "worker_pid": 65367,
+        "active": 0,
+        "queued": 0,
+        "capacity": 3,
+        "restarts": 1,
+        "counters": {
+          "accepted": 1,
+          "completed": 0,
+          "timeouts": 1,
+          "overloaded": 0,
+          "worker_failures": 0
+        }
+      }
+    }
+  },
+  {
+    "name": "model_generation_after_recovery",
+    "passed": true,
+    "data": {
+      "http": 200,
+      "request_id": "2d01474f-cf94-4874-bd4f-4638dcb5ed73",
+      "body": {
+        "request_id": "2d01474f-cf94-4874-bd4f-4638dcb5ed73",
+        "status": "generated",
+        "answer": "멱",
+        "answer_mode": "direct",
+        "sources": [
+          {
+            "source": "/Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/data/runbooks/idempotency.md",
+            "sha256": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4",
+            "size_bytes": 1257,
+            "encoding": "utf-8"
+          }
+        ],
+        "citations": [],
+        "answer_sentences": [],
+        "retrieval_reason": "selected",
+        "abstention_reason": null,
+        "validation": {
+          "quote_membership": "not_checked",
+          "semantic_quality": "unverified"
+        },
+        "model_executed": true,
+        "model": {
+          "id": "mlx-community/Qwen3-4B-4bit",
+          "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+        },
+        "truncated": true,
+        "usage": {
+          "prompt_tokens": 479,
+          "output_tokens": 1
+        },
+        "timing": {
+          "queue_seconds": 4.520901711657643e-05,
+          "request_seconds": 2.083813542034477,
+          "generation_seconds": 2.0363218749989755,
+          "retrieval_seconds": 0.005574707989580929
+        }
+      }
+    }
+  },
+  {
+    "name": "owned_servers_stopped",
+    "passed": true,
+    "data": {
+      "server_pids": [
+        65240,
+        65339
+      ]
+    }
+  },
+  {
+    "name": "workers_and_ports_released",
+    "passed": true,
+    "data": {
+      "remaining_workers": [],
+      "listening_ports": []
+    }
+  }
+]

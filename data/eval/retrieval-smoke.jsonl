@@ -1,0 +1,6 @@
+{"id":"idempotency","question":"데이터 파이프라인에서 멱등성이 필요한 이유를 두 문장으로 설명해 줘.","expected_source":"idempotency.md"}
+{"id":"retry","question":"일시적인 API 오류의 재시도 간격과 최대 시도 횟수는?","expected_source":"retry.md"}
+{"id":"backfill","question":"백필에서 과거 구간을 재처리하기 전에 고정할 정보는?","expected_source":"backfill.md"}
+{"id":"weather","question":"오늘 서울 날씨와 기온은?","expected_source":null}
+{"id":"astronomy","question":"데이터 파이프라인에서 토성의 고리와 궤도를 설명해 줘.","expected_source":null}
+{"id":"generic","question":"데이터 파이프라인에 대해 설명해 주세요.","expected_source":null}

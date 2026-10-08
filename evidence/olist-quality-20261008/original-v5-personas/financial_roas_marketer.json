@@ -1,0 +1,168 @@
+{
+  "diagnostic_mode": "model_tool_agent",
+  "model_executed": true,
+  "status": "abstained",
+  "stop_reason": "model_abstained",
+  "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "evidence": [
+    {
+      "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+      "tool": "version_evidence",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": {
+        "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+        "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+        "contract_version": "olist.raw.v1",
+        "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+        "published_at": "2026-10-07T11:43:59.903303+00:00",
+        "quality_status": "passed",
+        "check_count": 113,
+        "failed_check_count": 0,
+        "warning_count": 2,
+        "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+      }
+    },
+    {
+      "evidence_id": "ada4072fc50ded0e02d5ccd4bdf2317a79251adc62318c0fd32faf1198a97d63",
+      "tool": "definitions",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": {
+        "metric_definitions": {
+          "lead_count": "Source-sample leads grouped by origin; a null origin is retained.",
+          "contract_count": "Observed closed deals joined to leads by mql_id in this sample.",
+          "linked_contract_count": "Contracts whose seller_id appears in the commerce seller sample.",
+          "unlinked_contract_count": "Contracts whose seller is absent from the commerce sample; outcome coverage is unknown.",
+          "observed_order_count": "Distinct orders observed for a linked seller across the source sample; not time-attributed."
+        },
+        "metric_policy": {
+          "policy_version": "olist.metrics.v1",
+          "reviewed_at": "2026-10-07",
+          "scope": "historical Olist Kaggle samples; not current production commerce",
+          "currency": {
+            "status": "unresolved",
+            "value": null,
+            "reason": "Pinned CSV files have no currency field. Current Olist product documentation is not proof of the currency of these historical exports."
+          },
+          "timezone": {
+            "status": "unresolved",
+            "value": null,
+            "reason": "Exported timestamps have no UTC offset or IANA timezone. Seller location is not timestamp provenance."
+          },
+          "coverage": {
+            "status": "sample_only",
+            "complete_through": null,
+            "reason": "Maximum observed timestamp is not a completeness watermark. Unlinked sellers have unknown order outcomes."
+          },
+          "allowed": [
+            "sample_lead_count",
+            "sample_contract_count",
+            "sample_linked_contract_count",
+            "sample_unlinked_contract_count",
+            "sample_missing_origin_count",
+            "seller_distinct_observed_order_count"
+          ],
+          "conditional": {
+            "source_clock_pre_post_contract_count": "Only naive source-clock comparison; timezone alignment and business attribution are unverified."
+          },
+          "blocked": {
+            "currency_denominated_revenue": [
+              "documented_source_currency",
+              "revenue_status_and_refund_definition"
+            ],
+            "attributed_30_day_orders": [
+              "documented_source_timezone",
+              "complete_observation_window",
+              "attribution_contract"
+            ],
+            "roas": [
+              "ad_spend",
+              "attributed_revenue",
+              "consistent_currency"
+            ],
+            "cac": [
+              "acquisition_cost",
+              "customer_definition",
+              "attribution_contract"
+            ],
+            "net_revenue": [
+              "refund_ledger",
+              "revenue_recognition_contract"
+            ]
+          },
+          "evidence_sources": [
+            {
+              "url": "https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce",
+              "role": "dataset publisher; no timezone or currency confirmation obtained in this review"
+            },
+            {
+              "url": "https://www.kaggle.com/datasets/olistbr/marketing-funnel-olist",
+              "role": "dataset publisher; cross-sample completeness is not guaranteed"
+            },
+            {
+              "path": "data/olist/contract-v1.json",
+              "role": "pinned raw column and timestamp contracts"
+            },
+            {
+              "path": "evidence/olist-local-v1.json",
+              "role": "local observed coverage and validation evidence"
+            }
+          ],
+          "promotion": "Require dataset-specific documentary evidence or explicitly label a scenario assumption; never silently promote an assumption to a verified production metric."
+        },
+        "policy_sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+      }
+    }
+  ],
+  "findings": [],
+  "limitations": [
+    "source_timezone_unresolved",
+    "source_currency_unresolved",
+    "sample_completeness_unknown",
+    "unsupported_metric"
+  ],
+  "trace": [
+    {
+      "output_sha256": "fae7fc930cf8a7d2bef9841c9f665e6103e94c08d3660ac63f4bc358da43a983",
+      "generation_seconds": 3.2026775420526974,
+      "first_generation_event_seconds": 2.953713583003264,
+      "prompt_token_ids_sha256": "42d7d4dd01e13cf449c6155e7abf0f11617f65a35f52f695cf1bdd7198ecc7af",
+      "selected_action": "tool",
+      "selected_tool": "definitions"
+    },
+    {
+      "output_sha256": "a60add8a1672442e150f894a4c4e836371b8e77bb003462eb103e0bf238be115",
+      "generation_seconds": 4.6786945830099285,
+      "first_generation_event_seconds": 4.112675375014078,
+      "prompt_token_ids_sha256": "f7dd9383880c53f8a549ff15c4eaa63b7b54364b5bb7c32fc16df47b5f13bb08",
+      "selected_action": "finish",
+      "finding_codes": [],
+      "limitation_codes": [
+        "unsupported_metric"
+      ]
+    }
+  ],
+  "usage": {
+    "generations": 2,
+    "tool_calls": 1,
+    "prompt_tokens": 2500,
+    "output_tokens": 44
+  },
+  "model": {
+    "model_id": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "mlx_lm_version": "0.32.0",
+    "mlx_version": "0.32.3",
+    "load_seconds": 1.7207210829947144
+  },
+  "model_id": null,
+  "model_revision": null,
+  "prompt": {
+    "version": "olist-agent.v5",
+    "sha256": "e01b41abb461ff11f3a8c0508571e39b8b3636b4c79cf2bba43fba45e7787448"
+  },
+  "prompt_sha256": "e01b41abb461ff11f3a8c0508571e39b8b3636b4c79cf2bba43fba45e7787448",
+  "metric_policy": {
+    "version": "olist.metrics.v1",
+    "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+  }
+}

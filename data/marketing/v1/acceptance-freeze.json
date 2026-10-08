@@ -1,0 +1,7 @@
+{
+  "version": "marketing-freeze.v1",
+  "sha256": {
+    "acceptance.json": "abb92bfa733e623f79d5185846f95adf9343cf29e58c05314612b2d821001c57",
+    "acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81"
+  }
+}

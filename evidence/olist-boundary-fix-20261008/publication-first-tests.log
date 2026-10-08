@@ -1,0 +1,44 @@
+Using CPython 3.12.13
+Creating virtual environment at: .venv
+   Building llm-ops-lab @ file:///Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/work/publication-checkout
+Downloading ruff (9.3MiB)
+      Built llm-ops-lab @ file:///Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/work/publication-checkout
+ Downloaded ruff
+Installed 56 packages in 99ms
+........................................................................ [ 10%]
+........................................................................ [ 21%]
+.......................F................................................ [ 32%]
+........................................................................ [ 42%]
+........................................................................ [ 53%]
+........................................................................ [ 64%]
+........................................................................ [ 75%]
+........................................................................ [ 85%]
+........................................................................ [ 96%]
+.......................                                                  [100%]
+=================================== FAILURES ===================================
+___________ test_readme_walkthrough_runs_as_written_in_new_processes ___________
+
+tmp_path = PosixPath('/private/var/folders/pv/16m2x3wn0_97mt_f30wr7q940000gn/T/pytest-of-mason/pytest-268/test_readme_walkthrough_runs_a0')
+
+    def test_readme_walkthrough_runs_as_written_in_new_processes(tmp_path):
+        text = (ROOT / "docs/marketing/README.md").read_text()
+        block = text.split("<!-- marketing-walkthrough:start -->")[1].split(
+            "<!-- marketing-walkthrough:end -->"
+        )[0].split("```bash\n")[1].split("```")[0]
+        environment = os.environ.copy()
+        environment["TMPDIR"] = str(tmp_path)
+        run = subprocess.run(["bash", "-c", block], cwd=ROOT, env=environment,
+                             capture_output=True, text=True, timeout=90)
+        assert run.returncode == 0, run.stderr
+>       assert run.stderr == ""
+E       AssertionError: assert '   Building ...kage in 2ms\n' == ''
+E         
+E         +    Building llm-ops-lab @ file:///Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/work/publication-checkout
+E         +       Built llm-ops-lab @ file:///Users/mason/Documents/Codex/2026-10-06/new-chat/outputs/llm-ops-lab/work/publication-checkout
+E         + Uninstalled 1 package in 1ms
+E         + Installed 1 package in 2ms
+
+tests/test_marketing_docs.py:57: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_marketing_docs.py::test_readme_walkthrough_runs_as_written_in_new_processes
+1 failed, 670 passed in 93.87s (0:01:33)

@@ -1,0 +1,145 @@
+{
+  "stage": "repeat-2",
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "calls": [
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:36.001445+00:00",
+      "prompt_tokens": 800,
+      "output_tokens": 25,
+      "seconds": 0.5237435000017285,
+      "output_sha256": "dd530fe8fe930a0669aa3c043a708f02587e9d86f8d759c0a4fe9057aae751c7",
+      "request_labels": [
+        "financial_unsupported",
+        "out_of_scope"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:36.550702+00:00",
+      "prompt_tokens": 806,
+      "output_tokens": 19,
+      "seconds": 0.47248024999862537,
+      "output_sha256": "493fe73a5c3a96d7fb14cd0bd477490c5ef8c00d31c6ac7b5c927cdd5c25fb89",
+      "request_labels": [
+        "financial_unsupported"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:37.062291+00:00",
+      "prompt_tokens": 807,
+      "output_tokens": 27,
+      "seconds": 0.4558460839907639,
+      "output_sha256": "d469410a4b26a107a165d28e86e7068e0ff0c1823112e48c9f479f595f7f0b62",
+      "request_labels": [
+        "financial_unsupported",
+        "unavailable_root_cause"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:37.554024+00:00",
+      "prompt_tokens": 807,
+      "output_tokens": 23,
+      "seconds": 0.8438897909945808,
+      "output_sha256": "76440228b4982ef98bac0834203eb9485c332223173f1ff69dc54ef3127651cb",
+      "request_labels": [
+        "origin",
+        "financial_unsupported"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:38.421183+00:00",
+      "prompt_tokens": 789,
+      "output_tokens": 19,
+      "seconds": 0.41401950002182275,
+      "output_sha256": "9705476c83f39f3c5b2c5f54da5576978cfed84d0c99da818aac94d9bb2f48b9",
+      "request_labels": [
+        "unavailable_root_cause"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:38.839030+00:00",
+      "prompt_tokens": 793,
+      "output_tokens": 25,
+      "seconds": 0.5291370000340976,
+      "output_sha256": "3cc9ffded1db6499b18360725f63b0bc3614137fdd83ac8bd4c5c22cdf07b0c6",
+      "request_labels": [
+        "pipeline_history",
+        "unavailable_root_cause"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:39.370869+00:00",
+      "prompt_tokens": 794,
+      "output_tokens": 19,
+      "seconds": 0.552022667019628,
+      "output_sha256": "9705476c83f39f3c5b2c5f54da5576978cfed84d0c99da818aac94d9bb2f48b9",
+      "request_labels": [
+        "unavailable_root_cause"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:39.926107+00:00",
+      "prompt_tokens": 808,
+      "output_tokens": 25,
+      "seconds": 0.46267691696994007,
+      "output_sha256": "5966a0cfe6e7b5e83697ef8c3ee4f5bebc5c269dbbd5f386969263038cc0e3ef",
+      "request_labels": [
+        "unavailable_root_cause",
+        "out_of_scope"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:40.390607+00:00",
+      "prompt_tokens": 783,
+      "output_tokens": 11,
+      "seconds": 0.4305627499707043,
+      "output_sha256": "b9a89476d5a1e5d9ad5fdeb55863944f35e1dcc58e9050e4fcf51a366d4eb9b6",
+      "request_labels": [
+        "unsafe"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:40.824227+00:00",
+      "prompt_tokens": 786,
+      "output_tokens": 9,
+      "seconds": 0.44844616699265316,
+      "output_sha256": "5f3bca82ab1e6e1b9fee61f0605960f68ee1e7af0257a839a78ab8775b2b04cc",
+      "request_labels": [
+        "unsafe"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:41.274216+00:00",
+      "prompt_tokens": 789,
+      "output_tokens": 15,
+      "seconds": 0.4140326249762438,
+      "output_sha256": "ec0705b5fa99d80785b413141f18f92a4e71acb9bb375ea883dccbd47699627b",
+      "request_labels": [
+        "unsafe"
+      ]
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:26:41.690716+00:00",
+      "prompt_tokens": 793,
+      "output_tokens": 19,
+      "seconds": 0.7708750420133583,
+      "output_sha256": "e7c9d0dce8269fa97a16e2a27688044246f0403787529e514db8d32256797bec",
+      "request_labels": [
+        "origin",
+        "unsafe"
+      ]
+    }
+  ],
+  "calls_before_stage": 36
+}

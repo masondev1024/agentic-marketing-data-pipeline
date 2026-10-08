@@ -1,0 +1,70 @@
+{
+  "diagnostic_mode": "model_tool_agent",
+  "model_executed": true,
+  "status": "abstained",
+  "stop_reason": "model_abstained",
+  "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "evidence": [
+    {
+      "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+      "tool": "version_evidence",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": {
+        "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+        "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+        "contract_version": "olist.raw.v1",
+        "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+        "published_at": "2026-10-07T11:43:59.903303+00:00",
+        "quality_status": "passed",
+        "check_count": 113,
+        "failed_check_count": 0,
+        "warning_count": 2,
+        "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+      }
+    }
+  ],
+  "findings": [],
+  "limitations": [
+    "source_timezone_unresolved",
+    "source_currency_unresolved",
+    "sample_completeness_unknown",
+    "insufficient_evidence"
+  ],
+  "trace": [
+    {
+      "output_sha256": "2eb900b91e78b6df981e0841008c9b2c71294eb7f10c4d60a861ba830cb9a23d",
+      "generation_seconds": 2.9043554580421187,
+      "first_generation_event_seconds": 2.370533333043568,
+      "prompt_token_ids_sha256": "079b65e7040d98fe2ed606c1554d83ea8f3f4aa1a25481ac8ef17cb0747e5a2d",
+      "selected_action": "finish",
+      "finding_codes": [],
+      "limitation_codes": [
+        "insufficient_evidence"
+      ]
+    }
+  ],
+  "usage": {
+    "generations": 1,
+    "tool_calls": 0,
+    "prompt_tokens": 809,
+    "output_tokens": 30
+  },
+  "model": {
+    "model_id": "mlx-community/Qwen3-4B-4bit",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "mlx_lm_version": "0.32.0",
+    "mlx_version": "0.32.3",
+    "load_seconds": 1.867659084033221
+  },
+  "model_id": null,
+  "model_revision": null,
+  "prompt": {
+    "version": "olist-agent.v3",
+    "sha256": "707bb0580e60643d17278d528bc138360abcfe8686e58655c6633f8e2b53cf26"
+  },
+  "prompt_sha256": "707bb0580e60643d17278d528bc138360abcfe8686e58655c6633f8e2b53cf26",
+  "metric_policy": {
+    "version": "olist.metrics.v1",
+    "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+  }
+}

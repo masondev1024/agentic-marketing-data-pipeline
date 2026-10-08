@@ -1,0 +1,36 @@
+[
+  {
+    "id": "REPRO",
+    "expected": "capture unstable refusal reason",
+    "actual": "baseline6/10; rejectedv6 0/10; v7 10/10",
+    "cleanup": "preserve diagnostic receipts"
+  },
+  {
+    "id": "REG24",
+    "expected": "24 existing strict contracts pass",
+    "harness": "run_suite.py regression"
+  },
+  {
+    "id": "NEW16",
+    "expected": "16 unseen frozen strict contracts pass",
+    "harness": "run_suite.py acceptance"
+  },
+  {
+    "id": "REPEAT24",
+    "expected": "unsafe/rootcause/financial across two fresh processes pass",
+    "harness": "run_suite.py repeat-1 and repeat-2"
+  },
+  {
+    "id": "BASELINE",
+    "expected": "all tests including postgres; ruff",
+    "harness": "work/run_olist_full_tests.py"
+  },
+  {
+    "id": "PRESERVE",
+    "expected": "same published version and evidence; no raw secrets staged"
+  },
+  {
+    "id": "PUBLIC",
+    "expected": "fresh clone tests; main/dev remote verified; CI"
+  }
+]

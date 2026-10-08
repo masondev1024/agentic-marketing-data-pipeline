@@ -1,0 +1,994 @@
+{
+  "version": "marketing-experiment.v1",
+  "operator": "assistant",
+  "started_at": "2026-10-07T07:17:22.053163+00:00",
+  "agent_designation": "experimental",
+  "registration": {
+    "version": "marketing-experiment.v1",
+    "authority": "work/marketing-aws-implementation-brief.md sections 4 and 6",
+    "threshold_origin": "Assistant engineering defaults registered before first inference, not user-supplied numbers",
+    "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+    "prompt_version": "marketing-agent.v1",
+    "cases": {
+      "observed_decline": "observed_decline",
+      "incomplete": "unknown",
+      "zero_spend": "unknown"
+    },
+    "account": "alpha",
+    "clock": "fixture as_of (historical replay, not present-day freshness)",
+    "limits": {
+      "wall_seconds": 30,
+      "model_input_tokens": 2048,
+      "model_output_tokens": 256,
+      "cumulative_model_tokens": 8192,
+      "malformed_json_retries": 1,
+      "actions": 8,
+      "tool_calls": 6
+    },
+    "promotion": {
+      "minimum_real_cases": 20,
+      "correct_fraction": 1.0,
+      "complete_evidence_fraction": 1.0,
+      "maximum_errors": 0,
+      "maximum_unsupported_claims": 0,
+      "maximum_latency_ratio_to_baseline": 2.0
+    },
+    "sampling": "Three fixed acceptance cases, one trial each; small resource-bounded subset, no p95 or statistical generalization. Promotion requires a future separately preregistered larger study."
+  },
+  "registration_sha256": "dde97e9739656743163c4f33869794edcca7b598c18b23ade79a0d240476ec5c",
+  "fixture_sha256": "abb92bfa733e623f79d5185846f95adf9343cf29e58c05314612b2d821001c57",
+  "expected_figures": "data/marketing/v1/acceptance-expected.json",
+  "source_sha256": {
+    "src/llm_ops_lab/marketing/agent.py": "854383ea05b8bc30cfe651de078c322d6f175c2b39f998073b55c7ea63014504",
+    "src/llm_ops_lab/marketing/offline_model.py": "6c46e719518270504e3a9d8cefc6e149ead5c48a4bec218bc1151b71ef9c2528",
+    "src/llm_ops_lab/marketing/model_worker.py": "b98cc4849d163af13b97ac0cc85728d2bf430c94027973e66a8d152677a8ec50"
+  },
+  "cases": [
+    {
+      "case": "observed_decline",
+      "fixture_revision": "marketing-acceptance.v1.observed_decline",
+      "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+      "manifest_sha256": "83d7ccf70b6e3aa800cefb0c9be2c1b6227f611eaff90037081156d6ca870819",
+      "model": {
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "mlx_lm_version": "0.32.0",
+        "mlx_version": "0.32.3",
+        "load_seconds": 1.554020915995352
+      },
+      "expected_conclusion": "observed_decline",
+      "baseline": {
+        "kind": "deterministic",
+        "test_double": false,
+        "scope": {
+          "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+          "account_id": "alpha",
+          "date_start": "2026-09-20",
+          "date_end": "2026-09-21"
+        },
+        "result": {
+          "status": "ok",
+          "scope": {
+            "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+            "account_id": "alpha",
+            "date_start": "2026-09-20",
+            "date_end": "2026-09-21"
+          },
+          "conclusion": "observed_decline",
+          "reason": "observed_only_not_causal",
+          "claims": [],
+          "evidence_ids": [
+            "7febbbc84608575bd58d0e81d6b1eeb9f45ca73c4ede504609d2581247294cac",
+            "8ec9154549e7892d9754f834a9487988fd2ec789c80ed3a8ef9c170daaa80849",
+            "b45c23412f2268e8087f150fde03afb9328a50b65b536311935e0a528f435c13"
+          ],
+          "causality": "unknown",
+          "hypotheses": [],
+          "proposed_actions": [],
+          "usage": {
+            "actions": 4,
+            "tool_calls": 3,
+            "token_units": 3660
+          }
+        },
+        "observations": [
+          {
+            "status": "ok",
+            "evidence_id": "7febbbc84608575bd58d0e81d6b1eeb9f45ca73c4ede504609d2581247294cac",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "metrics",
+              "manifest_sha256": "83d7ccf70b6e3aa800cefb0c9be2c1b6227f611eaff90037081156d6ca870819",
+              "fixture_revision": "marketing-acceptance.v1.observed_decline",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true,
+                  "gross_sales_krw": 60000,
+                  "net_attributed_sales_krw": 53000,
+                  "observed_roas": 3.533333333333333,
+                  "order_count": 3,
+                  "refund_krw": 7000,
+                  "roas": 3.533333333333333,
+                  "spend_krw": 15000,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": true,
+                  "gross_sales_krw": 20000,
+                  "net_attributed_sales_krw": 20000,
+                  "observed_roas": 2.0,
+                  "order_count": 2,
+                  "refund_krw": 0,
+                  "roas": 2.0,
+                  "spend_krw": 10000,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                }
+              ]
+            },
+            "usage": {
+              "actions": 1,
+              "tool_calls": 1,
+              "token_units": 1138
+            }
+          },
+          {
+            "status": "ok",
+            "evidence_id": "8ec9154549e7892d9754f834a9487988fd2ec789c80ed3a8ef9c170daaa80849",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "quality",
+              "manifest_sha256": "83d7ccf70b6e3aa800cefb0c9be2c1b6227f611eaff90037081156d6ca870819",
+              "fixture_revision": "marketing-acceptance.v1.observed_decline",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": true
+                }
+              ]
+            },
+            "usage": {
+              "actions": 2,
+              "tool_calls": 2,
+              "token_units": 1899
+            }
+          },
+          {
+            "status": "ok",
+            "evidence_id": "b45c23412f2268e8087f150fde03afb9328a50b65b536311935e0a528f435c13",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "freshness",
+              "manifest_sha256": "83d7ccf70b6e3aa800cefb0c9be2c1b6227f611eaff90037081156d6ca870819",
+              "fixture_revision": "marketing-acceptance.v1.observed_decline",
+              "data": {
+                "as_of": "2026-09-23T12:00:00Z",
+                "rows": [
+                  {
+                    "account_id": "alpha",
+                    "business_date": "2026-09-20",
+                    "through_utc": "2026-09-23T12:00:00Z"
+                  },
+                  {
+                    "account_id": "alpha",
+                    "business_date": "2026-09-21",
+                    "through_utc": "2026-09-23T12:00:00Z"
+                  }
+                ]
+              }
+            },
+            "usage": {
+              "actions": 3,
+              "tool_calls": 3,
+              "token_units": 2746
+            }
+          }
+        ],
+        "generations": [],
+        "usage": {
+          "actions": 4,
+          "tool_calls": 3,
+          "token_units": 3660
+        },
+        "latency_seconds": 0.22964495903579518,
+        "prompt_version": "marketing-agent.v1"
+      },
+      "actual": {
+        "kind": "actual_offline_mlx",
+        "test_double": false,
+        "scope": {
+          "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+          "account_id": "alpha",
+          "date_start": "2026-09-20",
+          "date_end": "2026-09-21"
+        },
+        "result": {
+          "status": "error",
+          "error": {
+            "code": "evidence_incomplete",
+            "detail": "metrics, quality, freshness required"
+          },
+          "conclusion": "unknown",
+          "causality": "unknown",
+          "proposed_actions": [],
+          "usage": {
+            "actions": 2,
+            "tool_calls": 1,
+            "token_units": 1280
+          }
+        },
+        "observations": [
+          {
+            "status": "ok",
+            "evidence_id": "7febbbc84608575bd58d0e81d6b1eeb9f45ca73c4ede504609d2581247294cac",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "cb354b97778713b1f9a9b2927e1448a27cad65efc09fefbb62f954996fafd7df",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "metrics",
+              "manifest_sha256": "83d7ccf70b6e3aa800cefb0c9be2c1b6227f611eaff90037081156d6ca870819",
+              "fixture_revision": "marketing-acceptance.v1.observed_decline",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true,
+                  "gross_sales_krw": 60000,
+                  "net_attributed_sales_krw": 53000,
+                  "observed_roas": 3.533333333333333,
+                  "order_count": 3,
+                  "refund_krw": 7000,
+                  "roas": 3.533333333333333,
+                  "spend_krw": 15000,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": true,
+                  "gross_sales_krw": 20000,
+                  "net_attributed_sales_krw": 20000,
+                  "observed_roas": 2.0,
+                  "order_count": 2,
+                  "refund_krw": 0,
+                  "roas": 2.0,
+                  "spend_krw": 10000,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                }
+              ]
+            },
+            "usage": {
+              "actions": 1,
+              "tool_calls": 1,
+              "token_units": 1133
+            }
+          }
+        ],
+        "generations": [
+          {
+            "prompt_tokens": 326,
+            "prompt_token_ids_sha256": "66653aa4ac28e3095cd25460b4ce76cf53948ee09bd8e3f9edec1d12406df22a",
+            "model_executed": true,
+            "output": "{\"action\":\"tool\",\"tool\":\"metrics\",\"parameters\":{}}",
+            "generation_seconds": 1.6322839579661377,
+            "generation_tokens": 14,
+            "first_generation_event_seconds": 1.3893057910026982,
+            "max_tokens_reached": false,
+            "generation_tokens_per_second": 8.576939037889163,
+            "mlx_peak_memory_gb": 2.883240448
+          },
+          {
+            "prompt_tokens": 688,
+            "prompt_token_ids_sha256": "bd173dd2f19478e313eda446a0c4d28b907cc8e30d2f83be7013e01433eb292b",
+            "model_executed": true,
+            "output": "{\"action\":\"finish\",\"conclusion\":\"observed_decline\",\"evidence_ids\":[\"7febbbc84608575bd58d0e81d6b1eeb9f45ca73c4ede504609d2581247294cac\"],\"claims\":[]}",
+            "generation_seconds": 3.2946957499952987,
+            "generation_tokens": 76,
+            "first_generation_event_seconds": 1.9401797500322573,
+            "max_tokens_reached": false,
+            "generation_tokens_per_second": 23.067380349189587,
+            "mlx_peak_memory_gb": 3.065237664
+          }
+        ],
+        "usage": {
+          "actions": 2,
+          "tool_calls": 1,
+          "token_units": 1280
+        },
+        "latency_seconds": 5.057407458021771,
+        "prompt_version": "marketing-agent.v1"
+      },
+      "baseline_score": {
+        "correct": true,
+        "complete_evidence": true,
+        "error": null,
+        "abstained": false,
+        "failed_closed_unknown": false,
+        "unsupported_claim_rejected": false,
+        "tool_calls": 3,
+        "latency_seconds": 0.22964495903579518
+      },
+      "actual_score": {
+        "correct": false,
+        "complete_evidence": false,
+        "error": {
+          "code": "evidence_incomplete",
+          "detail": "metrics, quality, freshness required"
+        },
+        "abstained": false,
+        "failed_closed_unknown": true,
+        "unsupported_claim_rejected": false,
+        "tool_calls": 1,
+        "latency_seconds": 5.057407458021771
+      }
+    },
+    {
+      "case": "incomplete",
+      "fixture_revision": "marketing-acceptance.v1.incomplete",
+      "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+      "manifest_sha256": "b8e219a53ab07d047763dd4ed04ea11b1052801c8952e399c975284877e0cf1e",
+      "model": {
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "mlx_lm_version": "0.32.0",
+        "mlx_version": "0.32.3",
+        "load_seconds": 0.8694994170218706
+      },
+      "expected_conclusion": "unknown",
+      "baseline": {
+        "kind": "deterministic",
+        "test_double": false,
+        "scope": {
+          "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+          "account_id": "alpha",
+          "date_start": "2026-09-20",
+          "date_end": "2026-09-21"
+        },
+        "result": {
+          "status": "abstained",
+          "scope": {
+            "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+            "account_id": "alpha",
+            "date_start": "2026-09-20",
+            "date_end": "2026-09-21"
+          },
+          "conclusion": "unknown",
+          "reason": "requested_unknown",
+          "claims": [],
+          "evidence_ids": [
+            "429baa94cc96a031a6f211d521db9f7731e97513ce4bd22d0f64ecb9bce5a9ce",
+            "740368960379395fa1dcf2aa26f76172abef2e914d94d2b483344359c97e93b5",
+            "3f664dfbed6f8e5b750dce6e7aede1f9e70043e38e27101c7ce719253d461f88"
+          ],
+          "causality": "unknown",
+          "hypotheses": [],
+          "proposed_actions": [],
+          "usage": {
+            "actions": 4,
+            "tool_calls": 3,
+            "token_units": 3591
+          }
+        },
+        "observations": [
+          {
+            "status": "ok",
+            "evidence_id": "429baa94cc96a031a6f211d521db9f7731e97513ce4bd22d0f64ecb9bce5a9ce",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "metrics",
+              "manifest_sha256": "b8e219a53ab07d047763dd4ed04ea11b1052801c8952e399c975284877e0cf1e",
+              "fixture_revision": "marketing-acceptance.v1.incomplete",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true,
+                  "gross_sales_krw": 60000,
+                  "net_attributed_sales_krw": 53000,
+                  "observed_roas": 3.533333333333333,
+                  "order_count": 3,
+                  "refund_krw": 7000,
+                  "roas": 3.533333333333333,
+                  "spend_krw": 15000,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": false,
+                  "gross_sales_krw": 20000,
+                  "net_attributed_sales_krw": 20000,
+                  "observed_roas": 2.0,
+                  "order_count": 2,
+                  "refund_krw": 0,
+                  "roas": null,
+                  "spend_krw": 10000,
+                  "through_utc": null
+                }
+              ]
+            },
+            "usage": {
+              "actions": 1,
+              "tool_calls": 1,
+              "token_units": 1116
+            }
+          },
+          {
+            "status": "ok",
+            "evidence_id": "740368960379395fa1dcf2aa26f76172abef2e914d94d2b483344359c97e93b5",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "quality",
+              "manifest_sha256": "b8e219a53ab07d047763dd4ed04ea11b1052801c8952e399c975284877e0cf1e",
+              "fixture_revision": "marketing-acceptance.v1.incomplete",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": false
+                }
+              ]
+            },
+            "usage": {
+              "actions": 2,
+              "tool_calls": 2,
+              "token_units": 1872
+            }
+          },
+          {
+            "status": "ok",
+            "evidence_id": "3f664dfbed6f8e5b750dce6e7aede1f9e70043e38e27101c7ce719253d461f88",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "freshness",
+              "manifest_sha256": "b8e219a53ab07d047763dd4ed04ea11b1052801c8952e399c975284877e0cf1e",
+              "fixture_revision": "marketing-acceptance.v1.incomplete",
+              "data": {
+                "as_of": "2026-09-23T12:00:00Z",
+                "rows": [
+                  {
+                    "account_id": "alpha",
+                    "business_date": "2026-09-20",
+                    "through_utc": "2026-09-23T12:00:00Z"
+                  },
+                  {
+                    "account_id": "alpha",
+                    "business_date": "2026-09-21",
+                    "through_utc": null
+                  }
+                ]
+              }
+            },
+            "usage": {
+              "actions": 3,
+              "tool_calls": 3,
+              "token_units": 2695
+            }
+          }
+        ],
+        "generations": [],
+        "usage": {
+          "actions": 4,
+          "tool_calls": 3,
+          "token_units": 3591
+        },
+        "latency_seconds": 0.22833341598743573,
+        "prompt_version": "marketing-agent.v1"
+      },
+      "actual": {
+        "kind": "actual_offline_mlx",
+        "test_double": false,
+        "scope": {
+          "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+          "account_id": "alpha",
+          "date_start": "2026-09-20",
+          "date_end": "2026-09-21"
+        },
+        "result": {
+          "status": "error",
+          "error": {
+            "code": "evidence_incomplete",
+            "detail": "metrics, quality, freshness required"
+          },
+          "conclusion": "unknown",
+          "causality": "unknown",
+          "proposed_actions": [],
+          "usage": {
+            "actions": 2,
+            "tool_calls": 1,
+            "token_units": 1258
+          }
+        },
+        "observations": [
+          {
+            "status": "ok",
+            "evidence_id": "429baa94cc96a031a6f211d521db9f7731e97513ce4bd22d0f64ecb9bce5a9ce",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "3ec2afc380443d40e5cd9fe4fc358c46aca9e9657fc4390746dbd67baa61d4cf",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "metrics",
+              "manifest_sha256": "b8e219a53ab07d047763dd4ed04ea11b1052801c8952e399c975284877e0cf1e",
+              "fixture_revision": "marketing-acceptance.v1.incomplete",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true,
+                  "gross_sales_krw": 60000,
+                  "net_attributed_sales_krw": 53000,
+                  "observed_roas": 3.533333333333333,
+                  "order_count": 3,
+                  "refund_krw": 7000,
+                  "roas": 3.533333333333333,
+                  "spend_krw": 15000,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": false,
+                  "gross_sales_krw": 20000,
+                  "net_attributed_sales_krw": 20000,
+                  "observed_roas": 2.0,
+                  "order_count": 2,
+                  "refund_krw": 0,
+                  "roas": null,
+                  "spend_krw": 10000,
+                  "through_utc": null
+                }
+              ]
+            },
+            "usage": {
+              "actions": 1,
+              "tool_calls": 1,
+              "token_units": 1111
+            }
+          }
+        ],
+        "generations": [
+          {
+            "prompt_tokens": 324,
+            "prompt_token_ids_sha256": "51141f254da2e6a09a591e8f6f45052697e47d85073c33ace305551d2b2db1b8",
+            "model_executed": true,
+            "output": "{\"action\":\"tool\",\"tool\":\"metrics\",\"parameters\":{}}",
+            "generation_seconds": 1.3265228749951348,
+            "generation_tokens": 14,
+            "first_generation_event_seconds": 1.089493790990673,
+            "max_tokens_reached": false,
+            "generation_tokens_per_second": 10.553907711581187,
+            "mlx_peak_memory_gb": 2.880569848
+          },
+          {
+            "prompt_tokens": 665,
+            "prompt_token_ids_sha256": "259de78b3e9daefcb9c08c860f4ce5cfc620541c13c32071e2a3040fd2900fce",
+            "model_executed": true,
+            "output": "{\"action\":\"finish\",\"conclusion\":\"observed_decline\",\"evidence_ids\":[\"429baa94cc96a031a6f211d521db9f7731e97513ce4bd22d0f64ecb9bce5a9ce\"],\"claims\":[]}",
+            "generation_seconds": 6.304278832976706,
+            "generation_tokens": 78,
+            "first_generation_event_seconds": 2.010070500022266,
+            "max_tokens_reached": false,
+            "generation_tokens_per_second": 12.372549194999763,
+            "mlx_peak_memory_gb": 3.043512478
+          }
+        ],
+        "usage": {
+          "actions": 2,
+          "tool_calls": 1,
+          "token_units": 1258
+        },
+        "latency_seconds": 7.743271875020582,
+        "prompt_version": "marketing-agent.v1"
+      },
+      "baseline_score": {
+        "correct": true,
+        "complete_evidence": true,
+        "error": null,
+        "abstained": true,
+        "failed_closed_unknown": false,
+        "unsupported_claim_rejected": false,
+        "tool_calls": 3,
+        "latency_seconds": 0.22833341598743573
+      },
+      "actual_score": {
+        "correct": false,
+        "complete_evidence": false,
+        "error": {
+          "code": "evidence_incomplete",
+          "detail": "metrics, quality, freshness required"
+        },
+        "abstained": false,
+        "failed_closed_unknown": true,
+        "unsupported_claim_rejected": false,
+        "tool_calls": 1,
+        "latency_seconds": 7.743271875020582
+      }
+    },
+    {
+      "case": "zero_spend",
+      "fixture_revision": "marketing-acceptance.v1.zero_spend",
+      "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+      "manifest_sha256": "60ae46caa96298cb3bc105d2e011aaadaffb8e83f2fbcf6be8b1f32dc9024e8f",
+      "model": {
+        "model_id": "mlx-community/Qwen3-4B-4bit",
+        "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+        "mlx_lm_version": "0.32.0",
+        "mlx_version": "0.32.3",
+        "load_seconds": 1.236409375036601
+      },
+      "expected_conclusion": "unknown",
+      "baseline": {
+        "kind": "deterministic",
+        "test_double": false,
+        "scope": {
+          "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+          "account_id": "alpha",
+          "date_start": "2026-09-20",
+          "date_end": "2026-09-21"
+        },
+        "result": {
+          "status": "abstained",
+          "scope": {
+            "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+            "account_id": "alpha",
+            "date_start": "2026-09-20",
+            "date_end": "2026-09-21"
+          },
+          "conclusion": "unknown",
+          "reason": "requested_unknown",
+          "claims": [],
+          "evidence_ids": [
+            "5c573d4545d57f6ba0de09ff8e00abe6cb73361fbe0b187c619d52bdd8f04dd5",
+            "1c02c0c387e42fccfe1b697f957492b69568d9aed919f8aba733d977c2993d38",
+            "96a092b634250a342594c73d02528969b289e05311fb6762c4adc223819bf7e2"
+          ],
+          "causality": "unknown",
+          "hypotheses": [],
+          "proposed_actions": [],
+          "usage": {
+            "actions": 4,
+            "tool_calls": 3,
+            "token_units": 3622
+          }
+        },
+        "observations": [
+          {
+            "status": "ok",
+            "evidence_id": "5c573d4545d57f6ba0de09ff8e00abe6cb73361fbe0b187c619d52bdd8f04dd5",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "metrics",
+              "manifest_sha256": "60ae46caa96298cb3bc105d2e011aaadaffb8e83f2fbcf6be8b1f32dc9024e8f",
+              "fixture_revision": "marketing-acceptance.v1.zero_spend",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true,
+                  "gross_sales_krw": 60000,
+                  "net_attributed_sales_krw": 53000,
+                  "observed_roas": 3.533333333333333,
+                  "order_count": 3,
+                  "refund_krw": 7000,
+                  "roas": 3.533333333333333,
+                  "spend_krw": 15000,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": true,
+                  "gross_sales_krw": 20000,
+                  "net_attributed_sales_krw": 20000,
+                  "observed_roas": null,
+                  "order_count": 2,
+                  "refund_krw": 0,
+                  "roas": null,
+                  "spend_krw": 0,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                }
+              ]
+            },
+            "usage": {
+              "actions": 1,
+              "tool_calls": 1,
+              "token_units": 1130
+            }
+          },
+          {
+            "status": "ok",
+            "evidence_id": "1c02c0c387e42fccfe1b697f957492b69568d9aed919f8aba733d977c2993d38",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "quality",
+              "manifest_sha256": "60ae46caa96298cb3bc105d2e011aaadaffb8e83f2fbcf6be8b1f32dc9024e8f",
+              "fixture_revision": "marketing-acceptance.v1.zero_spend",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": true
+                }
+              ]
+            },
+            "usage": {
+              "actions": 2,
+              "tool_calls": 2,
+              "token_units": 1885
+            }
+          },
+          {
+            "status": "ok",
+            "evidence_id": "96a092b634250a342594c73d02528969b289e05311fb6762c4adc223819bf7e2",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "freshness",
+              "manifest_sha256": "60ae46caa96298cb3bc105d2e011aaadaffb8e83f2fbcf6be8b1f32dc9024e8f",
+              "fixture_revision": "marketing-acceptance.v1.zero_spend",
+              "data": {
+                "as_of": "2026-09-23T12:00:00Z",
+                "rows": [
+                  {
+                    "account_id": "alpha",
+                    "business_date": "2026-09-20",
+                    "through_utc": "2026-09-23T12:00:00Z"
+                  },
+                  {
+                    "account_id": "alpha",
+                    "business_date": "2026-09-21",
+                    "through_utc": "2026-09-23T12:00:00Z"
+                  }
+                ]
+              }
+            },
+            "usage": {
+              "actions": 3,
+              "tool_calls": 3,
+              "token_units": 2726
+            }
+          }
+        ],
+        "generations": [],
+        "usage": {
+          "actions": 4,
+          "tool_calls": 3,
+          "token_units": 3622
+        },
+        "latency_seconds": 0.38397237501339987,
+        "prompt_version": "marketing-agent.v1"
+      },
+      "actual": {
+        "kind": "actual_offline_mlx",
+        "test_double": false,
+        "scope": {
+          "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+          "account_id": "alpha",
+          "date_start": "2026-09-20",
+          "date_end": "2026-09-21"
+        },
+        "result": {
+          "status": "error",
+          "error": {
+            "code": "evidence_incomplete",
+            "detail": "metrics, quality, freshness required"
+          },
+          "conclusion": "unknown",
+          "causality": "unknown",
+          "proposed_actions": [],
+          "usage": {
+            "actions": 2,
+            "tool_calls": 1,
+            "token_units": 1272
+          }
+        },
+        "observations": [
+          {
+            "status": "ok",
+            "evidence_id": "5c573d4545d57f6ba0de09ff8e00abe6cb73361fbe0b187c619d52bdd8f04dd5",
+            "evidence": {
+              "version": "marketing-diagnostics.v1",
+              "scope": {
+                "snapshot_id": "b34fd52a1f7fb0c20e32224f533e3401404e6ac900e933219fc15032801eb882",
+                "account_id": "alpha",
+                "date_start": "2026-09-20",
+                "date_end": "2026-09-21"
+              },
+              "tool": "metrics",
+              "manifest_sha256": "60ae46caa96298cb3bc105d2e011aaadaffb8e83f2fbcf6be8b1f32dc9024e8f",
+              "fixture_revision": "marketing-acceptance.v1.zero_spend",
+              "data": [
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-20",
+                  "complete": true,
+                  "gross_sales_krw": 60000,
+                  "net_attributed_sales_krw": 53000,
+                  "observed_roas": 3.533333333333333,
+                  "order_count": 3,
+                  "refund_krw": 7000,
+                  "roas": 3.533333333333333,
+                  "spend_krw": 15000,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                },
+                {
+                  "account_id": "alpha",
+                  "business_date": "2026-09-21",
+                  "complete": true,
+                  "gross_sales_krw": 20000,
+                  "net_attributed_sales_krw": 20000,
+                  "observed_roas": null,
+                  "order_count": 2,
+                  "refund_krw": 0,
+                  "roas": null,
+                  "spend_krw": 0,
+                  "through_utc": "2026-09-23T12:00:00Z"
+                }
+              ]
+            },
+            "usage": {
+              "actions": 1,
+              "tool_calls": 1,
+              "token_units": 1125
+            }
+          }
+        ],
+        "generations": [
+          {
+            "prompt_tokens": 331,
+            "prompt_token_ids_sha256": "e396e208d358f3d685546f9bd8142b5b978b750f06fad2aa70f5bc213d85132b",
+            "model_executed": true,
+            "output": "{\"action\":\"tool\",\"tool\":\"metrics\",\"parameters\":{}}",
+            "generation_seconds": 3.6182735419715755,
+            "generation_tokens": 14,
+            "first_generation_event_seconds": 2.9089070839690976,
+            "max_tokens_reached": false,
+            "generation_tokens_per_second": 3.869248645134631,
+            "mlx_peak_memory_gb": 2.892071444
+          },
+          {
+            "prompt_tokens": 682,
+            "prompt_token_ids_sha256": "ec55b9a3257f34c188ade57d51ac96355f74edd2f91471f8a70bc19ed49cb57b",
+            "model_executed": true,
+            "output": "{\"action\":\"finish\",\"conclusion\":\"observed_decline\",\"evidence_ids\":[\"5c573d4545d57f6ba0de09ff8e00abe6cb73361fbe0b187c619d52bdd8f04dd5\"],\"claims\":[]}",
+            "generation_seconds": 9.996971333050169,
+            "generation_tokens": 75,
+            "first_generation_event_seconds": 5.017972375033423,
+            "max_tokens_reached": false,
+            "generation_tokens_per_second": 7.502272188382559,
+            "mlx_peak_memory_gb": 3.024965924
+          }
+        ],
+        "usage": {
+          "actions": 2,
+          "tool_calls": 1,
+          "token_units": 1272
+        },
+        "latency_seconds": 14.99116683396278,
+        "prompt_version": "marketing-agent.v1"
+      },
+      "baseline_score": {
+        "correct": true,
+        "complete_evidence": true,
+        "error": null,
+        "abstained": true,
+        "failed_closed_unknown": false,
+        "unsupported_claim_rejected": false,
+        "tool_calls": 3,
+        "latency_seconds": 0.38397237501339987
+      },
+      "actual_score": {
+        "correct": false,
+        "complete_evidence": false,
+        "error": {
+          "code": "evidence_incomplete",
+          "detail": "metrics, quality, freshness required"
+        },
+        "abstained": false,
+        "failed_closed_unknown": true,
+        "unsupported_claim_rejected": false,
+        "tool_calls": 1,
+        "latency_seconds": 14.99116683396278
+      }
+    }
+  ],
+  "summary": {
+    "real_cases": 3,
+    "correct": 0,
+    "complete_evidence": 0,
+    "errors": 3,
+    "abstentions": 0,
+    "unsupported_claims_rejected": 0,
+    "promotion_passed": false,
+    "promotion_failure": "minimum_real_cases: 3 < 20; see per-case scores",
+    "failed_closed_unknown": 3
+  },
+  "promotion_gates": {
+    "minimum_real_cases": false,
+    "correct_fraction": false,
+    "complete_evidence_fraction": false,
+    "maximum_errors": false,
+    "maximum_unsupported_claims": true,
+    "maximum_latency_ratio_to_baseline": false
+  }
+}

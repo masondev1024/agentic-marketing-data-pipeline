@@ -1,0 +1,199 @@
+{
+  "stage": "acceptance",
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "calls": [
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:20.174651+00:00",
+      "prompt_tokens": 801,
+      "output_tokens": 15,
+      "seconds": 0.6662405410315841,
+      "output_sha256": "8e7b5faa70d4c36ee32a3b72b1e5a42c787f9f2a4292065213bbb5b12f34a853"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:20.863430+00:00",
+      "prompt_tokens": 799,
+      "output_tokens": 15,
+      "seconds": 0.43172200000844896,
+      "output_sha256": "8e7b5faa70d4c36ee32a3b72b1e5a42c787f9f2a4292065213bbb5b12f34a853"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:21.329208+00:00",
+      "prompt_tokens": 807,
+      "output_tokens": 15,
+      "seconds": 0.5032089589512907,
+      "output_sha256": "8e7b5faa70d4c36ee32a3b72b1e5a42c787f9f2a4292065213bbb5b12f34a853"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:21.853192+00:00",
+      "prompt_tokens": 798,
+      "output_tokens": 15,
+      "seconds": 1.581992000050377,
+      "output_sha256": "8e7b5faa70d4c36ee32a3b72b1e5a42c787f9f2a4292065213bbb5b12f34a853"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:23.457715+00:00",
+      "prompt_tokens": 808,
+      "output_tokens": 16,
+      "seconds": 2.3088424170273356,
+      "output_sha256": "5a25b29d749d04ea1f742ede59a0f538a711aa08454db36d767f273c913217da"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:25.793364+00:00",
+      "prompt_tokens": 805,
+      "output_tokens": 16,
+      "seconds": 0.9397535829921253,
+      "output_sha256": "5a25b29d749d04ea1f742ede59a0f538a711aa08454db36d767f273c913217da"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:26.754430+00:00",
+      "prompt_tokens": 807,
+      "output_tokens": 16,
+      "seconds": 0.8246101249824278,
+      "output_sha256": "5a25b29d749d04ea1f742ede59a0f538a711aa08454db36d767f273c913217da"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:27.599502+00:00",
+      "prompt_tokens": 805,
+      "output_tokens": 16,
+      "seconds": 0.4079357500304468,
+      "output_sha256": "5a25b29d749d04ea1f742ede59a0f538a711aa08454db36d767f273c913217da"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:28.027665+00:00",
+      "prompt_tokens": 810,
+      "output_tokens": 21,
+      "seconds": 0.6006558330263942,
+      "output_sha256": "53040fef253798c55068793f83babe81afa1e5b78ba3f072b3e222971dea72da"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:28.655901+00:00",
+      "prompt_tokens": 801,
+      "output_tokens": 21,
+      "seconds": 0.7262956670019776,
+      "output_sha256": "53040fef253798c55068793f83babe81afa1e5b78ba3f072b3e222971dea72da"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:29.432108+00:00",
+      "prompt_tokens": 813,
+      "output_tokens": 21,
+      "seconds": 0.44545200001448393,
+      "output_sha256": "53040fef253798c55068793f83babe81afa1e5b78ba3f072b3e222971dea72da"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:29.907236+00:00",
+      "prompt_tokens": 808,
+      "output_tokens": 21,
+      "seconds": 0.486508917005267,
+      "output_sha256": "53040fef253798c55068793f83babe81afa1e5b78ba3f072b3e222971dea72da"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:30.429497+00:00",
+      "prompt_tokens": 800,
+      "output_tokens": 25,
+      "seconds": 0.7333494999911636,
+      "output_sha256": "dd530fe8fe930a0669aa3c043a708f02587e9d86f8d759c0a4fe9057aae751c7"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:31.198584+00:00",
+      "prompt_tokens": 806,
+      "output_tokens": 19,
+      "seconds": 0.6032622080529109,
+      "output_sha256": "493fe73a5c3a96d7fb14cd0bd477490c5ef8c00d31c6ac7b5c927cdd5c25fb89"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:31.821891+00:00",
+      "prompt_tokens": 807,
+      "output_tokens": 27,
+      "seconds": 0.5418003749800846,
+      "output_sha256": "d469410a4b26a107a165d28e86e7068e0ff0c1823112e48c9f479f595f7f0b62"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:32.401745+00:00",
+      "prompt_tokens": 807,
+      "output_tokens": 23,
+      "seconds": 0.467434584046714,
+      "output_sha256": "76440228b4982ef98bac0834203eb9485c332223173f1ff69dc54ef3127651cb"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:32.904118+00:00",
+      "prompt_tokens": 789,
+      "output_tokens": 19,
+      "seconds": 0.6327525830129161,
+      "output_sha256": "9705476c83f39f3c5b2c5f54da5576978cfed84d0c99da818aac94d9bb2f48b9"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:33.540562+00:00",
+      "prompt_tokens": 793,
+      "output_tokens": 25,
+      "seconds": 0.7309720419580117,
+      "output_sha256": "3cc9ffded1db6499b18360725f63b0bc3614137fdd83ac8bd4c5c22cdf07b0c6"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:34.273767+00:00",
+      "prompt_tokens": 794,
+      "output_tokens": 19,
+      "seconds": 0.5082662089844234,
+      "output_sha256": "9705476c83f39f3c5b2c5f54da5576978cfed84d0c99da818aac94d9bb2f48b9"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:34.783872+00:00",
+      "prompt_tokens": 808,
+      "output_tokens": 23,
+      "seconds": 0.5278463330469094,
+      "output_sha256": "2e965c88b172d8764282f3f5cead4669d1f8de5e10cf52943fe58187169cd33e"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:35.318521+00:00",
+      "prompt_tokens": 783,
+      "output_tokens": 11,
+      "seconds": 0.3743291669525206,
+      "output_sha256": "b9a89476d5a1e5d9ad5fdeb55863944f35e1dcc58e9050e4fcf51a366d4eb9b6"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:35.695437+00:00",
+      "prompt_tokens": 786,
+      "output_tokens": 9,
+      "seconds": 0.5514134580153041,
+      "output_sha256": "5f3bca82ab1e6e1b9fee61f0605960f68ee1e7af0257a839a78ab8775b2b04cc"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:36.250107+00:00",
+      "prompt_tokens": 789,
+      "output_tokens": 15,
+      "seconds": 1.00852841604501,
+      "output_sha256": "ec0705b5fa99d80785b413141f18f92a4e71acb9bb375ea883dccbd47699627b"
+    },
+    {
+      "status": "returned",
+      "at": "2026-10-08T01:23:37.263168+00:00",
+      "prompt_tokens": 793,
+      "output_tokens": 19,
+      "seconds": 0.42708504101028666,
+      "output_sha256": "e7c9d0dce8269fa97a16e2a27688044246f0403787529e514db8d32256797bec"
+    }
+  ],
+  "calls_before_stage": 0
+}

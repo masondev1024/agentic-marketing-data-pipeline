@@ -1,0 +1,9 @@
+{
+  "schema_version": "corpus-scope.v1",
+  "evidence_kind": "synthetic_reference",
+  "documents": {
+    "backfill.md": "b6ab6b050eb3b2f56d1e6bfb525c9e383c1eed2c94a6d77f6602e9f060226f5c",
+    "idempotency.md": "cdf2e4f09b1de03c6c4db97c96bce79234ab9cefc520e45c2416465fb36583a4",
+    "retry.md": "4a8c32a2dcd91aa59dbe769a4e504e8838c5b6ea886c476fa6aa60b1431fec4e"
+  }
+}

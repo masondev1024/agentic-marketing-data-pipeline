@@ -1,0 +1,119 @@
+{
+  "schema_version": "marketing-main-review.v1",
+  "operator": "assistant",
+  "created_at": "2026-10-07T10:24:24.824524+00:00",
+  "scope": "Independent repaired local-release review; automatic chain cancelled per user cost instruction, not formal Ouroboros approval.",
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "P1",
+      "problem": "Post-commit temporary-file cleanup failure falsely reported failed publication",
+      "repair": "Best-effort logged cleanup, retaining committed result and original failure",
+      "status": "verified"
+    },
+    {
+      "id": "R2",
+      "severity": "P2",
+      "problem": "Bronze bytes permitted type-coercing equality and duplicate JSON keys",
+      "repair": "Strict JSON with canonical type-preserving equality before publication",
+      "status": "verified"
+    },
+    {
+      "id": "R3",
+      "severity": "P2",
+      "problem": "Large integer ROAS failed reconciliation or concealed real decline",
+      "repair": "Explicit DOUBLE display reconciliation, exact integer cross-products for conclusions",
+      "status": "verified"
+    },
+    {
+      "id": "R4",
+      "severity": "P1",
+      "problem": "Partial model response or blocked write escaped host deadline",
+      "repair": "Bounded binary nonblocking I/O sharing one monotonic deadline",
+      "status": "verified"
+    },
+    {
+      "id": "R5",
+      "severity": "P1",
+      "problem": "Startup cancellation/spawn failure leaked owned resources",
+      "repair": "BaseException cleanup of owned process, pipes, lock and stderr",
+      "status": "verified"
+    },
+    {
+      "id": "R6",
+      "severity": "P2",
+      "problem": "Delayed replay changed committed approval to expired",
+      "repair": "Persist and replay historical completion receipt before new-approval freshness evaluation",
+      "status": "verified"
+    }
+  ],
+  "verification": {
+    "initial_reproduction": "10 failed, 5 passed in 32.91s",
+    "focused_final": "12 passed in 23.40s",
+    "graph_current": "18 passed in 31.89s",
+    "code_review": "APPROVE; independent 17 passed, ratio comparison matches Fraction for 5000 seeded pairs",
+    "architecture_review": "WATCH; no remaining blocker. Independent accept/reject crash recovery and 86400/86401 second boundary checks, large-integer decline and stale abstention passed.",
+    "real_model": "Fresh actual offline experiment: baseline3/3, actual0/3, one evidence_reference and two evidence_incomplete failures, all fail closed to unknown",
+    "full_suite": "AC1 isolated fresh-environment locked pytest419 passed112.80s, pytest-q419 passed107.18s, Ruff0; source unchanged and check stderr empty. See marketing-ac1-release.json.",
+    "documentation_followup": "11 focused docs/release tests passed in2.56s after limits documentation; final state additions checked by release checker."
+  },
+  "source_sha256": {
+    "src/llm_ops_lab/marketing/pipeline.py": "20e86a57318b6996d29e9d026228111a643945e564386d98b444153f1b1524bc",
+    "src/llm_ops_lab/marketing/contracts.py": "1b01967d20622b9a0f51efd5f5007714be638431ca6ca9da04f7248635c8d612",
+    "src/llm_ops_lab/marketing/diagnostics.py": "c6d87b698418c19c007f92323f0dd6dfd6b7bec409d690472ce0b333b10e15db",
+    "src/llm_ops_lab/marketing/agent.py": "0903fee9e49d10d0dec3ae0d56d92be841e061e63796298e9dd6a1cd11cf4208",
+    "src/llm_ops_lab/marketing/offline_model.py": "3dfd178b3e214f811b53d06f315ea86556db04d115d28bb329bdaab6bdbeb423",
+    "src/llm_ops_lab/marketing/graph.py": "ad3627d19f691de0a2f84ddb8c919520a75f3c9ef2a2330f93b5b88c8cee3d15"
+  },
+  "watch_items": [
+    "Account capture still reads the combined metrics JSON subject to an8MiB artifact limit; not validated at maximum producer cardinality.",
+    "Harness exposes pinned-snapshot completeness/freshness but does not query latest failed publication history. Consult the separate report and quarantine evidence."
+  ],
+  "boundaries": [
+    "No Git publication, AWS provisioning, or localhost:8000 service intervention.",
+    "Synthetic acceptance proof remains separate from proposed real public-data onboarding.",
+    "Assistant verification does not certify learner execution or production operations."
+  ],
+  "automation": {
+    "job_id": "job_7ba6d31c0412",
+    "status": "cancelled",
+    "completed_ac": 6,
+    "total_ac": 7,
+    "formal_evaluation": "not_run",
+    "reason": "Latest user requests new subagents use gpt-6-luna/high to save cost; running engine has no model-switch API. Finish with one Luna high read-only verifier."
+  },
+  "final_verifier": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "high",
+    "scope": "read-only local release evidence review",
+    "verdict": "local_required_verification_passed_agent_experimental",
+    "mandatory_deliverable_gaps": [],
+    "checked_deliverables": 7,
+    "requirements_checked": 19,
+    "documents_checked": 11,
+    "code_tests_scripts_changed_since_ac1": false,
+    "formal_ouroboros_approval": false
+  },
+  "post_verification_deltas": {
+    "docs/status.md": {
+      "verified_snapshot_sha256": "aacb10968f4ea671bb3f300f0e1561412b273adc20dd3c3d8ada7bda6f940d5d",
+      "current_sha256": "c72a85b30a18dd4975ff14b88e6d0b57c751ba9b389ee13acb85877f825f0803"
+    },
+    "docs/marketing/model-experiment.md": {
+      "verified_snapshot_sha256": "57392ebd463c7f6cdc35a54514a3473c43e6c85f6289d40ca22d356440913dc1",
+      "current_sha256": "5157ef4188f0520aa5de7d7a1da5447f1577b3f72212b16e725ddfb1a39503ee"
+    },
+    "docs/marketing/results.md": {
+      "verified_snapshot_sha256": "d847f0ce14d3e745cae308d9c45b7d58a959b13ddcafc09dc8be94600f73eea2",
+      "current_sha256": "e0917fb09f43cbd3438b3072a59581e54481b3bce5acab55222a56331c894508"
+    },
+    "docs/marketing/diagnostic-interface.md": {
+      "verified_snapshot_sha256": "68e8c86e2855fc73b861dd90cab46f33013bcf712ca02a1bf77659874bf47a50",
+      "current_sha256": "88b7f7df92423349623ab3d0382a02efe3cda2248fe79165e5fac2c6c3a866b4"
+    },
+    "evidence/marketing-ac6-docs.json": {
+      "verified_snapshot_sha256": "8d3e2b51078d9714994ab93d1b286fc89e9f0eb7448e2b17e93c362ee3681d1e",
+      "current_sha256": "7eafe2983b9bd94ab186f0780917463ab02f829518314d1cf41991feae89c31d"
+    }
+  }
+}

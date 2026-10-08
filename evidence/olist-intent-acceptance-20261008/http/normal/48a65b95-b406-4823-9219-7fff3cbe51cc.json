@@ -1,0 +1,187 @@
+{
+  "diagnostic_mode": "model_planned_investigation",
+  "model_executed": true,
+  "model_execution_status": "returned",
+  "status": "completed",
+  "stop_reason": "completed",
+  "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "evidence": [
+    {
+      "evidence_id": "0ad1694f15c150ce1fe0a8459211f751fb1e9f50a999f0e91ca044faad271e97",
+      "tool": "version_evidence",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": {
+        "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+        "dataset_id": "olist-0930f849d753e28243b8cfc94af94a507658503fddfb803b56ff9fede7bdc972",
+        "contract_version": "olist.raw.v1",
+        "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+        "published_at": "2026-10-07T11:43:59.903303+00:00",
+        "quality_status": "passed",
+        "check_count": 113,
+        "failed_check_count": 0,
+        "warning_count": 2,
+        "active_published_version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369"
+      }
+    },
+    {
+      "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+      "tool": "channel_funnel",
+      "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+      "data": [
+        {
+          "origin": null,
+          "lead_count": 60,
+          "contract_count": 14,
+          "linked_contract_count": 4,
+          "unlinked_contract_count": 10
+        },
+        {
+          "origin": "direct_traffic",
+          "lead_count": 499,
+          "contract_count": 56,
+          "linked_contract_count": 31,
+          "unlinked_contract_count": 25
+        },
+        {
+          "origin": "display",
+          "lead_count": 118,
+          "contract_count": 6,
+          "linked_contract_count": 2,
+          "unlinked_contract_count": 4
+        },
+        {
+          "origin": "email",
+          "lead_count": 493,
+          "contract_count": 15,
+          "linked_contract_count": 6,
+          "unlinked_contract_count": 9
+        },
+        {
+          "origin": "organic_search",
+          "lead_count": 2296,
+          "contract_count": 271,
+          "linked_contract_count": 113,
+          "unlinked_contract_count": 158
+        },
+        {
+          "origin": "other",
+          "lead_count": 150,
+          "contract_count": 4,
+          "linked_contract_count": 2,
+          "unlinked_contract_count": 2
+        },
+        {
+          "origin": "other_publicities",
+          "lead_count": 65,
+          "contract_count": 3,
+          "linked_contract_count": 0,
+          "unlinked_contract_count": 3
+        },
+        {
+          "origin": "paid_search",
+          "lead_count": 1586,
+          "contract_count": 195,
+          "linked_contract_count": 101,
+          "unlinked_contract_count": 94
+        },
+        {
+          "origin": "referral",
+          "lead_count": 284,
+          "contract_count": 24,
+          "linked_contract_count": 9,
+          "unlinked_contract_count": 15
+        },
+        {
+          "origin": "social",
+          "lead_count": 1350,
+          "contract_count": 75,
+          "linked_contract_count": 31,
+          "unlinked_contract_count": 44
+        },
+        {
+          "origin": "unknown",
+          "lead_count": 1099,
+          "contract_count": 179,
+          "linked_contract_count": 81,
+          "unlinked_contract_count": 98
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "code": "missing_origin_leads",
+      "severity": "info",
+      "summary": "60 leads have no observed origin; they remain in the funnel denominator. Observed denominator: 60/8000 leads in this published sample.",
+      "evidence_ids": [
+        "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa"
+      ],
+      "observed_counts": {
+        "numerator": 60,
+        "denominator": 8000,
+        "unit": "leads",
+        "scope": "published_channel_aggregate"
+      }
+    }
+  ],
+  "limitations": [
+    "source_timezone_unresolved",
+    "source_currency_unresolved",
+    "sample_completeness_unknown"
+  ],
+  "trace": [
+    {
+      "stage": "plan",
+      "output_sha256": "8f1f6bfe810f20feade7622a8fcb4831228140887ea48edfb52133f755e4000e",
+      "generation_seconds": 3.32519229198806,
+      "prompt_token_ids_sha256": "511e4481eb430f3a0e15b29c745e3504c6592445e491e4ddcd0767b01b7e5daa",
+      "disposition": "supported",
+      "intents": [
+        "origin"
+      ]
+    },
+    {
+      "stage": "execute",
+      "selected_action": "tool",
+      "selected_tool": "channel_funnel"
+    },
+    {
+      "stage": "render",
+      "finding_codes": [
+        "missing_origin_leads"
+      ]
+    }
+  ],
+  "usage": {
+    "generation_attempts": 1,
+    "generations": 1,
+    "tool_calls": 1,
+    "prompt_tokens": 868,
+    "output_tokens": 7
+  },
+  "model": {
+    "id": "mlx-community/Qwen3-4B-4bit",
+    "revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25"
+  },
+  "model_id": "mlx-community/Qwen3-4B-4bit",
+  "model_revision": "4dcb3d101c2a062e5c1d4bb173588c54ea6c4d25",
+  "prompt": {
+    "version": "olist-intent.v5",
+    "sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6"
+  },
+  "prompt_sha256": "7291913ed7e07fbbbd1a6034974f3c4216d81440fe139e89320afa3ec0d1feb6",
+  "metric_policy": {
+    "version": "olist.metrics.v1",
+    "sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9"
+  },
+  "request_plan": {
+    "disposition": "supported",
+    "intents": [
+      "origin"
+    ]
+  },
+  "request_id": "48a65b95-b406-4823-9219-7fff3cbe51cc",
+  "run_id": "48a65b95-b406-4823-9219-7fff3cbe51cc",
+  "worker_pid": 65246,
+  "service_processing_seconds": 3.480472875002306
+}

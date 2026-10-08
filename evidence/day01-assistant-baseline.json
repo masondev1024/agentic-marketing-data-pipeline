@@ -1,0 +1,29 @@
+{
+  "schema_version": "inference-experiment.v1",
+  "run_id": "5b3d59ef-9bcc-4f5b-84c1-397903c453bc",
+  "created_at": "2026-10-06T00:51:46.153687+00:00",
+  "operator": "assistant",
+  "model_id": "mlx-community/Qwen3-0.6B-4bit",
+  "model_revision": "73e3e38d981303bc594367cd910ea6eb48349da8",
+  "mlx_lm_version": "0.32.0",
+  "mlx_version": "0.32.3",
+  "python_version": "3.12.13",
+  "platform": "macOS-26.3.1-arm64-arm-64bit",
+  "runner_sha256": "af8098fb35717f550bc5cbe553f7cdb01c2bdfff288c98b6c3057a4412e8dd8f",
+  "settings": {
+    "temperature": 0.0,
+    "max_tokens": 128,
+    "seed": 42,
+    "enable_thinking": false
+  },
+  "input": "데이터 파이프라인에서 멱등성이 필요한 이유를 두 문장으로 설명해 줘.",
+  "output": "1. **데이터 파이프라인에서 멱등성이 필요한 이유는 데이터의 흐름과 관련된 정보를 정확하게 수집하고 전달하는 데 필수적입니다.**  \n2. **특히, 시장의 변화와 기술 발전이 가속화되고 있어 데이터의 활용이 기술적 성장과 혁신을 촉진하는 데 기여합니다.**",
+  "prompt_tokens": 36,
+  "generation_tokens": 94,
+  "max_tokens_reached": false,
+  "load_seconds": 0.7445117500028573,
+  "generation_seconds": 0.641810708999401,
+  "first_generation_event_seconds": 0.23565920899272896,
+  "generation_tokens_per_second": 146.46062878344358,
+  "mlx_peak_memory_gb": 0.469598608
+}

@@ -1,0 +1,112 @@
+{
+  "version": "nemotron-korea-seeds.v1",
+  "purpose": "Reviewed minimal occupational persona seed records used only to inspire separately authored Olist investigation questions. Evaluation questions do not copy the source persona prose.",
+  "source": {
+    "dataset": "NVIDIA Nemotron-Personas-Korea",
+    "source_url": "https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea",
+    "metadata_api_url": "https://huggingface.co/api/datasets/nvidia/Nemotron-Personas-Korea?blobs=false",
+    "rows_api_url": "https://datasets-server.huggingface.co/rows?dataset=nvidia%2FNemotron-Personas-Korea&config=default&split=train&offset=0&length=12",
+    "observed_repository_revision": "ada0f5b53a38bb5a30cce09358adde883c1ab63a",
+    "revision_binding_note": "Repository revision was observed from the separate metadata API response. The datasets-server rows endpoint did not report a revision, so these rows are not claimed to be pinned to that repository commit.",
+    "retrieved_at_utc": "2026-10-08T00:41:12.610247+00:00",
+    "row_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26",
+    "row_response_file": "work/olist-intent-quality/nvidia/rows-train-offset0-length12.json",
+    "metadata_response_sha256": "ed5ec6a8a7218ee8fabac7fa79cf4e6467b6ff6e74804c70e5ad33e2360dac27",
+    "splits_response_sha256": "a3246063eb9a6012ed9f21c595be0b8a154bcc69af68f9d0770f4327a7125b99",
+    "license": "CC-BY-4.0",
+    "attribution": "NVIDIA Corporation, Nemotron-Personas-Korea, https://huggingface.co/datasets/nvidia/Nemotron-Personas-Korea, licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Adapted only as occupational/background inspiration for independently written evaluation questions.",
+    "retrieval_bounds": {
+      "requested_rows": 12,
+      "returned_rows": 12,
+      "total_downloaded_bytes": 103207,
+      "maximum_total_bytes": 2000000,
+      "http_timeout_seconds": 20
+    }
+  },
+  "records": [
+    {
+      "uuid": "03b4f36a18e6469386d0286dddd513c8",
+      "occupation": "하역 및 적재 관련 단순 종사원",
+      "professional_persona": "전기태 씨는 광주 서구의 하역 현장에서 수십 년간 짐을 쌓아 올리며, 지렛대 원리를 이용해 무거운 자재를 효율적으로 옮기는 베테랑의 면모를 보입니다. 동료들 사이에서 가장 빠르고 정확하게 무게 중심을 잡는다는 평을 듣지만, 가끔은 고집스럽게 본인의 옛 방식만을 고수하며 젊은 일꾼들과 투닥거리기도 합니다.",
+      "source_row_index": 0,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "73f75d42a3934626b0d9a4bff062715a",
+      "occupation": "회계 사무원",
+      "professional_persona": "최은지 씨는 서초동 부동산 사무실에서 장부를 잡으며 복잡한 취득세나 양도세 계산을 암산 수준으로 빠르게 처리하는 베테랑 회계 사무원입니다. 다만 서류를 가나다순으로 분류하거나 분기별 계획표를 짜는 지루한 행정 작업이 시작되면 금세 한숨을 쉬며 펜을 놓아버리는 성미를 가졌습니다.",
+      "source_row_index": 1,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "89eca80b88284888ad94c84f56777680",
+      "occupation": "무직",
+      "professional_persona": "안상식 씨는 퇴직 후에도 목동 주민센터의 복잡한 서류 뭉치를 보며 흐뭇해하며, 동네 이웃들이 쩔쩔매는 민원 서류 절차를 막힘없이 짚어주는 해결사 역할을 자처합니다.",
+      "source_row_index": 2,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "16070be2ab8c44988e5d4e7878761d15",
+      "occupation": "무직",
+      "professional_persona": "김다희 씨는 현재 직업은 없지만 대학 시절 언론학을 전공하며 기른 분석적인 시각으로 집안의 모든 행정 업무와 정보 수집을 전담하며, 훗날 마음의 여유가 생기면 주택관리사처럼 정적인 분위기의 자격증을 취득해 소소한 성취감을 얻고 싶어 합니다.",
+      "source_row_index": 3,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "739ccb6390374954a47a680d8f1da91d",
+      "occupation": "그 외 서비스 관련 단순 종사원",
+      "professional_persona": "설숙자 씨는 기장군 부동산 사무실에서 손님들의 표정과 말투를 살피며 딱 맞는 매물을 찾아주는 눈썰미 좋은 실무자입니다. 임대차 계약서의 작은 오타 하나 놓치지 않고 꼼꼼하게 정리하는 완벽주의적 성향이 있지만, 가끔은 너무 신중한 나머지 결정적인 순간에 결단을 내리지 못하고 망설이곤 합니다.",
+      "source_row_index": 4,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "250145caa9b74e4aaf073d559a61614e",
+      "occupation": "경리 사무원",
+      "professional_persona": "황혜란 씨는 가구 공장의 복잡한 원자재 단가표를 엑셀로 한 치의 오차 없이 정리하며, 깐깐한 거래처 사장님들의 무리한 요구를 능숙하게 조율해 내는 실무 전문가입니다. 퇴근 전 모든 전표 처리를 완벽히 끝내기 위해 자신만의 효율적인 루틴을 고수하며 회사에서 없어서는 안 될 살림꾼으로 통합니다.",
+      "source_row_index": 5,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "20df908dd5f74569b5d84158c9298a03",
+      "occupation": "강구조물 가공원",
+      "professional_persona": "김준수 씨는 영주 지역 건설 현장에서 철강재를 밀리미터 단위로 정확하게 절단하는 강구조물 가공원으로 일하며, 도면의 치수를 오차 없이 읽어내는 정밀함으로 동료들의 신뢰를 받는 숙련공입니다. 갑작스러운 설계 변경에도 당황하지 않고 공정 순서를 빠르게 재조정하는 유연함을 갖췄지만, 거창한 성공보다는 산업기사 자격증을 하나 더 따서 월급 앞자리를 바꾸겠다는 지극히 실질적인 목표에 집중하고 있습니다.",
+      "source_row_index": 6,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "960fd83c1e1f4e0ba0772915ff9e3946",
+      "occupation": "무직",
+      "professional_persona": "곽상길 씨는 중학교 졸업 후 곧장 생업 전선에 뛰어들어 시장 바닥에서 몸으로 익힌 눈썰미로 물건의 적정가를 빠르게 꿰뚫으며, 집안의 삐걱거리는 문고리나 나간 전등갓을 뚝딱 고쳐내는 실용적인 손재주를 가졌습니다.",
+      "source_row_index": 7,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "2c30571d3af64e19baac9135d37c31f6",
+      "occupation": "전화 상담원",
+      "professional_persona": "박호철 씨는 헤드셋을 쓰고 하루 수십 통의 고성과 민원을 묵묵히 받아내며, 복잡한 보험 약관을 옆집 아저씨가 설명하듯 쉽게 풀어내는 원주 보험센터의 베테랑 상담원입니다. 박호철 씨는 감정이 격양된 고객의 말을 끝까지 들어주는 인내심과 상담 이력을 단 한 줄도 빠짐없이 기록하는 꼼꼼함으로 동료들 사이에서 가장 믿음직한 선임으로 통합니다.",
+      "source_row_index": 8,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "9d3c430b17ee480aab5936c27724a7e1",
+      "occupation": "무직",
+      "professional_persona": "이태훈 씨는 정해진 매뉴얼이 확실한 쿠팡 물류센터의 운영 관리나 정밀 기계 조작직 같은 기술직 공고를 매일 살피며, 변수가 적은 환경에서 톱니바퀴처럼 정확하게 움직이는 삶을 꿈꿉니다. 복잡한 전자기기 설정을 단계별로 나누어 설명하는 능력을 살려, 누구나 쉽게 이해할 수 있는 작업 지침서를 만들 수 있는 역량을 갖추고 있습니다.",
+      "source_row_index": 9,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "f9ab06ba0c274bdd941a77ff39a9cc5b",
+      "occupation": "음료 서비스 종사원",
+      "professional_persona": "홍희자 씨는 의정부의 북적이는 매장에서 손님이 말하기도 전에 빈 물잔을 채워 넣는 눈썰미 좋은 베테랑입니다. 매장의 복잡한 동선 사이를 능숙하게 누비며 처음 보는 이들에게도 넉살 좋게 말을 걸지만, 가끔은 자기 주관이 너무 강해 동료와 티격태격하기도 합니다.",
+      "source_row_index": 10,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    },
+    {
+      "uuid": "fdfc8a5857b4444d9ff64eac5ecbef13",
+      "occupation": "그 외 일반 영업원",
+      "professional_persona": "고성호 씨는 부산 남구 대연동과 용호동 일대의 골목길을 손바닥 보듯 훤히 꿰고 있으며, 손님의 미묘한 표정 변화만으로도 적정 매매가를 툭 던지는 노련한 부동산 영업원입니다. 복잡하게 얽힌 등기부등본의 권리 관계를 빠르게 훑어 위험 요소를 단숨에 짚어내지만, 가끔은 너무 직설적인 말투 탓에 손님과 실랑이를 벌이는 고집스러운 면이 있습니다.",
+      "source_row_index": 11,
+      "source_response_sha256": "e6fd9761837b21b640dff4dafb89a81f297a215d6762f739c6e5e8c4fe93eb26"
+    }
+  ]
+}

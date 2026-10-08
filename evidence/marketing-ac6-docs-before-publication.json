@@ -1,0 +1,233 @@
+{
+  "schema_version": "marketing-ac6-docs.v1",
+  "acceptance_criterion": 6,
+  "operator": "assistant",
+  "learner_marketing_execution_verified": false,
+  "aws": "optional_design_only_not_provisioned",
+  "agent_designation": "experimental",
+  "project_verdict": "local_required_verification_passed_agent_experimental",
+  "authority": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "63036953077de5f1bc6561fcd235dca12237a4308c462ec4d8543bd0f3df6731"
+    },
+    {
+      "path": "work/marketing-aws-implementation-brief.md",
+      "sha256": "d5f0de0d14757f558c60db3f1bdd77fb6a025da34aa7e0b9b2bca3fa7afe3c12"
+    }
+  ],
+  "deliverables": [
+    {
+      "number": 1,
+      "brief_section": "Domain/data contracts",
+      "source": "work/marketing-aws-implementation-brief.md, Architecture and milestone order 1",
+      "text": "두 계정 합성 계약·독립 산술·동결 기대값. 실제 광고 귀속이나 원천 수집 검증으로 과장하지 않는다.",
+      "references": [
+        "docs/marketing/data-product.md",
+        "data/marketing/v1/contract.json",
+        "data/marketing/v1/acceptance-freeze.json"
+      ]
+    },
+    {
+      "number": 2,
+      "brief_section": "Python + SQL + DuckDB/Parquet pipeline",
+      "source": "work/marketing-aws-implementation-brief.md, Architecture and milestone order 2",
+      "text": "중복 10000원·fanout·정정·환불·실패 이전본 보존과 compact report의 증거를 연결한다.",
+      "references": [
+        "docs/marketing/acceptance-report.md",
+        "evidence/marketing-ac2-data-product.json",
+        "evidence/marketing-ac2-verification.json"
+      ]
+    },
+    {
+      "number": 3,
+      "brief_section": "Harness",
+      "source": "work/marketing-aws-implementation-brief.md, Architecture and milestone order 3",
+      "text": "불변 scope·읽기 전용 allowlist·증거·한도의 구현 검증과 로컬 경계를 설명한다.",
+      "references": [
+        "docs/marketing/diagnostic-interface.md",
+        "evidence/marketing-ac3-verification.json"
+      ]
+    },
+    {
+      "number": 4,
+      "brief_section": "Deterministic baseline + model-selected loop",
+      "source": "work/marketing-aws-implementation-brief.md, Architecture and milestone order 4",
+      "text": "수정 후 실제 offline Qwen 선택과 동일 snapshot 비교를 검토. 품질 0/3·오류 3·unknown 3, evidence_reference 1건·evidence_incomplete 2건. 에이전트 실험용.",
+      "references": [
+        "docs/marketing/model-experiment.md",
+        "evidence/marketing-ac4-experiment.json",
+        "evidence/marketing-ac4-verification.json"
+      ]
+    },
+    {
+      "number": 5,
+      "brief_section": "Persisted conditional graph",
+      "source": "work/marketing-aws-implementation-brief.md, Architecture and milestone order 5",
+      "text": "file-backed SQLite의 결정론적 그래프 복구 18사례. 완료된 역사적 검토 replay와 새 승인 freshness를 구분하며 외부 exactly-once를 주장하지 않는다.",
+      "references": [
+        "docs/marketing/graph-recovery.md",
+        "evidence/marketing-ac5-recovery.json"
+      ]
+    },
+    {
+      "number": 6,
+      "brief_section": "Evaluation and operations evidence",
+      "source": "work/marketing-aws-implementation-brief.md, Architecture and milestone order 6",
+      "text": "수용셋·실험 부분집합·필수 안전 검증과 모델 승격을 분리. 현재 테스트는 외부 복사본에서 실행한다.",
+      "references": [
+        "docs/marketing/results.md",
+        "docs/marketing/operations.md",
+        "tests/test_marketing_docs.py",
+        "scripts/check_marketing_docs.py",
+        "scripts/verify_marketing_ac6.py"
+      ]
+    },
+    {
+      "number": 7,
+      "brief_section": "Korean docs + optional AWS design",
+      "source": "work/marketing-aws-implementation-brief.md, Architecture and milestone order 7",
+      "text": "한국어 ADR·운영·직무·정직한 포트폴리오와 AWS 선택 설계. 조력자와 학습자 증거를 구분한다.",
+      "references": [
+        "docs/marketing/README.md",
+        "docs/marketing/architecture.md",
+        "docs/marketing/aws-migration.md",
+        "docs/marketing/portfolio.md",
+        "README.md",
+        "docs/status.md"
+      ]
+    }
+  ],
+  "model_summary": {
+    "real_cases": 3,
+    "correct": 0,
+    "complete_evidence": 0,
+    "errors": 3,
+    "abstentions": 0,
+    "failed_closed_unknown": 3
+  },
+  "validation": {
+    "status": "passed",
+    "initial_failures": {
+      "pytest": "6 failed, 405 passed; source workspace changed during observer validation",
+      "ruff": "E501 in tests/test_marketing_review_regressions.py:26",
+      "documentation_response": "Record historical/current model hashes and withhold project verdict; do not relabel historical inference as current validation.",
+      "pytest_q": "412 passed but observer failed due to concurrent source changes; not a successful validation command."
+    },
+    "observer_scope": "Complete external-copy test suite; fingerprint every AC6 reviewed file, documented model sources, AGENTS and dependency lock. Concurrent sibling edits outside this set are excluded, not certified unchanged.",
+    "prior_inference_drift_resolution": "Updated AC4 actual-inference receipt and AC5 recovery receipt arrived from review-repair work. Reviewed current hashes and fresh generations; AC6 did not run inference itself.",
+    "pytest_passed": 414,
+    "pytest_q_passed": 414,
+    "documentation_tests_passed": 6,
+    "ruff_exit_code": 0,
+    "pytest_warnings": 0,
+    "commands_run": [
+      "python3 scripts/verify_marketing_ac6.py -- uv run --locked python scripts/check_marketing_docs.py",
+      "python3 scripts/verify_marketing_ac6.py -- uv run --locked pytest",
+      "python3 scripts/verify_marketing_ac6.py -- uv run --locked pytest -q",
+      "python3 scripts/verify_marketing_ac6.py -- uv run --locked ruff check ."
+    ],
+    "exit_codes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "real_inference_run_by_ac6": false,
+    "post_review_documentation": "Main added bounded consumer/watch limits, exact ratio comparison and model frame/deadline explanation after code verification; documentation checker is rerun separately."
+  },
+  "auditable_defaults": [
+    {
+      "source": "approved Seed safe-default synthesis",
+      "text": "Existing local runtime and synthetic data only; no new provider, credentials, cloud deployment, paid provisioning or external side effects."
+    },
+    {
+      "source": "prior assistant preregistration and implementation",
+      "text": "Numeric execution limits and promotion thresholds are engineering defaults recorded in diagnostic-interface.md and preregistered-v1.json, not inferred user answers."
+    }
+  ],
+  "reviewed_sha256": {
+    "README.md": "10c8a136a41078523fcb867a410faa3978417c4d478b44ac1def8d743eee6dc8",
+    "data/marketing/experiments/preregistered-v1.json": "dde97e9739656743163c4f33869794edcca7b598c18b23ade79a0d240476ec5c",
+    "data/marketing/v1/acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81",
+    "data/marketing/v1/acceptance-freeze.json": "38ca9dc922588ada7fbb101e2f730ba9ec2225f97895b1fe530aa72c15c2c6f0",
+    "data/marketing/v1/acceptance.json": "abb92bfa733e623f79d5185846f95adf9343cf29e58c05314612b2d821001c57",
+    "data/marketing/v1/contract.json": "c842df960f5b0d3f3b06e218dd9920447c545814c07a2160ddf109e4dd563955",
+    "docs/marketing/README.md": "10a0bde7cb44ba6e5478e58005da2ba8c58adb930e2338be8a105182fe6e7b10",
+    "docs/marketing/acceptance-report.md": "e06b5f4c65691a9c7a990b388a08a4dec0967083c4c2ee3e974f2f226efe7d47",
+    "docs/marketing/architecture.md": "14fc6fffdb4fdd78ee98dfcec63f762d4a2a840ef12a9f9c19837c78f1c4a8fc",
+    "docs/marketing/aws-migration.md": "93c561b34031674980de0e51113b05edda70c2b95fd2ad30605f6540a8ca96c8",
+    "docs/marketing/data-product.md": "3036a3ca93b5818438bd8d768190b1194062211ecb89dce22b35abefe0db51e9",
+    "docs/marketing/diagnostic-interface.md": "88b7f7df92423349623ab3d0382a02efe3cda2248fe79165e5fac2c6c3a866b4",
+    "docs/marketing/graph-recovery.md": "77b4414ec6b0d59878e1991e601425afcb427408ab8eccb8780f4faefce355e2",
+    "docs/marketing/model-experiment.md": "5157ef4188f0520aa5de7d7a1da5447f1577b3f72212b16e725ddfb1a39503ee",
+    "docs/marketing/operations.md": "a65f356e9194e0dc14544de10229a42a22760984a37d3b294a82e26780a22f9c",
+    "docs/marketing/portfolio.md": "e019bc5aaee6af1677eaa7a4f365fa4c2df5a5bb7db1947db18366eb649cfe21",
+    "docs/marketing/results.md": "e0917fb09f43cbd3438b3072a59581e54481b3bce5acab55222a56331c894508",
+    "docs/status.md": "c72a85b30a18dd4975ff14b88e6d0b57c751ba9b389ee13acb85877f825f0803",
+    "evidence/marketing-ac2-data-product.json": "2ebe930483d2dfa6a1a1fcaf9f23f1628bad0e20ff03e933cfb6c4547f6bcdf5",
+    "evidence/marketing-ac2-verification.json": "95b1f12e1d215d8435610414c76355247ad6df2881afdfadc194afdb561e5457",
+    "evidence/marketing-ac3-verification.json": "6ee3d60712ff09f9071fe15ee71b9efd45a5c2a5de5f287aa1ddd7844f0e0e59",
+    "evidence/marketing-ac4-experiment.json": "cda532af2cd0c1d4487a3eed4e1ca26e212c7641d65c6e1bf6e993e214889db4",
+    "evidence/marketing-ac4-verification.json": "7f59709ab305d28803de1f30d856f3a2be01b3107d8ae7e9c088521463d25f4d",
+    "evidence/marketing-ac5-recovery.json": "2255fab6713bf7ec9bf19c1741d39e12b400cb83cf2b53e36dcd75f39482b780",
+    "scripts/check_marketing_docs.py": "db528e9f57e92f7c07182af535e4b9771c24baa937cbfa95f36ee28a107c3b89",
+    "tests/test_marketing_docs.py": "10828861706f84838e8c82cb15e4581c98ba491214979418a40e09fe6ced2179",
+    "scripts/verify_marketing_ac6.py": "ad99cee3e6498f2b6edeb0b9ab8572f8dc07d75f66e00bf275c6ca6235e68df0"
+  },
+  "model_source_comparison": {
+    "src/llm_ops_lab/marketing/agent.py": {
+      "experiment_sha256": "0903fee9e49d10d0dec3ae0d56d92be841e061e63796298e9dd6a1cd11cf4208",
+      "current_sha256": "0903fee9e49d10d0dec3ae0d56d92be841e061e63796298e9dd6a1cd11cf4208"
+    },
+    "src/llm_ops_lab/marketing/offline_model.py": {
+      "experiment_sha256": "3dfd178b3e214f811b53d06f315ea86556db04d115d28bb329bdaab6bdbeb423",
+      "current_sha256": "3dfd178b3e214f811b53d06f315ea86556db04d115d28bb329bdaab6bdbeb423"
+    },
+    "src/llm_ops_lab/marketing/model_worker.py": {
+      "experiment_sha256": "b98cc4849d163af13b97ac0cc85728d2bf430c94027973e66a8d152677a8ec50",
+      "current_sha256": "b98cc4849d163af13b97ac0cc85728d2bf430c94027973e66a8d152677a8ec50"
+    }
+  },
+  "model_errors": {
+    "observed_decline": "evidence_reference",
+    "incomplete": "evidence_incomplete",
+    "zero_spend": "evidence_incomplete"
+  },
+  "graph_recovery_cases": 18,
+  "reviewed_at_utc": "2026-10-07T10:19:42.405908+00:00",
+  "verdict_basis": "Accepted AC2-5 evidence, updated actual offline inference and recovery receipts, plus current isolated-copy CLI/API/full regression and AC6 document validation. External Seed adjudication remains separate.",
+  "requirement_evidence": [
+    {
+      "source": "work/marketing-aws-implementation-brief.md section 7; Seed AC6",
+      "text": "일곱 산출물의 구현·검증 경로와 결과·한계를 한국어 표에 연결했다. README와 status에서 로컬 필수 검증 통과와 모델 실험용 유지, 외부 Seed 판정을 구분한다.",
+      "references": [
+        "docs/marketing/README.md",
+        "docs/marketing/results.md"
+      ]
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md compatibility and operational constraints",
+      "text": "마케팅 단계는 조력자 수행이다. 학습자의 기존 API 실습은 브리프의 과거 증거로만 설명하고 마케팅 단계 역량으로 확대하지 않는다. 학습자 직접 재실행을 새 합격 조건으로 추가하지 않았다.",
+      "references": [
+        "docs/marketing/portfolio.md"
+      ]
+    },
+    {
+      "source": "work/marketing-aws-implementation-brief.md section 7 and latest user steering",
+      "text": "AWS는 선택적 설계만 작성했다. S3 게시·IAM 경계·보존·복구·비용과 MLX/SQLite 이식 변경을 명시했다. 실제 권한 적용·과금·배포·Databricks 구현은 없다.",
+      "references": [
+        "docs/marketing/aws-migration.md"
+      ]
+    },
+    {
+      "source": "Seed AC6 observable command/artifact contract",
+      "text": "검토 해시·일곱 산출물·모델 오류/점수·링크를 read-only 명령으로 확인한다. README 명령 그대로 build/report/new-process reject를 외부 임시 복사본에서 실행했고 전체 CLI/API 회귀를 포함한 두 pytest 형식이 각 414개 통과했다.",
+      "references": [
+        "scripts/check_marketing_docs.py",
+        "scripts/verify_marketing_ac6.py",
+        "tests/test_marketing_docs.py"
+      ]
+    }
+  ]
+}
