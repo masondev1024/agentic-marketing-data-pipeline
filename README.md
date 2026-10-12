@@ -93,24 +93,6 @@ Olist에 없는 광고비·환불 데이터를 실제 값처럼 채우지 않고
 
 [합성 데이터 계약·계산 방식](docs/marketing/data-product.md) · [성공·실패 및 모델 실험 결과](docs/marketing/results.md)
 
-## 검증 결과와 현재 상태
-
-**2026-10-12 기준: 구현·단기 AWS 검증을 마쳤고, 검증용 AWS 리소스·백업·임시 API DNS는 삭제했습니다. 상시 운영 API는 없습니다.**
-
-| 검증 | 확인한 결과 | 근거 |
-|---|---|---|
-| 코드·실제 PostgreSQL 통합 | 로컬과 GitHub CI에서 731개 테스트, 건너뜀 0; Ruff 통과 | [릴리스 기록](docs/olist-durable-release-20261012.md), [CI](https://github.com/masondev1024/agentic-marketing-data-pipeline/actions/workflows/ci.yml) |
-| 제한된 요청 분류 품질 | 기존 회귀 24/24, 새 경계 문항 16/16, 주요 거절 반복 24/24 | [실패 후보·수정·평가 범위](docs/olist-boundary-fix.md) |
-| 실제 Super HTTP | 미연결 계약 462/842, 유입 경로 누락 60/8,000을 독립 조회와 대조 | [HTTPS 영수증](evidence/olist-durable-aws-20261012/aws-http.json) |
-| 재시작·장애 주입 | 동일 요청의 결과·예산 유지. 워커 강제 종료 후 불확실한 원격 호출 재전송 차단 | [재시작](evidence/olist-durable-aws-20261012/aws-restart.json), [장애 주입](evidence/olist-durable-aws-20261012/worker-fault.json) |
-| 백업·복원 | S3 백업으로 복원한 14개 테이블·뷰의 행 수·내용 지문 일치. 조사 기록·예산 보존 후 복원본 API의 재생·신규 조사 2건 검증 | [복구 보고서](docs/olist-durable-release-20261012.md) |
-| 비용·종료 | 승인 예산 USD 5의 단기 검증 후 생성 리소스·백업 삭제, 21개 확인 항목 통과 | [삭제 확인](evidence/olist-durable-aws-20261012/cleanup.json) |
-
-분류 평가 점수는 제한된 문항의 결과이며 일반 답변 정확도를 뜻하지 않습니다.
-복원은 **같은 RDS의 별도 DB와 같은 EC2의 새 SQLite 경로**에서 검증했습니다.
-다중 인스턴스, 새 호스트 재난 복구, 자동 장애 조치, RPO/RTO·HA·SLA는 이번 검증 범위에 포함하지 않습니다.
-단기 사용 요금은 리소스 삭제 이후 반영될 수 있습니다. [날짜별 구현 상태](docs/olist-status.md)에서 과거 결과와 현재 범위를 구분합니다.
-
 ## 실행과 재현
 
 Python 3.12와 `uv`가 필요합니다. 내부 Python 패키지·CLI 이름은 기존 호환성을 위해 `llm-ops-lab`을 유지합니다.
@@ -138,8 +120,7 @@ bootstrap은 실제 Python 환경을 `work/python-env`에 두고 `.venv`를 연�
 
 기본 API는 loopback 전용이며 로컬 추론은 Apple Silicon의 MLX를 사용합니다.
 Super HTTP 경로는 `--olist-engine intent-v1 --olist-provider nvidia-super`로 명시적으로 선택합니다.
-공개 모드는 HTTPS 프록시·인증·영속 원장을 함께 설정해야 합니다. 과거 단계 문서의 실행 예시와
-현재 배포 상태가 다를 수 있으므로 최신 운영 범위는 위의 2026-10-12 릴리스 기록을 기준으로 봅니다.
+공개 모드는 HTTPS 프록시·인증·영속 원장을 함께 설정해야 합니다.
 
 원본 CSV·DB·모델 가중치·API 키는 저장소에 포함하지 않습니다. 외부 데이터는 출처에서 별도로
 확보하고 계약 검사를 거쳐야 합니다. 프로젝트 자체 코드에 별도 오픈소스 라이선스를
