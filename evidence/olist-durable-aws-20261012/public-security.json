@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "cases": [
+    {
+      "name": "no_auth",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "name": "bad_auth",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "name": "browser_origin",
+      "status": 403,
+      "expected": 403,
+      "passed": true
+    },
+    {
+      "name": "private_metrics",
+      "status": 401,
+      "expected": 401,
+      "passed": true
+    },
+    {
+      "name": "no_docs",
+      "status": 404,
+      "expected": 404,
+      "passed": true
+    },
+    {
+      "name": "missing_idempotency",
+      "status": 400,
+      "expected": 400,
+      "passed": true
+    },
+    {
+      "name": "oversized",
+      "status": 413,
+      "expected": 413,
+      "passed": true
+    },
+    {
+      "name": "invalid_json",
+      "status": 422,
+      "expected": 422,
+      "passed": true
+    }
+  ],
+  "burst_statuses": [
+    422,
+    422,
+    422,
+    429,
+    422,
+    429,
+    429
+  ],
+  "budget_unchanged": true,
+  "budget": {
+    "limit": 32,
+    "reserved": 2,
+    "remaining": 30,
+    "scope": "durable_ledger"
+  }
+}

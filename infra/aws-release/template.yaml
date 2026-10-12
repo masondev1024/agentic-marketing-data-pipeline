@@ -714,4 +714,3 @@ Outputs:
   DatabaseMasterSecretArn:
     Description: Operator-only bootstrap/recovery secret; the EC2 role cannot read it.
     Value: !GetAtt OlistDatabase.MasterUserSecret.SecretArn
-

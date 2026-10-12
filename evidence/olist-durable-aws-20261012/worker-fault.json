@@ -1,0 +1,31 @@
+{
+  "first_http": 503,
+  "first_error": {
+    "code": "worker_crashed"
+  },
+  "replay_http": 503,
+  "replay_error": {
+    "code": "attempted_unknown"
+  },
+  "budget_before": {
+    "limit": 32,
+    "reserved": 3,
+    "remaining": 29,
+    "scope": "durable_ledger"
+  },
+  "budget_after": {
+    "limit": 32,
+    "reserved": 4,
+    "remaining": 28,
+    "scope": "durable_ledger"
+  },
+  "budget_middle": {
+    "limit": 32,
+    "reserved": 4,
+    "remaining": 28,
+    "scope": "durable_ledger"
+  },
+  "worker_replaced": true,
+  "ready_after": 200,
+  "status": "passed"
+}

@@ -1,0 +1,143 @@
+{
+  "schema_version": "olist-release-cleanup.v1",
+  "checked_at_utc": "2026-10-12T02:07:26.344724+00:00",
+  "region": "eu-west-1",
+  "scope": "resources created for the 2026-10-12 Olist release; not an account-wide billing guarantee",
+  "status": "passed",
+  "checks": [
+    {
+      "resource": "cloudformation_stack",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "ValidationError"
+    },
+    {
+      "resource": "ec2_instance",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "ebs_volumes_region",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "elastic_ip",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "rds_instance",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "DBInstanceNotFound"
+    },
+    {
+      "resource": "rds_snapshots",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "rds_automated_backups",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "DBInstanceAutomatedBackupNotFound"
+    },
+    {
+      "resource": "s3_bucket",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "404"
+    },
+    {
+      "resource": "ecr_repository",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "RepositoryNotFoundException"
+    },
+    {
+      "resource": "ApplicationLogGroup",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "PostgresLogGroup",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "runtime_and_bootstrap_parameters",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "rds_managed_secret",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "ResourceNotFoundException"
+    },
+    {
+      "resource": "iam_role",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "NoSuchEntity"
+    },
+    {
+      "resource": "iam_instance_profile",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "NoSuchEntity"
+    },
+    {
+      "resource": "vpc",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "InvalidVpcID.NotFound"
+    },
+    {
+      "resource": "rds_subnet_group",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": "DBSubnetGroupNotFoundFault"
+    },
+    {
+      "resource": "subnets",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "security-groups",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "internet-gateways",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    },
+    {
+      "resource": "route-tables",
+      "passed": true,
+      "observation": "verified_absent_or_terminated",
+      "aws_error_code": null
+    }
+  ],
+  "s3_all_versions_and_delete_markers_purged": true,
+  "temporary_dns": {
+    "host": "marketing-api.jungseongheon.org",
+    "status": "deleted_in_cloudflare_ui",
+    "existing_portfolio_and_ieojim_preserved": true
+  },
+  "billing": "Metered test charges may post later; resource absence is not a zero-invoice claim.",
+  "observed_cleanup_delay": "An automated RDS snapshot remained visible after stack deletion; final scoped queries verified its absence."
+}

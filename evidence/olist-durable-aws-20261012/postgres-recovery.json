@@ -1,0 +1,93 @@
+{
+  "comparison": "row_count_and_sorted_row_md5_digest",
+  "dump_sha256": "6069af9a8c7d642571b51fe1e05b248dad6fe792c422e00eb3e67aa415a12ddc",
+  "relation_count": 14,
+  "relations": [
+    {
+      "row_count": 1684,
+      "row_digest_md5": "49743201f9facbfb090dc56c3e64915d",
+      "schema": "olist_core",
+      "table": "deals"
+    },
+    {
+      "row_count": 225300,
+      "row_digest_md5": "2abdce082735ddd516c4840190b88329",
+      "schema": "olist_core",
+      "table": "items"
+    },
+    {
+      "row_count": 16000,
+      "row_digest_md5": "8067bea5f3f893f6f0bfe029020822b0",
+      "schema": "olist_core",
+      "table": "leads"
+    },
+    {
+      "row_count": 198882,
+      "row_digest_md5": "493cc9e12a8da97c27582bf08d6feddc",
+      "schema": "olist_core",
+      "table": "orders"
+    },
+    {
+      "row_count": 6190,
+      "row_digest_md5": "95374f7ac54a87a6ec466504b68609f3",
+      "schema": "olist_core",
+      "table": "sellers"
+    },
+    {
+      "row_count": 22,
+      "row_digest_md5": "335de8daec179a5e87628a4c30d144c0",
+      "schema": "olist_mart",
+      "table": "channel_funnel"
+    },
+    {
+      "row_count": 1,
+      "row_digest_md5": "a57b707a5d0c0d4fe4ede5debe234bea",
+      "schema": "olist_mart",
+      "table": "current_version"
+    },
+    {
+      "row_count": 5,
+      "row_digest_md5": "b71d8a433c9a538b9aba7cd1cf69b68e",
+      "schema": "olist_mart",
+      "table": "run_history"
+    },
+    {
+      "row_count": 1684,
+      "row_digest_md5": "4dc8ab26931efac822aba3e5f0db1e67",
+      "schema": "olist_mart",
+      "table": "seller_funnel"
+    },
+    {
+      "row_count": 2,
+      "row_digest_md5": "fe7a43b57c466ebd7693460374cedf18",
+      "schema": "olist_mart",
+      "table": "version_evidence"
+    },
+    {
+      "row_count": 1,
+      "row_digest_md5": "a7152fafe229d954a39c7b3d8d2e76b3",
+      "schema": "olist_ops",
+      "table": "migrations"
+    },
+    {
+      "row_count": 1,
+      "row_digest_md5": "a4196fbe22445680f0c9c2bdb7a0b214",
+      "schema": "olist_ops",
+      "table": "publication"
+    },
+    {
+      "row_count": 5,
+      "row_digest_md5": "9ca8b0f55a449570ef1700d2b7e78295",
+      "schema": "olist_ops",
+      "table": "runs"
+    },
+    {
+      "row_count": 2,
+      "row_digest_md5": "51ce5461ebd976517b02604565073cea",
+      "schema": "olist_ops",
+      "table": "versions"
+    }
+  ],
+  "schema": "llm-ops-lab-postgres-recovery.v1",
+  "status": "passed"
+}

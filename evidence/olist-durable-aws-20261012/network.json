@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "region": "eu-west-1",
+  "rds_public": false,
+  "rds_storage_encrypted": true,
+  "rds_tls_and_reader_verified": true,
+  "ssh_ingress": false,
+  "database_ingress": "app_security_group_only",
+  "imds_v2_required": true,
+  "single_az": true,
+  "api_image_revision": "57ec671"
+}

@@ -91,9 +91,15 @@ registry="$account.dkr.ecr.$region.amazonaws.com"
 revision_lower="$(printf '%s' "$revision" | tr '[:upper:]' '[:lower:]')"
 tag="release-$revision_lower"
 
+buildx_plugin="$(docker info --format '{{range .ClientInfo.Plugins}}{{if eq .Name "buildx"}}{{.Path}}{{end}}{{end}}')"
+[[ -x "$buildx_plugin" ]] || { echo 'docker_buildx_plugin_unavailable' >&2; exit 3; }
+docker_endpoint="${DOCKER_HOST:-$(docker context inspect --format '{{.Endpoints.docker.Host}}')}"
 docker_config="$(mktemp -d "${TMPDIR:-/tmp}/llm-ops-ecr-config.XXXXXX")"
 chmod 0700 "$docker_config"
 export DOCKER_CONFIG="$docker_config"
+export DOCKER_HOST="$docker_endpoint"
+mkdir -m 0700 "$docker_config/cli-plugins"
+ln -s "$buildx_plugin" "$docker_config/cli-plugins/docker-buildx"
 aws ecr get-login-password --profile "$profile" --region "$region" |
   docker login --username AWS --password-stdin "$registry" >/dev/null
 docker buildx build --platform linux/arm64 --provenance=false \

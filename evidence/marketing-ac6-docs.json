@@ -147,7 +147,7 @@
     }
   ],
   "reviewed_sha256": {
-    "README.md": "f246048d819a52c3e06319edf4293830925596ee340ae62898a382e026cedd40",
+    "README.md": "4ae9125b86736e65f4ef20ee0ac2e69f0eb0373a13b51a51794a098a393eda3a",
     "data/marketing/experiments/preregistered-v1.json": "dde97e9739656743163c4f33869794edcca7b598c18b23ade79a0d240476ec5c",
     "data/marketing/v1/acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81",
     "data/marketing/v1/acceptance-freeze.json": "38ca9dc922588ada7fbb101e2f730ba9ec2225f97895b1fe530aa72c15c2c6f0",
@@ -264,5 +264,13 @@
     ],
     "reason": "Explicit hosted HTTP intent backend added. README now distinguishes loopback hosted service from local default and AWS deployment. Existing synthetic marketing scores, model source comparison and acceptance criteria remain unchanged.",
     "evidence": "docs/olist-nvidia-http.md"
+  },
+  "scope_note": "Historical synthetic marketing acceptance. AWS design-only status applies to that path; the separate Olist durable AWS exercise is documented in docs/aws-release.md.",
+  "durable_release_readme_review": {
+    "date": "2026-10-12",
+    "operator": "assistant",
+    "prior_receipt": "evidence/marketing-ac6-docs-before-durable-release.json",
+    "reason": "README adds separate real Olist durable HTTP and AWS recovery evidence. Historical synthetic marketing model scores and scope remain unchanged.",
+    "readme_sha256": "4ae9125b86736e65f4ef20ee0ac2e69f0eb0373a13b51a51794a098a393eda3a"
   }
 }

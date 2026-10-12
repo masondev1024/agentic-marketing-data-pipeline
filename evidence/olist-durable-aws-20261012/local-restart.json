@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "kind": "durable_http_replay_after_restart",
+  "started_at": "2026-10-12T01:38:27.413016+00:00",
+  "baseline_report_sha256": "413351c81c059b8bc2ac60a0ad2c631bee43fc0795e17752ceec780f7a37f754",
+  "baseline_durable_budget_reserved": 2,
+  "durable_budget_before": {
+    "limit": 8,
+    "reserved": 2,
+    "remaining": 6,
+    "scope": "durable_ledger"
+  },
+  "durable_budget_after": {
+    "limit": 8,
+    "reserved": 2,
+    "remaining": 6,
+    "scope": "durable_ledger"
+  },
+  "cases": [
+    {
+      "intent": "coverage",
+      "investigation_id": "316b3b4a-b77b-487f-8b2d-f5d6415c8d2b",
+      "replay_verified": true,
+      "reserved": 2
+    },
+    {
+      "intent": "origin",
+      "investigation_id": "aedb3c42-749b-49ae-bdf1-1998838fcfe6",
+      "replay_verified": true,
+      "reserved": 2
+    }
+  ],
+  "status": "passed"
+}

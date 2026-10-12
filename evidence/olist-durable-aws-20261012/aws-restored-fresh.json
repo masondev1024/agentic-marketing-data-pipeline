@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "kind": "durable_http_smoke",
+  "started_at": "2026-10-12T01:51:57.750984+00:00",
+  "version_id": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "expectation_source": "independent_read_only_olist_snapshot",
+  "expected_counts": {
+    "coverage": [
+      462,
+      842
+    ],
+    "origin": [
+      60,
+      8000
+    ]
+  },
+  "anonymous_live_health": {
+    "status": 200,
+    "minimal": true
+  },
+  "unauthenticated_metrics": {
+    "status": 401,
+    "code": "authentication_required"
+  },
+  "authorized_ready": {
+    "status": 200,
+    "ready": true
+  },
+  "durable_budget_before": {
+    "limit": 32,
+    "reserved": 4,
+    "remaining": 28,
+    "scope": "durable_ledger"
+  },
+  "cases": [
+    {
+      "intent": "coverage",
+      "question_sha256": "f799aae084c1924f91d2a6509c9c838e870a6af5d02a48912b2d4b6db9208ea4",
+      "investigation_id": "980168e3-df5a-4be2-a824-53cb636b6bc1",
+      "semantic_sha256": "d8ca9e15eb9fa39b745bbe087b03275f1b8e5d3c764366f40f7a1f3a6f0892a4",
+      "counts": {
+        "numerator": 462,
+        "denominator": 842
+      },
+      "initial_budget_reserved": 5,
+      "replay_budget_reserved": 5,
+      "conflict_http_status": 409,
+      "replay_verified": true,
+      "conflict_did_not_reserve": true,
+      "idempotency_key_sha256": "004561e2fd2ba002354cb1ae8ab95c9a640421d2af01954bf029e4ca3d3a6b39"
+    },
+    {
+      "intent": "origin",
+      "question_sha256": "8687313cdeb1d703ee5d9ec2dc7c1756eb049a9086903194eec0cb278fcadafa",
+      "investigation_id": "43d8c229-859d-4633-96b5-86d191faa0d4",
+      "semantic_sha256": "9c03500aecf976a54571a0fc44b16b1192ef53e3fb358852d38a2dcbabbd3c84",
+      "counts": {
+        "numerator": 60,
+        "denominator": 8000
+      },
+      "initial_budget_reserved": 6,
+      "replay_budget_reserved": 6,
+      "conflict_http_status": 409,
+      "replay_verified": true,
+      "conflict_did_not_reserve": true,
+      "idempotency_key_sha256": "314a113fcb998861cf3895fc52bd142bb945a0ec306be313165b473b5d055e06"
+    }
+  ],
+  "durable_budget_after": {
+    "limit": 32,
+    "reserved": 6,
+    "remaining": 26,
+    "scope": "durable_ledger"
+  },
+  "status": "passed"
+}

@@ -1,0 +1,17 @@
+{
+  "status": "Success",
+  "checks": [
+    {
+      "status": "passed",
+      "role": "olist_reader",
+      "database": "olist_restore",
+      "transaction_read_only": true,
+      "tls": true,
+      "core_schema_access": false,
+      "mart_create_access": false,
+      "write_denied": true,
+      "access_log_secret_and_question_scan": "passed",
+      "access_event_count": 85
+    }
+  ]
+}

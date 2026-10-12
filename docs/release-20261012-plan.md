@@ -1,6 +1,6 @@
 # Olist durable service release — 2026-10-12
 
-Status: implementation in progress; no deployment or completion claim.
+Status: implementation, local/PostgreSQL checks, actual AWS recovery and scoped cleanup passed. Publication proof is the GitHub CI result for the published revision and the live portfolio, evaluated separately from local evidence.
 
 The user's goal is durable Olist resume, public-service controls, AWS deployment
 and recovery verification, GitHub publication, and an evidence-bounded portfolio update.
@@ -25,7 +25,7 @@ addendum supplies the concrete engineering checks; the original Seed is preserve
 - Public ingress is HTTPS through a trusted reverse proxy. Authentication, explicit
   Host/Origin rules, bounded body/concurrency/rate, private metrics and redacted errors
   precede model dispatch. Durable call budget survives parent and worker restarts.
-- Proposed AWS lab: dedicated VPC, small EC2/SSM, private Single-AZ PostgreSQL RDS,
+- Verified AWS lab: dedicated VPC, small EC2/SSM, private Single-AZ PostgreSQL RDS,
   encrypted storage and private S3 artifacts/backup. No GPU, NAT or ALB. The user
   approved a USD 5 budget and deletion of all resources/backups created for this
   release after verification. Existing local data and unrelated resources remain outside scope.
@@ -59,3 +59,12 @@ Project source and target: `masondev1024/agentic-marketing-data-pipeline`, curre
 Portfolio: existing `jungseongheon.org` deployment; preserve other projects/content.
 No raw Olist source, DB dumps, credentials, private AWS account inventory, Terraform
 state or internal execution logs may enter Git or public portfolio assets.
+
+## Verified execution ledger
+
+G1/G2/S1/S2/A1/A2/A3 passed. Local regression: 731 tests, no skips, Ruff passed.
+Actual HTTPS, restart, worker crash, database/ledger backup restore and fresh restored
+API requests passed; all 21 scoped cleanup checks passed. See
+[the release report](olist-durable-release-20261012.md).
+P1/P2 are confirmed by published revision CI and live-site checks after publication;
+these cannot be established by this local plan alone.

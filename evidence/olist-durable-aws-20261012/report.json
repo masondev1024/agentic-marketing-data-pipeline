@@ -1,0 +1,49 @@
+{
+  "schema_version": "olist-durable-release.v1",
+  "operator": "assistant_under_user_authorization",
+  "date": "2026-10-12",
+  "application_source_commit": "57ec671",
+  "image_digest": "sha256:9e3af0208c481a14332a576e365243f814027b74f122fce42575057644b7a645",
+  "tests": {
+    "passed": 731,
+    "skipped": 0,
+    "postgres_integration": true,
+    "ruff": "passed"
+  },
+  "actual_hosted_model": true,
+  "actual_aws_deployment": true,
+  "restored_postgres": "new database on same RDS instance",
+  "restored_sqlite": "new path on same EC2 host, identical quiesced backup",
+  "matched_postgres_relations": 14,
+  "cloud_calls_reserved_final": 6,
+  "cloud_call_limit": 32,
+  "ambiguous_pending_attempts": 1,
+  "initial_fault_control_attempt": "process name mismatch; no kill occurred and request completed, reservation retained",
+  "limits": [
+    "single-host single-AZ exercise",
+    "no customer production SLA or HA proof",
+    "no fresh-host or new-RDS-instance disaster recovery",
+    "known smoke cases are not general model-quality evaluation",
+    "remote provider exactly-once is not claimed"
+  ],
+  "receipt_hashes": {
+    "aws-http.json": "8cd409eb2cb6002fadc53430ba73a685cce50d1230c293c7b6c496eb3e64c82b",
+    "aws-restart.json": "60bbcbae82e95ea18dc26de5cadb6479589a234a4f54b84f167dc4d691dd62c8",
+    "aws-restored-fresh.json": "a76575748368af627883c0c8621aa2e7bd2dbde684f17cf2190a8a419f6d5aaf",
+    "aws-restored-replay.json": "5a4d4fb69041ee532452394051118d0017fb347990c30fb881625eeb5c079434",
+    "cleanup.json": "4906c8971eb2fb22a35d9b6705f8b447bb96a000483a9294736a9811c878feb8",
+    "cloudwatch-secret-scan.json": "8c26af2e4af108d40252eaa0108ef2a1b7e42779b0243d5e9dd3088d5bd91c97",
+    "local-http.json": "008a9d77ad454fbda53989059f82376b7ee76df6ab393adfffc759ccdc2f659e",
+    "local-restart.json": "0f0594032d2369dc4d00e4f6c2da449fe6e3eb7a3e3d0236ef31fc4c162e62b7",
+    "network.json": "fa1b07477fde3ae35e958a74bafe818b3974d9629bac7d2859674c54ff84d394",
+    "postgres-recovery.json": "a181bc9b0befc466c3860e59e4ea06e6da806839c72dde49aba30dc09c6b5bdb",
+    "public-security.json": "d3c41851e8a46e45ec9983a2eaae673816a62dcb5183964298ca3aea66398a39",
+    "pytest.txt": "846840d896cfab4983066283c2bda5860fe922fc944d43944a6829ea68df7f22",
+    "ruff.txt": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18",
+    "runtime-verification.json": "cebe5ec440d39dd6bec3227ad5209ed31c20e25fe8256dc2747c2047fcd36efe",
+    "sqlite-restore.json": "4a026ab320cda392aa5a7d610c4b5ade59d0f79e3e9c62757063dfca486fdd8d",
+    "worker-fault.json": "84c99b2172d57c4c5251397722d267b3e5942e357b2e7906ba39d5bf68acfcda"
+  },
+  "cleanup": "passed_21_of_21_scoped_checks",
+  "temporary_api_dns": "deleted"
+}

@@ -3,6 +3,11 @@
 `/v1/investigations`를 NVIDIA Nemotron 3 Super에 연결하는 명시적 선택 경로다.
 기본 `local` 설정은 기존 로컬 모델을 사용한다. `nvidia-super`는 `intent-v1`만 지원한다.
 
+기본 서버는 loopback 전용이다. 영속 기록과 인증된 HTTPS 공개 모드는
+[Durable Olist 서비스](olist-durable-service.md)의 명시적 옵션으로 사용한다.
+아래 실행 예시는 기존 비영속 로컬 HTTP 경로이며, 영속 모드에서는 호출 직전 예약과
+재시작 후 예산 보존을 SQLite 행동 기록이 담당한다.
+
 ## 데이터 흐름과 경계
 
 1. 로컬 HTTP 서버가 질문·버전 ID·대기열을 검증한다.

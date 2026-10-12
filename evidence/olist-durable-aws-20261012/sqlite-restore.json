@@ -1,0 +1,33 @@
+{
+  "status": "Success",
+  "checks": [
+    {
+      "receipt_sha256_match": true,
+      "sha256": "c8706d34506d7b6d8d065172fb5a3578d841b9679fa6fcd593cc757b7749a32f",
+      "status": "passed",
+      "tables": {
+        "checkpoints": 17,
+        "durable_attempts": 4,
+        "durable_budget": 1,
+        "durable_evidence": 3,
+        "durable_meta": 1,
+        "durable_runs": 4,
+        "writes": 54
+      }
+    },
+    {
+      "budget": [
+        [
+          32,
+          4
+        ]
+      ],
+      "budget_reconciled": true,
+      "kind": "identical_quiesced_sqlite_restore",
+      "logical_sha256": "693e0ddafa1420c7c739ca233e564fae5b10e13e513b04a24982ded85b5fe441",
+      "pending_attempts": 1,
+      "source_equals_restored": true,
+      "status": "passed"
+    }
+  ]
+}
