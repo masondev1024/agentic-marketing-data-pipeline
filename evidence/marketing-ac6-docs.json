@@ -147,7 +147,7 @@
     }
   ],
   "reviewed_sha256": {
-    "README.md": "4ae9125b86736e65f4ef20ee0ac2e69f0eb0373a13b51a51794a098a393eda3a",
+    "README.md": "fe4469ef97613bd4dd0fa41ccfa51088d390a7fc34d79e618410f4f9aae26af0",
     "data/marketing/experiments/preregistered-v1.json": "dde97e9739656743163c4f33869794edcca7b598c18b23ade79a0d240476ec5c",
     "data/marketing/v1/acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81",
     "data/marketing/v1/acceptance-freeze.json": "38ca9dc922588ada7fbb101e2f730ba9ec2225f97895b1fe530aa72c15c2c6f0",
@@ -272,5 +272,20 @@
     "prior_receipt": "evidence/marketing-ac6-docs-before-durable-release.json",
     "reason": "README adds separate real Olist durable HTTP and AWS recovery evidence. Historical synthetic marketing model scores and scope remain unchanged.",
     "readme_sha256": "4ae9125b86736e65f4ef20ee0ac2e69f0eb0373a13b51a51794a098a393eda3a"
+  },
+  "domain_and_ax_readme_review": {
+    "date": "2026-10-12",
+    "operator": "assistant",
+    "prior_receipt": "evidence/marketing-ac6-docs-before-domain-readme.json",
+    "readme_sha256": "fe4469ef97613bd4dd0fa41ccfa51088d390a7fc34d79e618410f4f9aae26af0",
+    "scope": "README only: seller-funnel semantics, bounded AI/AX investigation workflow, separate synthetic experiments and completed short-lived AWS recovery/cleanup. No model, code, metrics, historical scores or acceptance thresholds changed.",
+    "evidence": [
+      "docs/olist-metric-policy.md",
+      "docs/olist-docker.md",
+      "docs/marketing/data-product.md",
+      "docs/marketing/results.md",
+      "docs/olist-boundary-fix.md",
+      "docs/olist-durable-release-20261012.md"
+    ]
   }
 }
