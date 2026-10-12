@@ -27,6 +27,9 @@ def process_request(config, request, runtime):
     settings = request["settings"]
     if settings.get("operation") == "olist_investigate":
         return process_olist_investigation(config, request, runtime)
+    if config.get("olist_provider", "local") != "local":
+        return {"request_id": request["request_id"], "error": "answers_disabled_for_provider",
+                "http_status": 503, "restart": False}
     args = argparse.Namespace(
         prompt=settings["question"],
         context_file=None,
@@ -138,7 +141,24 @@ def process_olist_investigation(config, request, runtime):
             "restart": False,
         }
 
+    remote = config.get("olist_provider") == "nvidia-super"
+    provider_failure = None
+    remote_attempts = 0
+
     def generate(messages, timeout):
+        nonlocal provider_failure, remote_attempts
+        if remote:
+            from llm_ops_lab.olist.nvidia_planner import NvidiaPlannerError
+            from llm_ops_lab.olist.nvidia_service import CALLS_PER_REQUEST
+
+            try:
+                if remote_attempts >= CALLS_PER_REQUEST:
+                    raise NvidiaPlannerError("call_budget_exhausted")
+                remote_attempts += 1
+                return runtime.generate(messages, timeout)
+            except NvidiaPlannerError as error:
+                provider_failure = error.code
+                raise
         # The Supervisor owns the hard deadline and kills this worker before it can
         # create a second GPU owner. The adapter preserves the lab's fixed generation.
         trace = {}
@@ -166,16 +186,43 @@ def process_olist_investigation(config, request, runtime):
             "output_tokens": trace.get("generation_tokens", 0),
         }
 
+    if config.get("durable_db"):
+        generate.durable_identity = {
+            "provider": config.get("olist_provider", "local"),
+            "engine": config.get("olist_engine", "action-v5"),
+            "model": dict(runtime.identity),
+            "temperature": 0, "max_tokens": 256, "seed": 42,
+            "configured_timeout": config.get("request_timeout", 60.0),
+        }
+
     try:
-        record = investigate(
-            dsn,
-            settings["question"],
-            generate,
-            version_id=settings.get("version_id"),
-            timeout_seconds=float(config.get("request_timeout", 60.0)),
+        timeout = min(
+            float(config.get("request_timeout", 60.0)),
+            float(request.get("timeout_seconds", config.get("request_timeout", 60.0))),
         )
+        if config.get("durable_db"):
+            from llm_ops_lab.olist.durable_graph import DurableError, investigate_durable
+
+            try:
+                record = investigate_durable(
+                    Path(config["durable_db"]), dsn, settings["question"], generate,
+                    principal=settings.get("principal", "local"),
+                    idempotency_key=settings.get("idempotency_key", request_id),
+                    version_id=settings.get("version_id"),
+                    timeout_seconds=timeout,
+                    total_call_budget=config["remote_call_budget"],
+                )
+            except DurableError as error:
+                return {"request_id": request_id, "error": error.code,
+                        "http_status": error.status, "restart": False}
+        else:
+            record = investigate(
+                dsn, settings["question"], generate,
+                version_id=settings.get("version_id"), timeout_seconds=timeout,
+            )
         if not isinstance(record, dict) or record.get("status") not in {"completed", "abstained"}:
             raise ValueError("Investigator returned an invalid result")
+        provider_failure = provider_failure or record.get("provider_error")
         identity = dict(runtime.identity)
         result = {
             **record,
@@ -188,6 +235,10 @@ def process_olist_investigation(config, request, runtime):
             if record.get("model_executed") else None,
             "model_executed": bool(record.get("model_executed", False)),
             "service_processing_seconds": time.perf_counter() - started,
+            "provider": "nvidia_hosted" if remote else "local",
+            "revision_pinned": not remote,
+            "provider_error": provider_failure,
+            "remote_call_attempts": remote_attempts,
         }
         encoded = json.dumps(result, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
         if len(encoded.encode("utf-8")) > MAX_INVESTIGATION_RESULT_BYTES:
@@ -204,6 +255,15 @@ def process_olist_investigation(config, request, runtime):
                 "request_id": request_id,
                 "error": "storage_write_failed",
                 "http_status": 500,
+                "restart": False,
+            }
+        if provider_failure:
+            from llm_ops_lab.olist.nvidia_service import error_status
+
+            return {
+                "request_id": request_id,
+                "error": "nvidia_" + provider_failure,
+                "http_status": error_status(provider_failure),
                 "restart": False,
             }
         LOG.info(
@@ -233,22 +293,44 @@ def process_olist_investigation(config, request, runtime):
         }
 
 
+def load_runtime(config):
+    if config.get("olist_provider") == "nvidia-super":
+        from llm_ops_lab.olist.nvidia_service import create_planner
+
+        if config.get("olist_engine") != "intent-v1" or not config.get("olist_root"):
+            raise ValueError("Invalid remote service configuration")
+        return create_planner(Path(config["olist_root"]))
+    load_scope_contract(
+        Path(config["corpus_dir"]), load_corpus(Path(config["corpus_dir"])), required=True
+    )
+    return InferenceRuntime(MODEL_SPECS[config["model"]], offline=True)
+
+
 def main():
     logging.basicConfig(level=logging.INFO, stream=sys.stderr)
     protocol = sys.stdout
     config = json.loads(sys.stdin.readline())
     # Keep library output away from the protocol stream.
-    load_scope_contract(
-        Path(config["corpus_dir"]), load_corpus(Path(config["corpus_dir"])), required=True
-    )
-    with contextlib.redirect_stdout(sys.stderr):
-        runtime = InferenceRuntime(MODEL_SPECS[config["model"]], offline=True)
-    reply(protocol, {"event": "ready", "pid": os.getpid(), "model": runtime.identity})
-    for line in sys.stdin:
-        request = json.loads(line)
+    try:
         with contextlib.redirect_stdout(sys.stderr):
-            response = process_request(config, request, runtime)
-        reply(protocol, response)
+            runtime = load_runtime(config)
+    except Exception as error:
+        # Configuration/credentials failures must not print a traceback containing secrets.
+        from llm_ops_lab.olist.nvidia_planner import NvidiaPlannerError
+
+        code = error.code if isinstance(error, NvidiaPlannerError) else "runtime_setup_failed"
+        LOG.error("Worker startup failed code=%s", code)
+        return
+    reply(protocol, {"event": "ready", "pid": os.getpid(), "model": runtime.identity})
+    try:
+        for line in sys.stdin:
+            request = json.loads(line)
+            with contextlib.redirect_stdout(sys.stderr):
+                response = process_request(config, request, runtime)
+            reply(protocol, response)
+    finally:
+        if config.get("olist_provider") == "nvidia-super":
+            runtime.close()
 
 
 if __name__ == "__main__":

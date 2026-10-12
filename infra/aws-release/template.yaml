@@ -1,0 +1,717 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Short-lived LLM Ops Lab release stack. A dedicated VPC, one public Graviton app host,
+  private single-AZ PostgreSQL, private versioned backup bucket, ECR image repository,
+  and least-scoped runtime access. This template does not attach a domain or publish code.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Release identity
+        Parameters:
+          - PublicHost
+          - ParameterPrefix
+          - AmiId
+      - Label:
+          default: Network ranges
+        Parameters:
+          - VpcCidr
+          - PublicSubnetCidr
+          - PrivateSubnetACidr
+          - PrivateSubnetBCidr
+    ParameterLabels:
+      PublicHost:
+        default: HTTPS host name (DNS record is managed separately)
+      ParameterPrefix:
+        default: SSM SecureString parameter prefix
+      AmiId:
+        default: Pinned Amazon Linux 2023 ARM64 AMI ID
+
+Parameters:
+  PublicHost:
+    Type: String
+    Default: marketing-api.jungseongheon.org
+    AllowedPattern: '^[a-z0-9][a-z0-9.-]{1,251}[a-z0-9]$'
+    ConstraintDescription: Provide a lower-case DNS host name without a scheme or path.
+  ParameterPrefix:
+    Type: String
+    Default: /llm-ops-lab/aws-release
+    AllowedPattern: '^/[A-Za-z0-9_.\-/]+$'
+    ConstraintDescription: Use an SSM parameter path beginning with a slash.
+  AmiId:
+    Type: AWS::EC2::Image::Id
+    Description: Resolve the AL2023 arm64 public SSM parameter, then pass the resolved AMI ID.
+  VpcCidr:
+    Type: String
+    Default: 10.77.0.0/16
+    AllowedPattern: '^10\.[0-9]{1,3}\.0\.0/16$'
+  PublicSubnetCidr:
+    Type: String
+    Default: 10.77.0.0/24
+    AllowedPattern: '^10\.[0-9]{1,3}\.0\.0/24$'
+  PrivateSubnetACidr:
+    Type: String
+    Default: 10.77.10.0/24
+    AllowedPattern: '^10\.[0-9]{1,3}\.10\.0/24$'
+  PrivateSubnetBCidr:
+    Type: String
+    Default: 10.77.11.0/24
+    AllowedPattern: '^10\.[0-9]{1,3}\.11\.0/24$'
+
+Resources:
+  LabVpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-vpc'
+        - Key: Project
+          Value: llm-ops-lab
+        - Key: Owner
+          Value: aws-release-lab
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-igw'
+        - Key: Project
+          Value: llm-ops-lab
+
+  VpcInternetGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref LabVpc
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref LabVpc
+      CidrBlock: !Ref PublicSubnetCidr
+      AvailabilityZone: !Select [0, !GetAZs '']
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-public-a'
+        - Key: Project
+          Value: llm-ops-lab
+
+  PrivateSubnetA:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref LabVpc
+      CidrBlock: !Ref PrivateSubnetACidr
+      AvailabilityZone: !Select [0, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-private-a'
+        - Key: Project
+          Value: llm-ops-lab
+
+  PrivateSubnetB:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref LabVpc
+      CidrBlock: !Ref PrivateSubnetBCidr
+      AvailabilityZone: !Select [1, !GetAZs '']
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-private-b'
+        - Key: Project
+          Value: llm-ops-lab
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref LabVpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-public'
+        - Key: Project
+          Value: llm-ops-lab
+
+  PublicDefaultRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VpcInternetGatewayAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetRouteAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet
+      RouteTableId: !Ref PublicRouteTable
+
+  PrivateRouteTableA:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref LabVpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-private-a'
+        - Key: Project
+          Value: llm-ops-lab
+
+  PrivateRouteTableB:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref LabVpc
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-private-b'
+        - Key: Project
+          Value: llm-ops-lab
+
+  PrivateSubnetRouteAssociationA:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnetA
+      RouteTableId: !Ref PrivateRouteTableA
+
+  PrivateSubnetRouteAssociationB:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnetB
+      RouteTableId: !Ref PrivateRouteTableB
+
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Public HTTPS edge and ACME HTTP challenge; no SSH ingress.
+      VpcId: !Ref LabVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+          Description: HTTP redirect and ACME HTTP-01 challenge only.
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+          Description: Caddy HTTPS public boundary.
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+          Description: Required for SSM, image/package updates, TLS certificate issuance and hosted inference.
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-app-sg'
+        - Key: Project
+          Value: llm-ops-lab
+
+  DatabaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Private PostgreSQL, reachable only from the app security group.
+      VpcId: !Ref LabVpc
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          SourceSecurityGroupId: !Ref AppSecurityGroup
+          Description: Olist read-only query path from the single app host.
+      SecurityGroupEgress: []
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-database-sg'
+        - Key: Project
+          Value: llm-ops-lab
+
+  DatabaseSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Isolated private subnets for the single-AZ PostgreSQL instance.
+      SubnetIds:
+        - !Ref PrivateSubnetA
+        - !Ref PrivateSubnetB
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-db-subnets'
+        - Key: Project
+          Value: llm-ops-lab
+
+  OlistDatabase:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    DependsOn:
+      - PostgresLogGroup
+    Properties:
+      DBInstanceIdentifier: !Sub '${AWS::StackName}-olist'
+      Engine: postgres
+      EngineVersion: '17.11'
+      DBInstanceClass: db.t4g.micro
+      DBName: olist
+      ManageMasterUserPassword: true
+      MasterUsername: llm_ops_admin
+      AllocatedStorage: '20'
+      StorageType: gp3
+      StorageEncrypted: true
+      PubliclyAccessible: false
+      MultiAZ: false
+      AutoMinorVersionUpgrade: false
+      BackupRetentionPeriod: 1
+      CopyTagsToSnapshot: true
+      DeleteAutomatedBackups: true
+      DBSubnetGroupName: !Ref DatabaseSubnetGroup
+      VPCSecurityGroups:
+        - !GetAtt DatabaseSecurityGroup.GroupId
+      EnableCloudwatchLogsExports:
+        - postgresql
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-olist'
+        - Key: Project
+          Value: llm-ops-lab
+        - Key: Owner
+          Value: aws-release-lab
+
+  BackupBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: expire-noncurrent-versions-after-30-days
+            Status: Enabled
+            NoncurrentVersionExpiration:
+              NoncurrentDays: 30
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-backup'
+        - Key: Project
+          Value: llm-ops-lab
+        - Key: DataClass
+          Value: private-recovery-artifacts
+
+  ApplicationLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub '/llm-ops-lab/${AWS::StackName}'
+      RetentionInDays: 3
+      Tags:
+        - Key: Project
+          Value: llm-ops-lab
+
+  PostgresLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      LogGroupName: !Sub '/aws/rds/instance/${AWS::StackName}-olist/postgresql'
+      RetentionInDays: 3
+      Tags:
+        - Key: Project
+          Value: llm-ops-lab
+
+  ApplicationRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub 'llm-ops-lab-${AWS::StackName}'
+      ImageTagMutability: IMMUTABLE
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      EncryptionConfiguration:
+        EncryptionType: AES256
+      EmptyOnDelete: true
+      LifecyclePolicy:
+        LifecyclePolicyText: !Sub |
+          {"rules":[{"rulePriority":1,"description":"Keep the five newest release builds","selection":{"tagStatus":"tagged","tagPrefixList":["release-"],"countType":"imageCountMoreThan","countNumber":5},"action":{"type":"expire"}}]}
+      Tags:
+        - Key: Project
+          Value: llm-ops-lab
+
+  AppRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore'
+      Policies:
+        - PolicyName: release-runtime-scoped-access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: ReadOnlyRuntimeParameters
+                Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                Resource: !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ParameterPrefix}/*'
+              - Sid: DecryptOnlyParametersThroughParameterStore
+                Effect: Allow
+                Action:
+                  - kms:Decrypt
+                Resource: '*'
+                Condition:
+                  StringEquals:
+                    kms:ViaService: !Sub 'ssm.${AWS::Region}.${AWS::URLSuffix}'
+                  StringLike:
+                    kms:EncryptionContext:PARAMETER_ARN: !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ParameterPrefix}/*'
+              - Sid: PullThisImageOnly
+                Effect: Allow
+                Action:
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:BatchGetImage
+                  - ecr:GetDownloadUrlForLayer
+                Resource: !GetAtt ApplicationRepository.Arn
+              - Sid: GetEcrAuthorizationToken
+                Effect: Allow
+                Action:
+                  - ecr:GetAuthorizationToken
+                Resource: '*'
+              - Sid: WriteAndRestoreOnlyRecoveryPrefixes
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource:
+                  - !Sub '${BackupBucket.Arn}/backups/*'
+                  - !Sub '${BackupBucket.Arn}/evidence/*'
+              - Sid: ListOnlyRecoveryPrefixes
+                Effect: Allow
+                Action:
+                  - s3:ListBucket
+                Resource: !GetAtt BackupBucket.Arn
+                Condition:
+                  StringLike:
+                    s3:prefix:
+                      - backups/*
+                      - evidence/*
+              - Sid: PublishApplicationLogs
+                Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: !Sub '${ApplicationLogGroup.Arn}:*'
+      Tags:
+        - Key: Project
+          Value: llm-ops-lab
+
+  AppInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref AppRole
+
+  AppInstance:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - ApplicationLogGroup
+      - ApplicationRepository
+      - VpcInternetGatewayAttachment
+    Properties:
+      ImageId: !Ref AmiId
+      InstanceType: t4g.small
+      IamInstanceProfile: !Ref AppInstanceProfile
+      SubnetId: !Ref PublicSubnet
+      SecurityGroupIds:
+        - !GetAtt AppSecurityGroup.GroupId
+      MetadataOptions:
+        HttpEndpoint: enabled
+        HttpTokens: required
+        HttpPutResponseHopLimit: 1
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 20
+            Encrypted: true
+            DeleteOnTermination: true
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euo pipefail
+          exec > >(tee /var/log/llm-ops-lab-bootstrap.log | logger -t llm-ops-lab-bootstrap -s 2>/dev/console) 2>&1
+          dnf update -y
+          dnf install -y docker awscli-2 jq
+          systemctl enable --now docker
+          install -d -m 0750 /etc/llm-ops-lab /var/lib/llm-ops-lab /var/lib/llm-ops-lab/caddy-data /var/lib/llm-ops-lab/caddy-config
+          chown 10001:10001 /var/lib/llm-ops-lab
+          cat > /etc/llm-ops-lab/Caddyfile <<'CADDY'
+          ${PublicHost} {
+            reverse_proxy 127.0.0.1:8011
+          }
+          CADDY
+          chmod 0644 /etc/llm-ops-lab/Caddyfile
+          cat > /usr/local/sbin/llm-ops-refresh-secrets <<'SECRETS'
+          #!/bin/bash
+          set -euo pipefail
+          set +x
+          umask 077
+          region='${AWS::Region}'
+          prefix='${ParameterPrefix}'
+          get_secret() {
+            aws ssm get-parameter --region "$region" --name "$prefix/$1" --with-decryption --query 'Parameter.Value' --output text 2>/dev/null
+          }
+          nvidia_key="$(get_secret nvidia-api-key)" || { echo 'runtime_secret_unavailable'; exit 1; }
+          reader_dsn="$(get_secret olist-reader-dsn)" || { echo 'runtime_secret_unavailable'; exit 1; }
+          api_token="$(get_secret public-api-token)" || { echo 'runtime_secret_unavailable'; exit 1; }
+          if [[ -z "$nvidia_key" || -z "$reader_dsn" || -z "$api_token" || "$nvidia_key" == *$'\n'* || "$reader_dsn" == *$'\n'* || "$api_token" == *$'\n'* ]]; then
+            echo 'runtime_secret_invalid'
+            exit 1
+          fi
+          install -d -m 0750 -o root -g 10001 /run/llm-ops-lab
+          printf 'NVIDIA_API_KEY=%s\nOLIST_READER_DSN=%s\n' "$nvidia_key" "$reader_dsn" > /run/llm-ops-lab/runtime.env
+          printf '%s' "$api_token" > /run/llm-ops-lab/api-token
+          chown 10001:10001 /run/llm-ops-lab/api-token
+          chmod 0640 /run/llm-ops-lab/runtime.env
+          chmod 0600 /run/llm-ops-lab/api-token
+          unset nvidia_key reader_dsn api_token
+          SECRETS
+          chmod 0750 /usr/local/sbin/llm-ops-refresh-secrets
+          cat > /usr/local/sbin/llm-ops-api-run <<'RUNAPI'
+          #!/bin/bash
+          set -euo pipefail
+          tag="$(cat /etc/llm-ops-lab/image-tag 2>/dev/null || true)"
+          if [[ ! "$tag" =~ ^release-[0-9a-f]{7,40}$ ]]; then
+            echo 'application_image_not_installed'
+            exit 1
+          fi
+          account='${AWS::AccountId}'
+          region='${AWS::Region}'
+          image="$account.dkr.ecr.$region.${AWS::URLSuffix}/${ApplicationRepository}:$tag"
+          auth_dir="$(mktemp -d /run/llm-ops-ecr-auth.XXXXXX)"
+          trap 'rm -rf "$auth_dir"' EXIT
+          export DOCKER_CONFIG="$auth_dir"
+          aws ecr get-login-password --region "$region" | docker login --username AWS --password-stdin "$account.dkr.ecr.$region.${AWS::URLSuffix}" >/dev/null
+          docker pull "$image" >/dev/null
+          rm -rf "$auth_dir"
+          unset DOCKER_CONFIG
+          trap - EXIT
+          docker rm -f llm-ops-lab-api >/dev/null 2>&1 || true
+          exec docker run --rm --name llm-ops-lab-api --network host --user 10001:10001 \
+            --cap-drop ALL --security-opt no-new-privileges --read-only \
+            --memory 1024m --memory-swap 1024m --cpus 1.0 --pids-limit 256 \
+            --tmpfs /tmp:rw,noexec,nosuid,size=64m \
+            --mount type=bind,src=/var/lib/llm-ops-lab,dst=/state \
+            --mount type=bind,src=/run/llm-ops-lab/runtime.env,dst=/run/secrets/runtime.env,readonly \
+            --mount type=bind,src=/run/llm-ops-lab/api-token,dst=/run/secrets/api-token,readonly \
+            --env-file /run/llm-ops-lab/runtime.env \
+            --log-driver awslogs --log-opt awslogs-region="$region" \
+            --log-opt awslogs-group='${ApplicationLogGroup}' --log-opt awslogs-stream=api \
+            "$image" --port 8011 --olist-root /app --output-dir /state/service --olist-engine intent-v1 \
+            --olist-provider nvidia-super --durable-db /state/investigations.sqlite \
+            --remote-call-budget 32 --request-timeout 60 \
+            --public-host '${PublicHost}' --public-token-file /run/secrets/api-token \
+            --rate-limit-per-minute 30
+          RUNAPI
+          chmod 0750 /usr/local/sbin/llm-ops-api-run
+          cat > /usr/local/sbin/llm-ops-install-image <<'INSTALLIMAGE'
+          #!/bin/bash
+          set -euo pipefail
+          tag="$1"
+          if [[ ! "$tag" =~ ^release-[0-9a-f]{7,40}$ ]]; then
+            echo 'invalid_release_image_tag' >&2
+            exit 2
+          fi
+          install -d -m 0750 /etc/llm-ops-lab
+          printf '%s\n' "$tag" > /etc/llm-ops-lab/image-tag
+          chmod 0640 /etc/llm-ops-lab/image-tag
+          systemctl restart llm-ops-lab-api.service
+          INSTALLIMAGE
+          chmod 0750 /usr/local/sbin/llm-ops-install-image
+          cat > /etc/systemd/system/llm-ops-lab-api.service <<'APIUNIT'
+          [Unit]
+          Description=LLM Ops Lab API container
+          After=docker.service network-online.target
+          Wants=network-online.target
+          ConditionPathExists=/etc/llm-ops-lab/image-tag
+          [Service]
+          Type=simple
+          ExecStartPre=/usr/local/sbin/llm-ops-refresh-secrets
+          ExecStartPre=-/usr/bin/docker rm -f llm-ops-lab-api
+          ExecStart=/usr/local/sbin/llm-ops-api-run
+          ExecStop=/usr/bin/docker stop --time 15 llm-ops-lab-api
+          Restart=on-failure
+          RestartSec=15
+          StartLimitIntervalSec=300
+          StartLimitBurst=10
+          TimeoutStartSec=120
+          TimeoutStopSec=25
+          [Install]
+          WantedBy=multi-user.target
+          APIUNIT
+          cat > /etc/systemd/system/llm-ops-lab-caddy.service <<'CADDYUNIT'
+          [Unit]
+          Description=Caddy public HTTPS reverse proxy
+          After=docker.service network-online.target
+          Wants=network-online.target
+          [Service]
+          Type=simple
+          ExecStartPre=/usr/bin/docker pull caddy:2.11.7-alpine@sha256:84058f1a0e5beb97664a9b79dcfd267b594c033d5bb88d8463cdfb59c0779197
+          ExecStartPre=-/usr/bin/docker rm -f llm-ops-lab-caddy
+          ExecStart=/usr/bin/docker run --rm --name llm-ops-lab-caddy --network host --cap-drop ALL --cap-add NET_BIND_SERVICE --security-opt no-new-privileges --read-only --memory 128m --memory-swap 128m --cpus 0.25 --pids-limit 64 --tmpfs /tmp:rw,noexec,nosuid,size=16m --mount type=bind,src=/etc/llm-ops-lab/Caddyfile,dst=/etc/caddy/Caddyfile,readonly --mount type=bind,src=/var/lib/llm-ops-lab/caddy-data,dst=/data --mount type=bind,src=/var/lib/llm-ops-lab/caddy-config,dst=/config --log-driver awslogs --log-opt awslogs-region=${AWS::Region} --log-opt awslogs-group=${ApplicationLogGroup} --log-opt awslogs-stream=caddy caddy:2.11.7-alpine@sha256:84058f1a0e5beb97664a9b79dcfd267b594c033d5bb88d8463cdfb59c0779197 caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+          ExecStop=/usr/bin/docker stop --time 15 llm-ops-lab-caddy
+          Restart=on-failure
+          RestartSec=10
+          TimeoutStartSec=120
+          TimeoutStopSec=25
+          [Install]
+          WantedBy=multi-user.target
+          CADDYUNIT
+          systemctl daemon-reload
+          systemctl enable --now llm-ops-lab-caddy.service
+          systemctl enable llm-ops-lab-api.service
+          systemctl start llm-ops-lab-api.service || true
+          cat > /usr/local/sbin/llm-ops-backup-sqlite <<'BACKUP'
+          #!/bin/bash
+          set -euo pipefail
+          set +x
+          stamp="$(date -u +%Y%m%dT%H%M%SZ)"
+          bucket='${BackupBucket}'
+          work="/var/lib/llm-ops-lab/backups/$stamp"
+          install -d -m 0700 "$work"
+          was_active=0
+          systemctl is-active --quiet llm-ops-lab-api.service && was_active=1 || true
+          if (( was_active )); then systemctl stop llm-ops-lab-api.service; fi
+          restart_api() { if (( was_active )); then systemctl start llm-ops-lab-api.service; fi; }
+          trap restart_api EXIT
+          python3 - "$work/investigations.sqlite" <<'PY'
+          import hashlib, json, sqlite3, sys
+          from pathlib import Path
+          source = Path('/var/lib/llm-ops-lab/investigations.sqlite')
+          target = Path(sys.argv[1])
+          if not source.is_file():
+              raise SystemExit('durable_sqlite_missing')
+          with sqlite3.connect(f'file:{source}?mode=ro', uri=True) as src:
+              with sqlite3.connect(target) as dst:
+                  src.backup(dst)
+              with sqlite3.connect(target) as check:
+                  result = check.execute('PRAGMA integrity_check').fetchone()[0]
+                  if result != 'ok':
+                      raise SystemExit('durable_sqlite_integrity_failed')
+          digest = hashlib.sha256(target.read_bytes()).hexdigest()
+          receipt = {'schema':'llm-ops-lab-sqlite-backup.v1','status':'passed','sha256':digest,'size_bytes':target.stat().st_size,'operator':'ec2-backup-script'}
+          target.with_suffix('.receipt.json').write_text(json.dumps(receipt, sort_keys=True) + '\n')
+          PY
+          aws s3 cp "$work/investigations.sqlite" "s3://$bucket/backups/sqlite/$stamp/investigations.sqlite" --sse AES256 --only-show-errors
+          aws s3 cp "$work/investigations.receipt.json" "s3://$bucket/evidence/sqlite/$stamp/receipt.json" --sse AES256 --only-show-errors
+          printf 'backup_key=backups/sqlite/%s/investigations.sqlite\n' "$stamp"
+          BACKUP
+          chmod 0750 /usr/local/sbin/llm-ops-backup-sqlite
+          cat > /usr/local/sbin/llm-ops-verify-sqlite-backup <<'VERIFYBACKUP'
+          #!/bin/bash
+          set -euo pipefail
+          set +x
+          key="$1"
+          if [[ ! "$key" =~ ^backups/sqlite/[0-9]{8}T[0-9]{6}Z/investigations\.sqlite$ ]]; then
+            echo 'invalid_backup_key' >&2
+            exit 2
+          fi
+          bucket='${BackupBucket}'
+          stamp="$(printf '%s\n' "$key" | sed -e 's#^backups/sqlite/##' -e 's#/investigations\.sqlite$##')"
+          temp="$(mktemp -d /var/tmp/llm-ops-restore-check.XXXXXX)"
+          trap 'rm -rf "$temp"' EXIT
+          aws s3 cp "s3://$bucket/$key" "$temp/investigations.sqlite" --only-show-errors
+          aws s3 cp "s3://$bucket/evidence/sqlite/$stamp/receipt.json" "$temp/receipt.json" --only-show-errors
+          python3 - "$temp/investigations.sqlite" "$temp/receipt.json" <<'PY'
+          import hashlib, json, sqlite3, sys
+          from pathlib import Path
+          path = Path(sys.argv[1])
+          receipt = json.loads(Path(sys.argv[2]).read_text())
+          digest = hashlib.sha256(path.read_bytes()).hexdigest()
+          if receipt.get('schema') != 'llm-ops-lab-sqlite-backup.v1' or receipt.get('status') != 'passed' or receipt.get('sha256') != digest:
+              raise SystemExit('restored_sqlite_receipt_mismatch')
+          with sqlite3.connect(f'file:{path}?mode=ro', uri=True) as db:
+              check = db.execute('PRAGMA integrity_check').fetchone()[0]
+              if check != 'ok':
+                  raise SystemExit('restored_sqlite_integrity_failed')
+              tables = [r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name")]
+              counts = {name: db.execute('SELECT count(*) FROM "' + name.replace('"', '""') + '"').fetchone()[0] for name in tables}
+          print(json.dumps({'status':'passed','receipt_sha256_match':True,'sha256':digest,'tables':counts}, sort_keys=True))
+          PY
+          VERIFYBACKUP
+          chmod 0750 /usr/local/sbin/llm-ops-verify-sqlite-backup
+          cat > /usr/local/sbin/llm-ops-refresh-secrets-wrapper <<'REFRESH'
+          #!/bin/bash
+          set -euo pipefail
+          /usr/local/sbin/llm-ops-refresh-secrets
+          systemctl restart llm-ops-lab-api.service
+          REFRESH
+          chmod 0750 /usr/local/sbin/llm-ops-refresh-secrets-wrapper
+          systemctl enable amazon-ssm-agent || true
+          systemctl start amazon-ssm-agent || true
+          echo 'llm-ops-lab bootstrap complete; API remains stopped until an image and secrets are installed.'
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-app'
+        - Key: Project
+          Value: llm-ops-lab
+        - Key: Owner
+          Value: aws-release-lab
+
+  AppElasticIp:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      InstanceId: !Ref AppInstance
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-public-ip'
+        - Key: Project
+          Value: llm-ops-lab
+
+Outputs:
+  StackName:
+    Description: Use this exact stack name for the scoped scripts.
+    Value: !Ref AWS::StackName
+  PublicHost:
+    Description: Configure a DNS-only A record to PublicIp after stack creation.
+    Value: !Ref PublicHost
+  PublicIp:
+    Description: Static address for the dedicated public host; DNS remains an explicit step.
+    Value: !Ref AppElasticIp
+  AppInstanceId:
+    Description: Use Session Manager; there is no SSH ingress.
+    Value: !Ref AppInstance
+  EcrRepositoryUri:
+    Description: Push an immutable linux/arm64 image tagged release-<commit-sha>.
+    Value: !GetAtt ApplicationRepository.RepositoryUri
+  EcrRepositoryName:
+    Value: !Ref ApplicationRepository
+  DatabaseInstanceId:
+    Value: !Ref OlistDatabase
+  DatabaseEndpoint:
+    Value: !GetAtt OlistDatabase.Endpoint.Address
+  DatabasePort:
+    Value: !GetAtt OlistDatabase.Endpoint.Port
+  BackupBucketName:
+    Value: !Ref BackupBucket
+  ParameterPrefix:
+    Value: !Ref ParameterPrefix
+  DatabaseMasterSecretArn:
+    Description: Operator-only bootstrap/recovery secret; the EC2 role cannot read it.
+    Value: !GetAtt OlistDatabase.MasterUserSecret.SecretArn
+

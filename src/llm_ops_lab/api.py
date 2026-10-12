@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import json
 import logging
+import re
 import time
 from contextlib import asynccontextmanager
 from datetime import UTC, datetime
@@ -76,10 +77,17 @@ def error_response(request_id, status, code):
 
 
 class RequestBoundary:
-    """Bound total HTTP work and body bytes before FastAPI parses JSON."""
+    """Audit requests and enforce body bounds, authenticating public calls first."""
 
-    def __init__(self, app, output_dir):
+    def __init__(self, app, output_dir, public_mode=False, public_config=None):
         self.app, self.output_dir = app, output_dir
+        self.public_mode = public_mode
+        self.public_config = public_config
+        self.public_boundary = None
+        if public_config is not None:
+            from llm_ops_lab.public_security import PublicBoundary
+
+            self.public_boundary = PublicBoundary(self._body_limited_dispatch, public_config)
         self.inflight = 0
         self.audit_tasks = set()
 
@@ -139,6 +147,15 @@ class RequestBoundary:
                     for key, value in message.get("headers", [])
                     if key.lower() != b"x-request-id"
                 ] + [(b"x-request-id", request_id.encode())]
+                if self.public_config is not None:
+                    from llm_ops_lab.public_security import _SECURITY_HEADERS
+
+                    enforced = {name for name, _ in _SECURITY_HEADERS}
+                    message["headers"] = [
+                        (key, value)
+                        for key, value in message["headers"]
+                        if key.lower() not in enforced
+                    ] + list(_SECURITY_HEADERS)
                 sent = True
             await send(message)
 
@@ -150,54 +167,18 @@ class RequestBoundary:
                 local_peer = peer is not None and ip_address(peer[0]).is_loopback
             except ValueError:
                 local_peer = False
-            if not local_peer:
+            if not self.public_mode and not local_peer:
                 raise ServiceError(403, "loopback_client_required")
             headers = {k.lower(): v for k, v in scope["headers"]}
             host = headers.get(b"host", b"").split(b":")[0].lower()
-            if host not in {b"localhost", b"127.0.0.1"}:
+            if not self.public_mode and host not in {b"localhost", b"127.0.0.1"}:
                 raise ServiceError(400, "invalid_host")
-            if scope["method"] == "POST":
-                # This is a local CLI API, not a browser cross-origin inference endpoint.
-                if b"origin" in headers:
-                    raise ServiceError(403, "browser_origin_not_allowed")
-                if headers.get(b"content-type", b"").split(b";")[0].strip() != b"application/json":
-                    raise ServiceError(415, "json_content_type_required")
-                length = headers.get(b"content-length")
-                if length is not None:
-                    try:
-                        if int(length) < 0:
-                            raise ValueError
-                        if int(length) > MAX_BODY_BYTES:
-                            raise ServiceError(413, "request_body_too_large")
-                    except ValueError:
-                        raise ServiceError(400, "invalid_content_length") from None
-                body = bytearray()
-                async with asyncio.timeout(BODY_TIMEOUT_SECONDS):
-                    while True:
-                        part = await receive()
-                        if part["type"] == "http.disconnect":
-                            return
-                        body.extend(part.get("body", b""))
-                        if len(body) > MAX_BODY_BYTES:
-                            raise ServiceError(413, "request_body_too_large")
-                        if not part.get("more_body", False):
-                            break
-                try:
-                    strict_object(body.decode("utf-8"))
-                except (ValueError, UnicodeError, RecursionError):
-                    raise ServiceError(422, "invalid_json_object") from None
-                delivered = False
-
-                async def replay():
-                    nonlocal delivered
-                    if not delivered:
-                        delivered = True
-                        return {"type": "http.request", "body": bytes(body), "more_body": False}
-                    return await receive()
-
-                await self.app(scope, replay, observed_send)
-            else:
-                await self.app(scope, receive, observed_send)
+            dispatch = (
+                self.public_boundary
+                if self.public_boundary is not None
+                else self._body_limited_dispatch
+            )
+            await dispatch(scope, receive, observed_send)
         except TimeoutError:
             scope["state"]["outcome"] = {"error_code": "body_read_timeout"}
             response = error_response(request_id, 408, "body_read_timeout")
@@ -222,12 +203,62 @@ class RequestBoundary:
                     await error_response(request_id, 500, "audit_write_failed")(
                         scope, receive, send
                     )
-        except Exception:
-            logging.getLogger(__name__).exception("Request failed id=%s", request_id)
+        except Exception as error:
+            logging.getLogger(__name__).error(
+                "Request failed id=%s type=%s", request_id, type(error).__name__
+            )
             if not sent:
                 await error_response(request_id, 500, "internal_error")(scope, receive, send)
         finally:
             self.inflight -= 1
+
+    async def _body_limited_dispatch(self, scope, receive, send):
+        """Validate and replay a bounded POST body before handing it to FastAPI."""
+        if scope["method"] == "POST":
+            # This is a CLI/API endpoint, not a browser cross-origin inference endpoint.
+            headers = {}
+            for key, value in scope["headers"]:
+                headers.setdefault(key.lower(), value)
+            if b"origin" in headers:
+                raise ServiceError(403, "browser_origin_not_allowed")
+            if headers.get(b"content-type", b"").split(b";")[0].strip() != b"application/json":
+                raise ServiceError(415, "json_content_type_required")
+            length = headers.get(b"content-length")
+            if length is not None:
+                try:
+                    if int(length) < 0:
+                        raise ValueError
+                    if int(length) > MAX_BODY_BYTES:
+                        raise ServiceError(413, "request_body_too_large")
+                except ValueError:
+                    raise ServiceError(400, "invalid_content_length") from None
+            body = bytearray()
+            async with asyncio.timeout(BODY_TIMEOUT_SECONDS):
+                while True:
+                    part = await receive()
+                    if part["type"] == "http.disconnect":
+                        return
+                    body.extend(part.get("body", b""))
+                    if len(body) > MAX_BODY_BYTES:
+                        raise ServiceError(413, "request_body_too_large")
+                    if not part.get("more_body", False):
+                        break
+            try:
+                strict_object(body.decode("utf-8"))
+            except (ValueError, UnicodeError, RecursionError):
+                raise ServiceError(422, "invalid_json_object") from None
+            delivered = False
+
+            async def replay():
+                nonlocal delivered
+                if not delivered:
+                    delivered = True
+                    return {"type": "http.request", "body": bytes(body), "more_body": False}
+                return await receive()
+
+            await self.app(scope, replay, send)
+        else:
+            await self.app(scope, receive, send)
 
 
 def public_result(record):
@@ -272,6 +303,25 @@ def public_result(record):
 MAX_PUBLIC_INVESTIGATION_BYTES = 48 * 1024
 
 
+def reader_ready(root):
+    """Check actual published data using the same bounded read-only boundary."""
+    from llm_ops_lab.olist.config import connection_info
+    from llm_ops_lab.olist.tool_session import OlistToolSession
+
+    try:
+        with OlistToolSession(
+            connection_info(root, reader=True), version_id=None, deadline=time.monotonic() + 3
+        ) as session:
+            quality = session.initialize()
+            return bool(
+                quality and quality["data"].get("quality_status") == "passed"
+                and quality["data"].get("failed_check_count") == 0
+            )
+    except Exception:
+        # Connection errors may contain DSNs; expose only readiness, never their text.
+        return False
+
+
 def public_investigation(record):
     """Expose only the bounded diagnostic contract; never return SQL or connection data."""
     prompt = record.get("prompt") or {}
@@ -288,6 +338,8 @@ def public_investigation(record):
         "diagnostic_mode": record.get("diagnostic_mode"),
         "request_plan": record.get("request_plan"),
         "model_execution_status": record.get("model_execution_status"),
+        "provider": record.get("provider", "local"),
+        "revision_pinned": record.get("revision_pinned"),
         "stop_reason": record.get("stop_reason"),
         "pipeline_context": record.get("pipeline_context"),
         "metric_policy": record.get("metric_policy"),
@@ -306,6 +358,9 @@ def public_investigation(record):
             "processing_seconds": record.get("service_processing_seconds", 0),
         },
     }
+    if "investigation_id" in record:
+        result["investigation_id"] = record["investigation_id"]
+        result["replayed"] = record.get("replayed", False)
     # Fail closed: truncating evidence would make a diagnosis look complete when it is not.
     encoded = json.dumps(result, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
     if len(encoded.encode("utf-8")) > MAX_PUBLIC_INVESTIGATION_BYTES:
@@ -313,8 +368,10 @@ def public_investigation(record):
     return result
 
 
-def create_app(config=None, *, supervisor=None):
+def create_app(config=None, *, supervisor=None, public_config=None):
     config = config or ServiceConfig()
+    if public_config is not None and config.durable_db is None:
+        raise ValueError("Public service requires durable investigations")
     supervisor = supervisor or Supervisor(config)
 
     @asynccontextmanager
@@ -327,7 +384,10 @@ def create_app(config=None, *, supervisor=None):
 
     app = FastAPI(title="LLM Ops Lab — Local API", version="1.0", lifespan=lifespan)
     app.state.supervisor = supervisor
-    app.add_middleware(RequestBoundary, output_dir=config.output_dir)
+    app.add_middleware(
+        RequestBoundary, output_dir=config.output_dir, public_mode=public_config is not None,
+        public_config=public_config,
+    )
 
     @app.exception_handler(RequestValidationError)
     async def validation_error(request, error):
@@ -341,6 +401,12 @@ def create_app(config=None, *, supervisor=None):
     @app.get("/health/ready")
     async def ready():
         health = supervisor.health()
+        if public_config is not None:
+            health["database_ready"] = await asyncio.to_thread(reader_ready, config.olist_root)
+            health["ready"] = bool(
+                health["ready"] and health["database_ready"]
+                and (health.get("remote_budget") or {}).get("state") != "unavailable"
+            )
         return JSONResponse(health, status_code=200 if health["ready"] else 503)
 
     @app.get("/metrics")
@@ -349,6 +415,9 @@ def create_app(config=None, *, supervisor=None):
 
     @app.post("/v1/answers")
     async def answer(payload: AnswerRequest, request: Request):
+        if config.olist_provider != "local":
+            request.state.outcome = {"error_code": "answers_disabled_for_provider"}
+            return error_response(request.state.request_id, 503, "answers_disabled_for_provider")
         try:
             record = await supervisor.submit(request.state.request_id, payload.model_dump())
         except ServiceError as error:
@@ -372,6 +441,15 @@ def create_app(config=None, *, supervisor=None):
             "question": payload.question,
             "version_id": payload.version_id,
         }
+        if config.durable_db is not None:
+            key = request.headers.get("idempotency-key", "")
+            if re.fullmatch(r"[A-Za-z0-9_-]{8,128}", key) is None:
+                request.state.outcome = {"error_code": "idempotency_key_required"}
+                return error_response(request.state.request_id, 400, "idempotency_key_required")
+            settings.update(
+                idempotency_key=key,
+                principal=getattr(request.state, "principal", "local"),
+            )
         try:
             record = await supervisor.submit(request.state.request_id, settings)
             response = public_investigation(record)
@@ -401,6 +479,13 @@ def main(argv=None):
     parser.add_argument("--startup-timeout", type=float, default=120)
     parser.add_argument("--olist-root", type=Path)
     parser.add_argument("--olist-engine", choices=("action-v5", "intent-v1"), default="action-v5")
+    parser.add_argument("--olist-provider", choices=("local", "nvidia-super"), default="local")
+    parser.add_argument("--remote-call-budget", type=int, default=32,
+                        help="Hosted call limit; persistent when --durable-db is supplied")
+    parser.add_argument("--durable-db", type=Path)
+    parser.add_argument("--public-host", help="HTTPS hostname served by a trusted loopback proxy")
+    parser.add_argument("--public-token-file", type=Path)
+    parser.add_argument("--rate-limit-per-minute", type=int, default=30)
     args = parser.parse_args(argv)
     if not 1 <= args.port <= 65535:
         parser.error("port must be between 1 and 65535")
@@ -414,14 +499,29 @@ def main(argv=None):
             args.startup_timeout,
             olist_root=args.olist_root,
             olist_engine=args.olist_engine,
+            olist_provider=args.olist_provider,
+            remote_call_budget=args.remote_call_budget,
+            durable_db=args.durable_db,
         )
+        public_config = None
+        if args.public_host:
+            from llm_ops_lab.public_security import PublicConfig
+
+            public_config = PublicConfig.from_sources(
+                allowed_host=args.public_host, token_file=args.public_token_file,
+                requests_per_minute=args.rate_limit_per_minute,
+            )
+            if config.durable_db is None:
+                raise ValueError("--public-host requires --durable-db")
+        elif args.public_token_file:
+            raise ValueError("--public-token-file requires --public-host")
     except ValueError as error:
         parser.error(str(error))
     import uvicorn
 
     # One API process and one GPU owner. Multiple Uvicorn workers would multiply model memory.
     uvicorn.run(
-        create_app(config),
+        create_app(config, public_config=public_config),
         host="127.0.0.1",
         port=args.port,
         workers=1,

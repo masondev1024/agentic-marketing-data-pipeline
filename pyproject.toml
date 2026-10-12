@@ -5,6 +5,7 @@ description = "A measured, beginner-friendly path from local LLM inference to a 
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "duckdb==1.4.3",
+    "httpx==0.28.1",
     "fastapi>=0.142.2",
     "langgraph==1.0.10",
     "langgraph-checkpoint-sqlite==3.0.3",
@@ -17,7 +18,6 @@ local = ["mlx-lm; sys_platform == 'darwin' and platform_machine == 'arm64'"]
 
 [dependency-groups]
 dev = [
-    "httpx>=0.28.1",
     "pytest",
     "ruff",
 ]

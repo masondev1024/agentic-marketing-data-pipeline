@@ -57,8 +57,8 @@ NVIDIA **Nemotron-Personas-Korea는 평가 질문의 다양성을 위한 공개 
 [전체 구현 상태](docs/olist-status.md)에서는 이전 실험과 현재 결과를 구분합니다.
 
 - Olist 원본 검증·마트·읽기 전용 진단과 로컬 HTTP 경로를 구현했습니다.
-- 로컬 추론은 Apple Silicon의 Qwen3-4B/MLX, NVIDIA Super는 명시적으로 선택하는 원격 **평가 경로**입니다.
-- Super를 HTTP 서비스에 배포한 상태는 아닙니다. 기본 Olist 엔진은 `action-v5`이고 `intent-v1`은 선택 후보입니다.
+- 로컬 추론은 Apple Silicon의 Qwen3-4B/MLX, NVIDIA Super는 명시적으로 선택하는 원격 평가·HTTP 조사 경로입니다.
+- Super HTTP 연결은 loopback 전용입니다. 기본값은 로컬 `action-v5`이며, 원격 모드는 `intent-v1`을 명시해야 합니다.
 - 통화·시간대·관측 완전성이 확정되지 않은 재무·30일 귀속 지표는 제공하지 않습니다.
 - 로컬 검증 프로젝트이며 실제 고객 운영, AWS 배포, 자유로운 원인 추론의 정확성을 주장하지 않습니다.
 
@@ -90,3 +90,9 @@ bootstrap은 실제 Python 환경을 `work/python-env`에 두고 `.venv`를 연�
 원본 CSV·DB·모델 가중치·API 키는 저장소에 포함하지 않습니다. 외부 데이터는 출처에서 별도로
 확보하고 계약 검사를 거쳐야 합니다. 프로젝트 자체 코드에 별도 오픈소스 라이선스를
 아직 부여하지 않았으며, 외부 자료에는 각 자료의 라이선스가 적용됩니다.
+
+### Nemotron Super HTTP 연결
+
+로컬 전용 조사 API에서 Super를 명시적으로 선택할 수 있습니다. 질문 분류만 원격으로
+보내고, 읽기 전용 조회와 근거 검증은 호스트에서 수행합니다. 실행 방법과 호출 예약 상한,
+실패 처리 범위는 [HTTP 연결 안내](docs/olist-nvidia-http.md)를 참고하세요.

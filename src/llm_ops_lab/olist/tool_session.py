@@ -31,11 +31,20 @@ class OlistToolSession:
 
     tools = TOOLS
 
-    def __init__(self, dsn: str, *, version_id: str | None, deadline: float):
+    def __init__(
+        self,
+        dsn: str,
+        *,
+        version_id: str | None,
+        deadline: float,
+        started_at: datetime | None = None,
+    ):
         self._dsn = dsn
         self._requested_version = version_id
         self._deadline = deadline
-        self._started_at = datetime.now(UTC)
+        self._started_at = started_at or datetime.now(UTC)
+        if self._started_at.tzinfo is None or self._started_at.utcoffset() is None:
+            raise ValueError("started_at_must_be_timezone_aware")
         self._connection = None
         self.dataset_version: str | None = None
         self.active_published_version_id: str | None = None
@@ -167,6 +176,25 @@ class OlistToolSession:
             raise SessionError("investigation_deadline_exceeded") from error
         except psycopg.Error as error:
             raise SessionError("database_read_failed") from error
+
+    def collect_bundle(self, tools: list[str]) -> list[dict[str, Any]]:
+        """Read quality and all selected tools in this one repeatable-read transaction.
+
+        The caller persists the returned list as one durable unit. No partial result
+        escapes if a selected tool fails, and a failed quality gate runs no tools.
+        """
+        quality = self.initialize()
+        if quality is None:
+            raise SessionError(self.failure_code or "published_version_unavailable")
+        bundle = [quality]
+        if (
+            quality["data"].get("quality_status") != "passed"
+            or quality["data"].get("failed_check_count", 0) > 0
+        ):
+            return bundle
+        for tool in tools:
+            bundle.append(self.call(tool))
+        return bundle
 
     def _evidence(self, tool: str, data: Any) -> dict[str, Any]:
         evidence_id = diagnostics._evidence_id(self.dataset_version, tool, data)

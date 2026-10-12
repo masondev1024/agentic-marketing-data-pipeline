@@ -28,8 +28,21 @@ class ServiceConfig:
     max_restarts: int = 3
     olist_root: Path | None = None
     olist_engine: str = "action-v5"
+    olist_provider: str = "local"
+    remote_call_budget: int = 32
+    durable_db: Path | None = None
 
     def __post_init__(self):
+        if self.olist_provider not in {"local", "nvidia-super"}:
+            raise ValueError("Unknown Olist provider")
+        if self.durable_db is not None and self.olist_provider != "nvidia-super":
+            raise ValueError("Durable investigations require the nvidia-super provider")
+        if self.olist_provider == "nvidia-super" and (
+            self.olist_engine != "intent-v1" or self.olist_root is None
+        ):
+            raise ValueError("nvidia-super requires --olist-engine intent-v1 and --olist-root")
+        if type(self.remote_call_budget) is not int or not 2 <= self.remote_call_budget <= 128:
+            raise ValueError("Remote call budget must be an integer between 2 and 128")
         if self.olist_engine not in {"action-v5", "intent-v1"}:
             raise ValueError("Unknown Olist engine")
         if self.model not in MODEL_SPECS:
@@ -75,8 +88,11 @@ class Supervisor:
             "timeouts": 0,
             "overloaded": 0,
             "worker_failures": 0,
+            "upstream_errors": 0,
+            "remote_budget_rejected": 0,
         }
         self.stderr = None
+        self.remote_calls_reserved = 0
 
     @property
     def ready(self):
@@ -85,6 +101,24 @@ class Supervisor:
         )
 
     def health(self):
+        remote_budget = None
+        if self.config.olist_provider == "nvidia-super":
+            if self.config.durable_db is not None:
+                from llm_ops_lab.olist.durable_graph import DurableError, budget_status
+
+                try:
+                    remote_budget = budget_status(
+                        self.config.durable_db, total_call_budget=self.config.remote_call_budget
+                    )
+                except (DurableError, OSError, RuntimeError, ValueError):
+                    remote_budget = {"scope": "durable_ledger", "state": "unavailable"}
+            else:
+                remote_budget = {
+                    "limit": self.config.remote_call_budget,
+                    "reserved": self.remote_calls_reserved,
+                    "remaining": self.config.remote_call_budget - self.remote_calls_reserved,
+                    "scope": "api_process_lifetime",
+                }
         return {
             "ready": self.ready,
             "state": self.state,
@@ -96,6 +130,8 @@ class Supervisor:
             "capacity": 1 + self.config.queue_size,
             "restarts": self.restarts,
             "counters": dict(self.counters),
+            "olist_provider": self.config.olist_provider,
+            "remote_budget": remote_budget,
         }
 
     def start(self):
@@ -186,7 +222,10 @@ class Supervisor:
             "model": self.config.model,
             "request_timeout": self.config.request_timeout,
             "olist_engine": self.config.olist_engine,
+            "olist_provider": self.config.olist_provider,
             "olist_root": str(self.config.olist_root.resolve()) if self.config.olist_root else None,
+            "durable_db": str(self.config.durable_db.resolve()) if self.config.durable_db else None,
+            "remote_call_budget": self.config.remote_call_budget,
         }
         self.process.stdin.write((json.dumps(config) + "\n").encode())
         await self.process.stdin.drain()
@@ -216,13 +255,31 @@ class Supervisor:
             self.counters["timeouts"] += 1
             self.active_id = None
             return False
+        if self.config.olist_provider == "nvidia-super":
+            from llm_ops_lab.olist.nvidia_service import CALLS_PER_REQUEST
+
+            if job.settings.get("operation") != "olist_investigate":
+                self._finish(job, error=ServiceError(503, "answers_disabled_for_provider"))
+                self.active_id = None
+                return False
+            if (self.config.durable_db is None
+                    and self.remote_calls_reserved + CALLS_PER_REQUEST
+                    > self.config.remote_call_budget):
+                self.counters["remote_budget_rejected"] += 1
+                self._finish(job, error=ServiceError(503, "remote_call_budget_exhausted"))
+                self.active_id = None
+                return False
+            # Never refund: after a timeout/crash provider execution and billing are unknown.
+            if self.config.durable_db is None:
+                self.remote_calls_reserved += CALLS_PER_REQUEST
         queued_seconds = time.monotonic() - job.created
         try:
             async with asyncio.timeout(remaining):
                 self.process.stdin.write(
                     (
                         json.dumps(
-                            {"request_id": job.request_id, "settings": job.settings},
+                            {"request_id": job.request_id, "settings": job.settings,
+                             "timeout_seconds": remaining},
                             ensure_ascii=False,
                         )
                         + "\n"
@@ -244,6 +301,10 @@ class Supervisor:
         finally:
             self.active_id = None
         if "error" in response:
+            if response["error"].startswith("nvidia_"):
+                self.counters["upstream_errors"] += 1
+                if response["http_status"] == 504:
+                    self.counters["timeouts"] += 1
             self._finish(job, error=ServiceError(response["http_status"], response["error"]))
             return response.get("restart", False)
         result = response["result"]

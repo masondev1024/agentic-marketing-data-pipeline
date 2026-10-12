@@ -34,6 +34,13 @@ flowchart LR
 현재 구조의 병목은 한 번에 한 요청만 생성하는 모델이다. 우선 큐를 제한하고 429로 부하를
 되돌리며, 다중 GPU나 무한 큐로 확장했다고 주장하지 않는다.
 
+## 원격 Super 연결
+
+[Nemotron Super HTTP 실행·실패 계약](olist-nvidia-http.md)을 참고한다.
+`--olist-provider nvidia-super --olist-engine intent-v1`로 명시적으로 선택한다.
+이 모드에서는 MLX를 적재하지 않고 `/v1/investigations`만 모델을 사용한다.
+아래의 공유 로컬 모델 설명과 실행 명령은 기본 `local` 모드에 해당한다.
+
 ## 로컬 실행
 
 프로젝트 루트에서 실행한다. Docker PostgreSQL과 로컬 모델 캐시가 필요하다.

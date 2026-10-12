@@ -1,0 +1,19 @@
+# The image contains only the locked application package and its reviewed data contracts.
+.git
+.github
+.venv
+.pytest_cache
+.ruff_cache
+**/__pycache__
+**/*.pyc
+.omx
+.ouroboros
+work
+runs
+evidence
+tests
+scripts
+docs
+outputs
+*.log
+.DS_Store

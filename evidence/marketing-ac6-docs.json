@@ -147,7 +147,7 @@
     }
   ],
   "reviewed_sha256": {
-    "README.md": "84a51aabd7291492d1555966032010e615fba2d6ebef7b490914c49da69369af",
+    "README.md": "f246048d819a52c3e06319edf4293830925596ee340ae62898a382e026cedd40",
     "data/marketing/experiments/preregistered-v1.json": "dde97e9739656743163c4f33869794edcca7b598c18b23ade79a0d240476ec5c",
     "data/marketing/v1/acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81",
     "data/marketing/v1/acceptance-freeze.json": "38ca9dc922588ada7fbb101e2f730ba9ec2225f97895b1fe530aa72c15c2c6f0",
@@ -250,5 +250,19 @@
       }
     ],
     "test_evidence": "See Olist boundary-fix final tests report, not the historical AC6 test count."
+  },
+  "nvidia_http_readme_review": {
+    "date": "2026-10-10",
+    "operator": "assistant",
+    "prior_receipt": "evidence/marketing-ac6-docs-before-nvidia-http.json",
+    "reviewed_changes": [
+      {
+        "path": "README.md",
+        "before": "84a51aabd7291492d1555966032010e615fba2d6ebef7b490914c49da69369af",
+        "after": "f246048d819a52c3e06319edf4293830925596ee340ae62898a382e026cedd40"
+      }
+    ],
+    "reason": "Explicit hosted HTTP intent backend added. README now distinguishes loopback hosted service from local default and AWS deployment. Existing synthetic marketing scores, model source comparison and acceptance criteria remain unchanged.",
+    "evidence": "docs/olist-nvidia-http.md"
   }
 }

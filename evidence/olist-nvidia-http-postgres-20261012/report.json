@@ -1,0 +1,145 @@
+{
+  "started_at": "2026-10-12T00:37:28.658195+00:00",
+  "kind": "actual_hosted_http_postgres",
+  "database_snapshot_before_sha256": "0e41811d6b7b9c1a436050876efcc97e9254d98144b846fe306414f4e0be2d70",
+  "cases": [
+    {
+      "intent": "coverage",
+      "request_id": "90ebeab1-6fc9-4287-9ff0-8024083927b3",
+      "status": "completed",
+      "counts": {
+        "numerator": 462,
+        "denominator": 842,
+        "unit": "contracts",
+        "scope": "published_channel_aggregate"
+      },
+      "usage": {
+        "generation_attempts": 1,
+        "generations": 1,
+        "tool_calls": 1,
+        "prompt_tokens": 679,
+        "output_tokens": 10
+      },
+      "timing": {
+        "queue_seconds": 0.04791291704168543,
+        "request_seconds": 0.7408529579988681,
+        "processing_seconds": 0.6917254999862053
+      },
+      "model": {
+        "id": "nvidia/nemotron-3-super-120b-a12b",
+        "revision": null
+      },
+      "prompt": {
+        "version": "olist-intent.v7",
+        "sha256": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3"
+      },
+      "evidence_reference_verified": true,
+      "worker_reuse_verified": true,
+      "access_log_link_verified": true
+    },
+    {
+      "intent": "origin",
+      "request_id": "1f22f124-0bfe-42fb-82c1-9129ff752ee6",
+      "status": "completed",
+      "counts": {
+        "numerator": 60,
+        "denominator": 8000,
+        "unit": "leads",
+        "scope": "published_channel_aggregate"
+      },
+      "usage": {
+        "generation_attempts": 1,
+        "generations": 1,
+        "tool_calls": 1,
+        "prompt_tokens": 684,
+        "output_tokens": 9
+      },
+      "timing": {
+        "queue_seconds": 7.537502096965909e-05,
+        "request_seconds": 0.518256500014104,
+        "processing_seconds": 0.5171862919814885
+      },
+      "model": {
+        "id": "nvidia/nemotron-3-super-120b-a12b",
+        "revision": null
+      },
+      "prompt": {
+        "version": "olist-intent.v7",
+        "sha256": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3"
+      },
+      "evidence_reference_verified": true,
+      "worker_reuse_verified": true,
+      "access_log_link_verified": true
+    }
+  ],
+  "server_pid": 80572,
+  "worker_pid": 80573,
+  "metrics": {
+    "ready": true,
+    "state": "ready",
+    "worker_pid": 80573,
+    "active": 0,
+    "queued": 0,
+    "capacity": 3,
+    "restarts": 0,
+    "counters": {
+      "accepted": 2,
+      "completed": 2,
+      "timeouts": 0,
+      "overloaded": 0,
+      "worker_failures": 0,
+      "upstream_errors": 0,
+      "remote_budget_rejected": 0
+    },
+    "olist_provider": "nvidia-super",
+    "remote_budget": {
+      "limit": 4,
+      "reserved": 4,
+      "remaining": 0,
+      "scope": "api_process_lifetime"
+    }
+  },
+  "database_snapshot_after_sha256": "0e41811d6b7b9c1a436050876efcc97e9254d98144b846fe306414f4e0be2d70",
+  "published_evidence_preserved": true,
+  "status": "passed",
+  "server_stopped": true,
+  "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "operator": "assistant",
+  "http_statuses": [
+    200,
+    200
+  ],
+  "service_processes_reaped": true,
+  "limitations": [
+    "Two known smoke questions, not an independent quality benchmark.",
+    "Published aggregate/version/history evidence preserved; no claim of hashing every raw source row.",
+    "Hosted model revision is not pinned. AWS state belongs in separate private audit records."
+  ],
+  "source_sha256": {
+    "src/llm_ops_lab/api.py": "a0e9e23543dd654b2e25a5447b7c336e20123d8ddb878332f725ad2c1b9031a0",
+    "src/llm_ops_lab/service.py": "42a66f2c94c1b69fa787fb83ad08ba8dbd98c99880de2f84f28852ba3167496d",
+    "src/llm_ops_lab/service_worker.py": "60700bf9f62e124f11f0b37e25e6b2f4beab6f1558ac31183553567b0e240739",
+    "src/llm_ops_lab/olist/nvidia_service.py": "35121d5a69e039600769434c48fc1b48a5d198d8fbe9c6e82ff2aa38e2fcabe1",
+    "src/llm_ops_lab/olist/intent_agent.py": "9e0f0da403f5940c78665903d49c5d6212ef59f0dc7a2d400b60772fe17056c7",
+    "src/llm_ops_lab/olist/intent_prompt.txt": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3",
+    "uv.lock": "471ba76e189dd25e513450116ba738f0e7a81f44a1a79261c07239c5e9ab1bf1"
+  },
+  "full_suite": {
+    "command": "OLIST_TEST_ADMIN_DSN=<local secret> uv run --locked pytest -q",
+    "passed": 687,
+    "skipped": 0,
+    "exit_code": 0,
+    "temporary_test_databases_remaining": 0,
+    "published_evidence_preserved_after_tests": true,
+    "ruff_exit_code": 0
+  },
+  "cleanup": {
+    "http_server_stopped": true,
+    "worker_reaped": true,
+    "port_8012_released": true,
+    "postgres_container_stopped": true,
+    "named_volume_retained": "llm-ops-olist_postgres_data",
+    "unrelated_containers_started": false,
+    "docker_desktop_stopped": true
+  }
+}

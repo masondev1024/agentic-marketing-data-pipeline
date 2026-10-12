@@ -1,0 +1,145 @@
+{
+  "schema_version": "olist-nvidia-http-smoke.v1",
+  "at": "2026-10-10T07:19:01.208864+00:00",
+  "operator": "assistant",
+  "kind": "actual_hosted_model_via_loopback_http",
+  "model_calls": 2,
+  "cases": [
+    {
+      "case": "root-cause",
+      "request_id": "5860c61e-af1b-4743-8285-6b670f47b249",
+      "http_status": 200,
+      "expected_disposition": "unavailable_root_cause",
+      "actual_disposition": "unavailable_root_cause",
+      "model": {
+        "id": "nvidia/nemotron-3-super-120b-a12b",
+        "revision": null
+      },
+      "prompt": {
+        "version": "olist-intent.v7",
+        "sha256": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3"
+      },
+      "provider": "nvidia_hosted",
+      "revision_pinned": false,
+      "usage": {
+        "generation_attempts": 1,
+        "generations": 1,
+        "tool_calls": 0,
+        "prompt_tokens": 691,
+        "output_tokens": 13
+      },
+      "timing": {
+        "queue_seconds": 0.05028979101916775,
+        "request_seconds": 0.8063596250140108,
+        "processing_seconds": 0.7539397499640472
+      },
+      "remote_call_attempts": 1,
+      "access_log_link_verified": true,
+      "evidence_count": 0,
+      "status": "abstained"
+    },
+    {
+      "case": "unsafe",
+      "request_id": "4ac44828-5507-4214-8f15-520df2f8e3ed",
+      "http_status": 200,
+      "expected_disposition": "unsafe",
+      "actual_disposition": "unsafe",
+      "model": {
+        "id": "nvidia/nemotron-3-super-120b-a12b",
+        "revision": null
+      },
+      "prompt": {
+        "version": "olist-intent.v7",
+        "sha256": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3"
+      },
+      "provider": "nvidia_hosted",
+      "revision_pinned": false,
+      "usage": {
+        "generation_attempts": 1,
+        "generations": 1,
+        "tool_calls": 0,
+        "prompt_tokens": 676,
+        "output_tokens": 9
+      },
+      "timing": {
+        "queue_seconds": 7.683399599045515e-05,
+        "request_seconds": 0.37480895896442235,
+        "processing_seconds": 0.37387470802059397
+      },
+      "remote_call_attempts": 1,
+      "access_log_link_verified": true,
+      "evidence_count": 0,
+      "status": "abstained"
+    }
+  ],
+  "metrics_after": {
+    "ready": true,
+    "state": "ready",
+    "worker_pid": 19132,
+    "active": 0,
+    "queued": 0,
+    "capacity": 3,
+    "restarts": 0,
+    "counters": {
+      "accepted": 3,
+      "completed": 2,
+      "timeouts": 0,
+      "overloaded": 0,
+      "worker_failures": 0,
+      "upstream_errors": 0,
+      "remote_budget_rejected": 1
+    },
+    "olist_provider": "nvidia-super",
+    "remote_budget": {
+      "limit": 4,
+      "reserved": 4,
+      "remaining": 0,
+      "scope": "api_process_lifetime"
+    }
+  },
+  "budget_exhaustion": {
+    "http_status": 503,
+    "error_code": "remote_call_budget_exhausted",
+    "request_id": "0d325b11-a2ea-410d-9e1d-c1c29893792c",
+    "no_worker_dispatch": true
+  },
+  "source_sha256": {
+    "src/llm_ops_lab/api.py": "a0e9e23543dd654b2e25a5447b7c336e20123d8ddb878332f725ad2c1b9031a0",
+    "src/llm_ops_lab/service.py": "42a66f2c94c1b69fa787fb83ad08ba8dbd98c99880de2f84f28852ba3167496d",
+    "src/llm_ops_lab/service_worker.py": "60700bf9f62e124f11f0b37e25e6b2f4beab6f1558ac31183553567b0e240739",
+    "src/llm_ops_lab/olist/nvidia_service.py": "35121d5a69e039600769434c48fc1b48a5d198d8fbe9c6e82ff2aa38e2fcabe1",
+    "src/llm_ops_lab/olist/nvidia_planner.py": "73a49039793310cc0e473002283552df00fc5fde278fb34f493d0d1baf738a34",
+    "src/llm_ops_lab/olist/intent_agent.py": "9e0f0da403f5940c78665903d49c5d6212ef59f0dc7a2d400b60772fe17056c7",
+    "src/llm_ops_lab/olist/intent_prompt.txt": "a94c76cd65771b6fcc680f97543d0b0f4cf98d062950a030dc0b0c5dbe7dbca3",
+    "uv.lock": "471ba76e189dd25e513450116ba738f0e7a81f44a1a79261c07239c5e9ab1bf1"
+  },
+  "limitations": [
+    "Two known regression questions, not an independent quality evaluation.",
+    "Actual PostgreSQL-backed completed investigation pending: Docker unavailable, host memory pressure warning.",
+    "Only server process lifetime reservations; API restart resets budget.",
+    "No AWS deployment or Git publication."
+  ],
+  "cleanup": {
+    "server_pid": 19125,
+    "worker_pid": 19132,
+    "owned_processes_absent": true,
+    "port_8012_listener_absent": true
+  },
+  "credential_scan": {
+    "changed_and_new_files_checked": 15,
+    "credential_matches": 0
+  },
+  "verification": {
+    "pytest_command": "uv run --locked pytest -q",
+    "pytest_passed": 672,
+    "pytest_skipped": 15,
+    "pytest_skips_reason": "Dedicated PostgreSQL test DSN not enabled; Docker unavailable and host pressure warning.",
+    "ruff_command": "uv run --locked ruff check .",
+    "ruff_exit_code": 0,
+    "earlier_failure": {
+      "failed_tests": 2,
+      "cause": "README hash no longer matched reviewed documentation receipt.",
+      "resolution": "Reviewed factual changes, preserved prior receipt, updated only README review hash and added explicit review metadata; no acceptance checks removed."
+    }
+  }
+}

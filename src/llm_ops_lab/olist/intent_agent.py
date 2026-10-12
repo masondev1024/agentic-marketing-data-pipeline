@@ -222,48 +222,179 @@ def _add_denominator(finding, intent, rows):
     finding["summary"] += f" Observed denominator: {count}/{total} {unit} in this published sample."
 
 
-def investigate(
-    dsn: str, question: str, generate: Callable, *, version_id=None, timeout_seconds=60.0
-) -> dict:
-    """Plan before opening the DB; semantic refusals perform zero database reads."""
-    trace, evidence, findings = [], [], []
-    usage = {
+def _empty_usage() -> dict:
+    return {
         "generation_attempts": 0,
         "generations": 0,
         "tool_calls": 0,
         "prompt_tokens": 0,
         "output_tokens": 0,
     }
-    identity = {"id": None, "revision": None}
-    plan = None
-    observed_version = None
 
-    def abstain(reason, *, semantic=False):
-        return _result(
-            observed_version,
-            "abstained",
-            "model_abstained" if semantic else reason,
-            evidence,
-            [],
-            [reason],
-            trace,
-            usage,
-            identity,
-            plan,
-        )
 
+def plan_stage(question: str, generate: Callable, remaining: Callable) -> dict:
+    """Generate and validate the bounded plan without opening the evidence DB."""
+    trace, usage, identity = [], _empty_usage(), {"id": None, "revision": None}
     if type(question) is not str or not question.strip() or len(question) > 2048:
-        return abstain("invalid_question")
-    if (
-        type(timeout_seconds) not in (int, float)
-        or not math.isfinite(timeout_seconds)
-        or not 0 < timeout_seconds <= 300
-    ):
-        return abstain("invalid_timeout")
-    if version_id is not None and evidence_contract.diagnostics._safe_version(version_id) is None:
-        return abstain("invalid_version_id")
+        return {"reason": "invalid_question", "trace": trace, "usage": usage,
+                "identity": identity, "plan": None}
     if evidence_contract._metric_policy()[0].get("policy_version") == "unavailable":
-        return abstain("metric_policy_unavailable")
+        return {"reason": "metric_policy_unavailable", "trace": trace, "usage": usage,
+                "identity": identity, "plan": None}
+    correction = ""
+    plan = None
+    for attempt in range(MAX_PLAN_GENERATIONS):
+        left = remaining()
+        usage["generation_attempts"] += 1
+        try:
+            generation = generate(intent_plan.plan_messages(question, correction), left)
+        except TimeoutError:
+            return {"reason": "investigation_deadline_exceeded", "trace": trace,
+                    "usage": usage, "identity": identity, "plan": None}
+        except RuntimeError:
+            return {"reason": "model_unavailable", "trace": trace, "usage": usage,
+                    "identity": identity, "plan": None}
+        usage["generations"] += 1
+        _generation_metadata(generation, usage, trace, identity)
+        remaining()
+        try:
+            plan = intent_plan.parse_plan(generation["output"])
+            trace[-1].update(disposition=plan.disposition, intents=list(plan.intents))
+            break
+        except ValueError:
+            trace[-1]["validation_error"] = "invalid_request_plan"
+            if attempt + 1 == MAX_PLAN_GENERATIONS:
+                return {"reason": "invalid_request_plan", "trace": trace,
+                        "usage": usage, "identity": identity, "plan": None}
+            trace[-1]["repair_requested"] = True
+            correction = "형식 오류입니다. 허용된 requests 목록만 포함한 JSON 하나를 반환하세요."
+    return {"reason": None, "trace": trace, "usage": usage, "identity": identity,
+            "plan": plan, "semantic_refusal": plan.disposition not in {
+                "supported", "financial_unsupported"}}
+
+
+def evidence_stage(
+    dsn: str,
+    plan: intent_plan.Plan,
+    version_id: str | None,
+    remaining: Callable,
+    *,
+    deadline: float,
+    evidence_bundle: Callable | None = None,
+    started_at=None,
+) -> dict:
+    """Collect and validate one complete evidence bundle for a committed plan."""
+    tools = (["definitions"] if plan.disposition == "financial_unsupported" else list(
+        dict.fromkeys(tool for intent in plan.intents for tool in intent_plan.INTENT_TOOLS[intent])
+    ))
+    usage, trace, evidence = _empty_usage(), [], []
+    if plan.disposition not in {"supported", "financial_unsupported"}:
+        return {"reason": "insufficient_evidence", "semantic_refusal": True,
+                "observed_version": None, "evidence": evidence, "trace": trace,
+                "usage": usage}
+    if evidence_bundle is None:
+        session_options = {"version_id": version_id, "deadline": deadline}
+        if started_at is not None:
+            session_options["started_at"] = started_at
+        with OlistToolSession(dsn, **session_options) as session:
+            observed = session.dataset_version
+            if hasattr(session, "collect_bundle"):
+                bundle = session.collect_bundle(tools)
+            else:
+                quality = session.initialize()
+                if quality is None:
+                    return {"reason": session.failure_code or "published_version_unavailable",
+                            "observed_version": observed, "evidence": [], "trace": trace,
+                            "usage": usage}
+                bundle = [quality]
+                if quality["data"].get("quality_status") == "passed" and (
+                    quality["data"].get("failed_check_count", 0) == 0
+                ):
+                    bundle.extend(session.call(tool) for tool in tools)
+    else:
+        bundle = evidence_bundle(tools, version_id, deadline)
+        if type(bundle) is not list or not bundle:
+            return {"reason": "invalid_tool_evidence", "observed_version": None,
+                    "evidence": [], "trace": trace, "usage": usage}
+        observed = bundle[0].get("dataset_version")
+    quality = bundle[0]
+    evidence_contract._validate_tool_result(quality, "version_evidence", observed)
+    if quality["data"].get("version_id") != observed:
+        return {"reason": "version_mismatch", "observed_version": observed,
+                "evidence": [], "trace": trace, "usage": usage}
+    if quality["data"].get("quality_status") != "passed" or quality["data"].get(
+        "failed_check_count", 0
+    ) > 0:
+        return {"reason": "published_quality_gate_failed", "observed_version": observed,
+                "evidence": [quality], "trace": trace, "usage": usage}
+    evidence.append(quality)
+    if len(bundle) != len(tools) + 1:
+        return {"reason": "invalid_tool_evidence", "observed_version": observed,
+                "evidence": evidence, "trace": trace, "usage": usage}
+    for tool, item in zip(tools, bundle[1:], strict=True):
+        remaining()
+        usage["tool_calls"] += 1
+        evidence_contract._validate_tool_result(item, tool, observed)
+        evidence.append(item)
+        trace.append({"stage": "execute", "selected_action": "tool", "selected_tool": tool})
+    remaining()
+    return {"reason": "unsupported_metric" if plan.disposition == "financial_unsupported" else None,
+            "semantic_refusal": plan.disposition == "financial_unsupported",
+            "observed_version": observed, "evidence": evidence, "trace": trace,
+            "usage": usage}
+
+
+def render_stage(plan, evidence_result, plan_result) -> dict:
+    """Render only validated facts from the plan and committed evidence bundle."""
+    evidence = evidence_result["evidence"]
+    trace = plan_result["trace"] + evidence_result["trace"]
+    usage = plan_result["usage"] | {
+        key: plan_result["usage"][key] + evidence_result["usage"].get(key, 0)
+        for key in ("tool_calls",)
+    }
+    identity = plan_result["identity"]
+    observed = evidence_result.get("observed_version")
+    reason = evidence_result.get("reason") or plan_result.get("reason")
+    semantic = evidence_result.get("semantic_refusal") or plan_result.get("semantic_refusal")
+    if reason:
+        return _result(observed, "abstained", "model_abstained" if semantic else reason,
+                       evidence, [], [reason], trace, usage, identity, plan)
+    findings = []
+    by_tool = {item["tool"]: item for item in evidence}
+    for intent in plan.intents:
+        intent_findings = _findings_for(intent, by_tool)
+        if not intent_findings:
+            return _result(observed, "abstained", "insufficient_evidence", evidence, [],
+                           ["insufficient_evidence"], trace, usage, identity, plan)
+        findings.extend(intent_findings)
+    trace.append({"stage": "render", "finding_codes": [f["code"] for f in findings]})
+    return _result(observed, "completed", "completed", evidence, findings,
+                   BACKGROUND_LIMITATIONS, trace, usage, identity, plan)
+
+
+def investigate(
+    dsn: str,
+    question: str,
+    generate: Callable,
+    *,
+    version_id=None,
+    timeout_seconds=60.0,
+    evidence_bundle: Callable | None = None,
+    started_at=None,
+) -> dict:
+    """Run the shared plan, evidence, and render stages for direct or durable use."""
+    empty_plan = {"trace": [], "usage": _empty_usage(), "identity": {"id": None,
+                    "revision": None}, "plan": None}
+    if (type(timeout_seconds) not in (int, float) or not math.isfinite(timeout_seconds)
+            or not 0 < timeout_seconds <= 300):
+        return render_stage(None, {"reason": "invalid_timeout", "evidence": [],
+                            "trace": [], "usage": _empty_usage()}, empty_plan)
+    if version_id is not None and evidence_contract.diagnostics._safe_version(version_id) is None:
+        return render_stage(None, {"reason": "invalid_version_id", "evidence": [],
+                            "trace": [], "usage": _empty_usage()}, empty_plan)
+    if version_id is not None and evidence_contract.diagnostics._safe_version(version_id) is None:
+        return render_stage(None, {"reason": "invalid_version_id", "evidence": [],
+                            "trace": [], "usage": _empty_usage()}, empty_plan)
     deadline = time.monotonic() + timeout_seconds
 
     def remaining():
@@ -273,103 +404,37 @@ def investigate(
         return left
 
     try:
-        correction = ""
-        for attempt in range(MAX_PLAN_GENERATIONS):
-            left = remaining()
-            usage["generation_attempts"] += 1
-            generation = generate(intent_plan.plan_messages(question, correction), left)
-            usage["generations"] += 1
-            _generation_metadata(generation, usage, trace, identity)
-            remaining()
-            try:
-                plan = intent_plan.parse_plan(generation["output"])
-                trace[-1].update(disposition=plan.disposition, intents=list(plan.intents))
-                break
-            except ValueError:
-                trace[-1]["validation_error"] = "invalid_request_plan"
-                if attempt + 1 == MAX_PLAN_GENERATIONS:
-                    return abstain("invalid_request_plan")
-                trace[-1]["repair_requested"] = True
-                correction = (
-                    "형식 오류입니다. 허용된 requests 목록만 포함한 JSON 하나를 반환하세요."
-                )
-        if plan is None:
-            return abstain("invalid_request_plan")
-        if plan.disposition not in {"supported", "financial_unsupported"}:
-            return abstain("insufficient_evidence", semantic=True)
-
-        with OlistToolSession(dsn, version_id=version_id, deadline=deadline) as session:
-            observed_version = session.dataset_version
-            quality = session.initialize()
-            if quality is None:
-                return abstain(session.failure_code or "published_version_unavailable")
-            evidence_contract._validate_tool_result(quality, "version_evidence", observed_version)
-            if quality["data"].get("version_id") != observed_version:
-                return abstain("version_mismatch")
-            evidence.append(quality)
-            if (
-                quality["data"].get("quality_status") != "passed"
-                or quality["data"].get("failed_check_count", 0) > 0
-            ):
-                return abstain("published_quality_gate_failed")
-
-            tools = (
-                ["definitions"]
-                if plan.disposition == "financial_unsupported"
-                else list(
-                    dict.fromkeys(
-                        tool for intent in plan.intents for tool in intent_plan.INTENT_TOOLS[intent]
-                    )
-                )
-            )
-            for tool in tools:
-                remaining()
-                usage["tool_calls"] += 1
-                trace.append({"stage": "execute", "selected_action": "tool", "selected_tool": tool})
-                item = session.call(tool)
-                evidence_contract._validate_tool_result(item, tool, observed_version)
-                evidence.append(item)
-            remaining()
-            if plan.disposition == "financial_unsupported":
-                return abstain("unsupported_metric", semantic=True)
-            by_tool = {item["tool"]: item for item in evidence}
-            for intent in plan.intents:
-                intent_findings = _findings_for(intent, by_tool)
-                if not intent_findings:
-                    # Do not label an incomplete multi-intent request completed.
-                    return abstain("insufficient_evidence")
-                findings.extend(intent_findings)
-            trace.append({"stage": "render", "finding_codes": [f["code"] for f in findings]})
-            return _result(
-                observed_version,
-                "completed",
-                "completed",
-                evidence,
-                findings,
-                BACKGROUND_LIMITATIONS,
-                trace,
-                usage,
-                identity,
-                plan,
-            )
+        planned = plan_stage(question, generate, remaining)
+        if planned.get("reason") or planned.get("semantic_refusal"):
+            return render_stage(planned.get("plan"), {"reason": planned.get("reason") or
+                "insufficient_evidence", "semantic_refusal": planned.get("semantic_refusal"),
+                "evidence": [], "trace": [], "usage": _empty_usage()}, planned)
+        evidence = evidence_stage(dsn, planned["plan"], version_id, remaining,
+                                  deadline=deadline, evidence_bundle=evidence_bundle,
+                                  started_at=started_at)
+        return render_stage(planned["plan"], evidence, planned)
     except TimeoutError:
-        trace.append(
-            {"stage": "deadline", "generation_attempted": usage["generation_attempts"] > 0}
-        )
-        return abstain("investigation_deadline_exceeded")
+        planned = locals().get("planned", empty_plan)
+        trace = planned.get("trace", []) + [{"stage": "deadline", "generation_attempted":
+                planned.get("usage", {}).get("generation_attempts", 0) > 0}]
+        identity = planned.get("identity", empty_plan["identity"])
+        return _result(None, "abstained", "investigation_deadline_exceeded", [], [],
+                       ["investigation_deadline_exceeded"], trace,
+                       planned.get("usage", _empty_usage()), identity, planned.get("plan"))
     except SessionError as error:
-        return abstain(error.code)
+        return render_stage(None, {"reason": error.code, "evidence": [], "trace": [],
+                            "usage": _empty_usage()}, empty_plan)
     except RuntimeError:
-        trace.append(
-            {"stage": "model_failure", "generation_attempted": usage["generation_attempts"] > 0}
-        )
-        return abstain("model_unavailable")
+        planned = locals().get("planned", empty_plan)
+        planned.setdefault("trace", []).append({"stage": "model_failure",
+            "generation_attempted": planned.get("usage", {}).get("generation_attempts", 0) > 0})
+        return _result(None, "abstained", "model_unavailable", [], [], ["model_unavailable"],
+                       planned["trace"], planned.get("usage", _empty_usage()),
+                       planned.get("identity", empty_plan["identity"]), planned.get("plan"))
     except (ValueError, TypeError, KeyError, OSError) as error:
         code = str(error) if isinstance(error, ValueError) else ""
-        safe = {
-            "model_response_invalid",
-            "model_token_budget",
-            "invalid_tool_evidence",
-            "metric_policy_mismatch",
-        }
-        return abstain(code if code in safe else "invalid_or_unavailable_evidence")
+        safe = {"model_response_invalid", "model_token_budget", "invalid_tool_evidence",
+                "metric_policy_mismatch"}
+        reason = code if code in safe else "invalid_or_unavailable_evidence"
+        return render_stage(None, {"reason": reason, "evidence": [], "trace": [],
+                            "usage": _empty_usage()}, empty_plan)

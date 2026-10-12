@@ -547,3 +547,73 @@ def test_record_write_failure_does_not_restart_healthy_worker(tmp_path, monkeypa
         "http_status": 500,
         "restart": False,
     }
+
+
+def test_remote_reservation_survives_worker_restart_and_never_refunds(tmp_path):
+    async def run():
+        _, supervisor = make_supervisor(
+            tmp_path, olist_provider="nvidia-super", olist_engine="intent-v1",
+            olist_root=tmp_path, remote_call_budget=4, request_timeout=0.2,
+        )
+        supervisor.start()
+        try:
+            pid = await wait_ready(supervisor)
+            with pytest.raises(ServiceError, match="inference_deadline_exceeded"):
+                await supervisor.submit("timeout", {"operation": "olist_investigate",
+                                                    "question": "hang"})
+            await wait_ready(supervisor, old_pid=pid)
+            assert supervisor.health()["remote_budget"]["reserved"] == 2
+            await supervisor.submit("ok", {"operation": "olist_investigate", "question": "ok"})
+            with pytest.raises(ServiceError, match="remote_call_budget_exhausted"):
+                await supervisor.submit("over", {"operation": "olist_investigate",
+                                                 "question": "never-run"})
+            assert supervisor.health()["remote_budget"] == {
+                "limit": 4, "reserved": 4, "remaining": 0, "scope": "api_process_lifetime",
+            }
+            assert supervisor.counters["remote_budget_rejected"] == 1
+            started = [json.loads(line) for line in
+                       (tmp_path / "fixture-started.jsonl").read_text().splitlines()]
+            assert [r["request_id"] for r in started] == ["timeout", "ok"]
+            assert 0 < started[0]["timeout_seconds"] <= 0.2
+        finally:
+            await supervisor.close()
+
+    asyncio.run(run())
+
+
+def test_remote_cancelled_queue_does_not_spend_budget_and_active_slot_is_held(tmp_path):
+    async def run():
+        _, supervisor = make_supervisor(
+            tmp_path, olist_provider="nvidia-super", olist_engine="intent-v1",
+            olist_root=tmp_path, remote_call_budget=4, queue_size=1,
+        )
+        supervisor.start()
+        try:
+            await wait_ready(supervisor)
+            active = asyncio.create_task(supervisor.submit(
+                "active", {"operation": "olist_investigate", "question": "slow"}))
+            queued = asyncio.create_task(supervisor.submit(
+                "queued", {"operation": "olist_investigate", "question": "never-run"}))
+            await asyncio.sleep(0.05)
+            queued.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await queued
+            active.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await active
+            assert supervisor.health()["active"] == 1
+            assert supervisor.health()["remote_budget"]["reserved"] == 2
+            with pytest.raises(ServiceError, match="capacity_exceeded"):
+                await supervisor.submit("extra", {"question": "never-run"})
+            for _ in range(100):
+                if not supervisor.jobs:
+                    break
+                await asyncio.sleep(0.01)
+            assert not supervisor.jobs
+            assert supervisor.health()["remote_budget"]["reserved"] == 2
+            started = (tmp_path / "fixture-started.jsonl").read_text()
+            assert "never-run" not in started
+        finally:
+            await supervisor.close()
+
+    asyncio.run(run())

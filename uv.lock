@@ -460,6 +460,7 @@ source = { editable = "." }
 dependencies = [
     { name = "duckdb" },
     { name = "fastapi" },
+    { name = "httpx" },
     { name = "langgraph" },
     { name = "langgraph-checkpoint-sqlite" },
     { name = "psycopg", extra = ["binary"] },
@@ -473,7 +474,6 @@ local = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "httpx" },
     { name = "pytest" },
     { name = "ruff" },
 ]
@@ -482,6 +482,7 @@ dev = [
 requires-dist = [
     { name = "duckdb", specifier = "==1.4.3" },
     { name = "fastapi", specifier = ">=0.142.2" },
+    { name = "httpx", specifier = "==0.28.1" },
     { name = "langgraph", specifier = "==1.0.10" },
     { name = "langgraph-checkpoint-sqlite", specifier = "==3.0.3" },
     { name = "mlx-lm", marker = "platform_machine == 'arm64' and sys_platform == 'darwin' and extra == 'local'" },
@@ -492,7 +493,6 @@ provides-extras = ["local"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "httpx", specifier = ">=0.28.1" },
     { name = "pytest" },
     { name = "ruff" },
 ]
