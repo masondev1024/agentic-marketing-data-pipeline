@@ -1,0 +1,83 @@
+{
+  "asserted_triples": 107,
+  "assets": {
+    "manifest-v1.json": "e08d3c25938d81ed244fcec05c2d909345913b3539b009e19baf2bc2627bf3fc",
+    "ontology-v1.ttl": "14b8aead0b8ee9370b35291b07fdbc7fecf78792afb2f68e23fcc2714c9f9aee",
+    "shapes-v1.ttl": "2dcd19909be6a4e48b3cbdc3c23f690381fc85757ed6c37c05d23d98c05372a0"
+  },
+  "contract_version": "olist.semantics.v1",
+  "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "declared_source_paths_validated": true,
+  "engine_versions": {
+    "owlrl": "7.6.2",
+    "pyshacl": "0.40.1",
+    "rdflib": "7.6.0"
+  },
+  "graph_sha256": "28a047d8a2d25dfca2a0d1b7ed8d1e59026bfcf0b6350bdaaf26d716f05f5d50",
+  "inferred_triples": 286,
+  "limits": [
+    "sample_only",
+    "unlinked_is_unknown_not_zero",
+    "no_currency_or_time_attribution"
+  ],
+  "metric_policy_sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9",
+  "observations": [
+    {
+      "declared_sources": [
+        "marketing"
+      ],
+      "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+      "metric": "sample_contract_count",
+      "scope": "source_sample",
+      "unit": "contracts",
+      "value": 842
+    },
+    {
+      "declared_sources": [
+        "marketing"
+      ],
+      "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+      "metric": "sample_lead_count",
+      "scope": "source_sample",
+      "unit": "leads",
+      "value": 8000
+    },
+    {
+      "declared_sources": [
+        "commerce",
+        "marketing"
+      ],
+      "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+      "metric": "sample_linked_contract_count",
+      "scope": "source_sample",
+      "unit": "contracts",
+      "value": 380
+    },
+    {
+      "declared_sources": [
+        "marketing"
+      ],
+      "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+      "metric": "sample_missing_origin_count",
+      "scope": "source_sample",
+      "unit": "leads",
+      "value": 60
+    },
+    {
+      "declared_sources": [
+        "commerce",
+        "marketing"
+      ],
+      "evidence_id": "9548e0e813da8024d2d68f4dc8ce3969dee1c4f19cf2e4ac5fc20bae4be5aefa",
+      "interpretation": "unobserved_not_zero",
+      "metric": "sample_unlinked_contract_count",
+      "scope": "source_sample",
+      "unit": "contracts",
+      "value": 462
+    }
+  ],
+  "row_level_provenance_verified": false,
+  "status": "passed",
+  "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a",
+  "validation_scope": "count_observations_and_declared_dependencies"
+}

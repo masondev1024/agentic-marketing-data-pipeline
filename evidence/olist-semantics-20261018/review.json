@@ -1,0 +1,51 @@
+{
+  "schema_version": "olist-semantic-review.v1",
+  "review_date": "2026-10-18",
+  "operator": "assistant",
+  "base_branch": "dev",
+  "base_commit": "34dc346",
+  "independent_reviews": [
+    {
+      "task": "/root/rdf_code_review",
+      "role": "code_review",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "high",
+      "verdict": "APPROVE",
+      "revisions": "Deep-copy test input bundles; distinguish structure-only validation from numeric observation checks; clarify SHACL vs Python source-path validation."
+    },
+    {
+      "task": "/root/rdf_arch_review",
+      "role": "architecture_review",
+      "model": "gpt-6-luna",
+      "reasoning_effort": "high",
+      "verdict": "CLEAR",
+      "revisions": "Distinguish release membership from per-metric declared dependencies; bind declarations to reviewed transformation fingerprint; document bounded CPU validation and provenance limits."
+    }
+  ],
+  "reviewed_sha256": {
+    "README.md": "210cb7f6f49f60e333451b020b940bcd5546abc1832d25faa08a55da448d9976",
+    "docs/olist-semantic-validation.md": "c68c6dda21f86e54c1b578be2f8d22281833f1a17a7794018d0978dbeade7354",
+    "src/llm_ops_lab/olist/semantics.py": "06b6d0dd3bb65f246b086a098eb9619bc19182e8a92cae03c95429722ebc3f54",
+    "src/llm_ops_lab/olist/intent_agent.py": "47837ccf40a17e8bae218ae6d1a482f72fa3673ac0743b3310ce77d47f5065a8",
+    "src/llm_ops_lab/olist/durable_graph.py": "9ec4cebb27519f7ba36cb623a234ca9826050d559d0b5468d0830d3f726bb0bf",
+    "src/llm_ops_lab/api.py": "86a41e97788cf0099aee4068e05a70ee03ff104beca6617153d7e77d5ca77213",
+    "data/olist/semantics/manifest-v1.json": "e08d3c25938d81ed244fcec05c2d909345913b3539b009e19baf2bc2627bf3fc",
+    "data/olist/semantics/ontology-v1.ttl": "14b8aead0b8ee9370b35291b07fdbc7fecf78792afb2f68e23fcc2714c9f9aee",
+    "data/olist/semantics/shapes-v1.ttl": "2dcd19909be6a4e48b3cbdc3c23f690381fc85757ed6c37c05d23d98c05372a0",
+    "data/olist/metric-policy-v1.json": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9",
+    "pyproject.toml": "71a5266054954c2b184ccd382fa8e201d3ac9455d8644b12aee0458fe0bf4a0e",
+    "uv.lock": "602e45d90e9331daf3e160e84251cd23e6b512a48b53e6fa45aceb1b2c4fb7b4",
+    "tests/test_olist_semantics.py": "6d41a6d8f7aa7f283d3993c1ed2aa0636290b7cffb26f1fa182f915c10b3cf7d",
+    "tests/test_olist_semantic_postgres.py": "1b55a07e46fa754d8ae779bab990265d121cdc1f443e1a0e170ade365f79a21e",
+    "tests/test_olist_intent_agent.py": "4dd5f693ee185b95f3c69e19de0f2f79d887e79d7f00ee72ec678e4b565b3235",
+    "tests/test_olist_api.py": "364a0c30eee072d5396e1e30b4759977639bd963a2cbecca9d6ed5271609a684",
+    "tests/test_olist_durable_graph.py": "014992bbb25cda8eea0839a91bc22dc6f226409b098cb6a666774eb81d2e32c9",
+    "tests/test_olist_agent.py": "c7f5259f272fbf930dc5e6a6ca0b92cc3b727009db85ef02f0dcf19605edcd18"
+  },
+  "scope_limits": [
+    "No new remote-model inference or live-model quality measurement.",
+    "Declared source dependencies are checked; raw-row provenance is not verified.",
+    "HTTP integration uses an explicit fixture planner against real isolated PostgreSQL.",
+    "No GitHub publication, AWS deployment, or infrastructure provisioning."
+  ]
+}

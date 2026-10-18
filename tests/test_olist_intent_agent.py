@@ -44,6 +44,34 @@ def test_semantic_refusal_never_opens_database(monkeypatch, disposition):
     assert result["usage"]["tool_calls"] == 0
 
 
+def test_semantic_graph_gate_is_part_of_completed_result(monkeypatch):
+    monkeypatch.setattr(intent_agent, "OlistToolSession", FakeSession)
+    result = intent_agent.investigate("reader", "coverage", lambda *_: planned())
+    assert result["status"] == "completed"
+    report = result["semantic_validation"]
+    assert report["status"] == "passed"
+    assert report["dataset_version"] == result["dataset_version"]
+    assert report["declared_source_paths_validated"]
+
+
+def test_semantic_graph_failure_cannot_return_findings(monkeypatch):
+    from llm_ops_lab.olist import semantics
+
+    monkeypatch.setattr(intent_agent, "OlistToolSession", FakeSession)
+
+    def fail(_bundle):
+        raise semantics.SemanticValidationError("semantic_constraints_failed")
+
+    monkeypatch.setattr(semantics, "validate_bundle", fail)
+    result = intent_agent.investigate("reader", "coverage", lambda *_: planned())
+    assert result["status"] == "abstained"
+    assert result["stop_reason"] == "semantic_validation_failed"
+    assert result["findings"] == result["evidence"] == []
+    assert result["semantic_validation"] == {
+        "status": "failed", "code": "semantic_constraints_failed"
+    }
+
+
 def test_financial_refusal_reads_only_version_and_definitions(monkeypatch):
     monkeypatch.setattr(intent_agent, "OlistToolSession", FakeSession)
     result = intent_agent.investigate(

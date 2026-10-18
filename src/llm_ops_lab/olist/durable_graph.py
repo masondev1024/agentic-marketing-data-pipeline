@@ -34,7 +34,7 @@ from .graph_store import (
 )
 from .tool_session import OlistToolSession, SessionError
 
-GRAPH_VERSION = "olist-durable.v1"
+GRAPH_VERSION = "olist-durable.v2"
 SOURCE_BINDING_FILES = (
     "agent.py",
     "agent_prompt.txt",
@@ -48,10 +48,17 @@ SOURCE_BINDING_FILES = (
     "nvidia_planner.py",
     "nvidia_service.py",
     "schema.sql",
+    "semantics.py",
     "tool_session.py",
     "transform.sql",
     "validation.py",
     "../service_worker.py",
+    "../../../data/olist/metric-policy-v1.json",
+    "../../../data/olist/semantics/ontology-v1.ttl",
+    "../../../data/olist/semantics/shapes-v1.ttl",
+    "../../../data/olist/semantics/manifest-v1.json",
+    "../../../uv.lock",
+    "../../../pyproject.toml",
 )
 MAX_QUESTION_CHARS = 2_048
 MAX_RESUME_AGE_SECONDS = 86_400
@@ -375,7 +382,7 @@ class _Execution:
         plan = (intent_plan.Plan(encoded_plan["disposition"], tuple(encoded_plan["intents"]))
                 if encoded_plan else None)
         result = intent_agent.render_stage(
-            plan, state["evidence_result"], plan_state
+            plan, state["evidence_result"], plan_state, remaining=self.remaining
         )
         if self.provider_error:
             result["provider_error"] = self.provider_error

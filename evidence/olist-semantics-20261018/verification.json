@@ -1,0 +1,65 @@
+{
+  "schema_version": "olist-semantic-verification.v1",
+  "date": "2026-10-18",
+  "operator": "assistant",
+  "status": "passed",
+  "base_branch": "dev",
+  "base_commit": "34dc346",
+  "pytest": {
+    "command": "uv run --locked pytest -q --tb=short",
+    "passed": 764,
+    "skipped": 0,
+    "exit_code": 0,
+    "seconds": 89.08,
+    "postgres_integration_enabled": true,
+    "log": "pytest.txt"
+  },
+  "ruff": {
+    "command": "uv run --locked ruff check .",
+    "exit_code": 0
+  },
+  "documentation_check": {
+    "command": "uv run --locked python scripts/check_marketing_docs.py",
+    "exit_code": 0,
+    "historical_model_results_unchanged": true
+  },
+  "git_diff_check": {
+    "command": "git diff --check",
+    "exit_code": 0
+  },
+  "live_local_postgres": {
+    "receipt": "local-postgres.json",
+    "independent_core_comparison": "independent-core-counts.json",
+    "reader_grants_not_expanded": true
+  },
+  "http_validation": {
+    "test": "tests/test_olist_semantic_postgres.py::test_real_database_graph_and_http_replay",
+    "transport": "FastAPI TestClient",
+    "database": "real isolated local PostgreSQL",
+    "planner": "explicit deterministic fixture",
+    "replay_same_result": true,
+    "planner_calls": 1,
+    "remote_llm_quality_verified": false
+  },
+  "failure_cases": [
+    "SHACL required fields, type, unit, negative values, mixed version, unknown predicate",
+    "Evidence hash or contract asset drift",
+    "Transform fingerprint mismatch",
+    "Invalid input size and bounds",
+    "Durable source binding mismatch",
+    "Semantic validation failure blocks findings and preserves published version"
+  ],
+  "boundaries": [
+    "OWL 2 RL entailment and SHACL constraints are actual library execution, not label-only checks.",
+    "Declared metric source dependencies are transform-bound, not row-level provenance.",
+    "Unlinked contracts remain unobserved; no zero-sales inference.",
+    "No raw archive re-ingestion, new remote-model evaluation, public deployment, or learner execution is asserted."
+  ],
+  "cleanup": {
+    "postgres_container": "stopped_after_verification",
+    "data_volume": "llm-ops-olist_postgres_data_preserved",
+    "docker_desktop": "stop_command_succeeded",
+    "port_55432": "no_listener_after_shutdown",
+    "initial_docker_desktop_state": "stopped"
+  }
+}

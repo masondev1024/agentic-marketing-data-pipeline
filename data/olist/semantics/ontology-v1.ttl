@@ -1,0 +1,41 @@
+@prefix ex: <urn:olist:semantic:> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ex:Ontology a owl:Ontology ; owl:versionInfo "olist.semantics.v1" .
+ex:Metric a owl:Class .
+ex:SampleCountMetric a owl:Class ; rdfs:subClassOf ex:Metric .
+ex:UnknownOutcomeMetric a owl:Class ; rdfs:subClassOf ex:SampleCountMetric .
+ex:Observation a owl:Class .
+ex:CountObservation a owl:Class ; rdfs:subClassOf ex:Observation .
+ex:ToolEvidence a owl:Class .
+ex:DatasetVersion a owl:Class .
+ex:SourceDataset a owl:Class .
+ex:derivedFrom a owl:ObjectProperty, owl:TransitiveProperty .
+ex:sourceEvidence a owl:ObjectProperty ; rdfs:subPropertyOf ex:derivedFrom .
+ex:inVersion a owl:ObjectProperty .
+ex:releaseContainsSource a owl:ObjectProperty .
+ex:declaredSource a owl:ObjectProperty ; rdfs:subPropertyOf ex:derivedFrom .
+ex:forMetric a owl:ObjectProperty ; owl:inverseOf ex:hasObservation ;
+    rdfs:subPropertyOf ex:derivedFrom .
+
+ex:sample_lead_count a ex:SampleCountMetric ; ex:unit "leads" ; ex:scope "source_sample" ;
+    ex:declaredSource ex:marketing .
+ex:sample_contract_count a ex:SampleCountMetric ; ex:unit "contracts" ; ex:scope "source_sample" ;
+    ex:declaredSource ex:marketing .
+ex:sample_linked_contract_count a ex:SampleCountMetric ; ex:unit "contracts" ;
+    ex:scope "source_sample" ; ex:declaredSource ex:marketing, ex:commerce .
+ex:sample_unlinked_contract_count a ex:UnknownOutcomeMetric ; ex:unit "contracts" ;
+    ex:scope "source_sample" ; ex:interpretation "unobserved_not_zero" ;
+    ex:declaredSource ex:marketing, ex:commerce .
+ex:sample_missing_origin_count a ex:SampleCountMetric ; ex:unit "leads" ; ex:scope "source_sample" ;
+    ex:declaredSource ex:marketing .
+ex:seller_distinct_observed_order_count a ex:SampleCountMetric ;
+    ex:unit "orders" ; ex:scope "per_seller_source_sample_not_attributed" ;
+    ex:declaredSource ex:marketing, ex:commerce .
+
+ex:marketing a ex:SourceDataset ;
+    ex:documentedAt <https://www.kaggle.com/datasets/olistbr/marketing-funnel-olist> .
+ex:commerce a ex:SourceDataset ;
+    ex:documentedAt <https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce> .

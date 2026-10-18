@@ -11,6 +11,9 @@ dependencies = [
     "langgraph-checkpoint-sqlite==3.0.3",
     "psycopg[binary]==3.3.3",
     "uvicorn>=0.54.0",
+    "rdflib==7.6.0",
+    "owlrl==7.6.2",
+    "pyshacl==0.40.1",
 ]
 
 [project.optional-dependencies]

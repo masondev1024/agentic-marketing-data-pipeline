@@ -1,0 +1,42 @@
+@prefix ex: <urn:olist:semantic:> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+ex:VersionShape a sh:NodeShape ; sh:targetClass ex:DatasetVersion ;
+    sh:property [ sh:path ex:versionId ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path ex:releaseContainsSource ; sh:minCount 1 ; sh:class ex:SourceDataset ] .
+
+ex:EvidenceShape a sh:NodeShape ; sh:targetClass ex:ToolEvidence ;
+    sh:property [ sh:path ex:evidenceId ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ] ;
+    sh:property [ sh:path ex:inVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ex:DatasetVersion ] ;
+    sh:property [ sh:path ex:datasetVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:sparql [ sh:message "evidence_version_mismatch" ; sh:select """
+      PREFIX ex: <urn:olist:semantic:>
+      SELECT $this WHERE {
+        $this ex:datasetVersion ?actual ; ex:inVersion/ex:versionId ?expected .
+        FILTER (?actual != ?expected)
+      }
+    """ ] .
+
+ex:ObservationShape a sh:NodeShape ; sh:targetClass ex:Observation ;
+    sh:closed true ; sh:ignoredProperties ( rdf:type owl:sameAs ) ;
+    sh:property [ sh:path ex:derivedFrom ; sh:nodeKind sh:IRI ] ;
+    sh:property [ sh:path ex:value ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:integer ; sh:minInclusive 0 ] ;
+    sh:property [ sh:path ex:forMetric ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ex:Metric ] ;
+    sh:property [ sh:path ex:sourceEvidence ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ex:ToolEvidence ] ;
+    sh:property [ sh:path ex:inVersion ; sh:minCount 1 ; sh:maxCount 1 ; sh:class ex:DatasetVersion ] ;
+    sh:property [ sh:path ex:unit ; sh:minCount 1 ; sh:maxCount 1 ; sh:datatype xsd:string ] ;
+    sh:property [ sh:path ex:scope ; sh:hasValue "source_sample" ; sh:maxCount 1 ] ;
+    sh:sparql [ sh:message "metric_unit_or_version_mismatch" ; sh:select """
+      PREFIX ex: <urn:olist:semantic:>
+      SELECT $this WHERE {
+        $this ex:forMetric ?metric ; ex:unit ?actual ;
+              ex:sourceEvidence/ex:inVersion ?sourceVersion ; ex:inVersion ?version .
+        ?metric ex:unit ?expected .
+        FILTER (?actual != ?expected || ?sourceVersion != ?version)
+      }
+    """ ] .

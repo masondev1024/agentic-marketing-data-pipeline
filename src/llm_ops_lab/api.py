@@ -361,6 +361,8 @@ def public_investigation(record):
     if "investigation_id" in record:
         result["investigation_id"] = record["investigation_id"]
         result["replayed"] = record.get("replayed", False)
+    if "semantic_validation" in record:
+        result["semantic_validation"] = record["semantic_validation"]
     # Fail closed: truncating evidence would make a diagnosis look complete when it is not.
     encoded = json.dumps(result, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
     if len(encoded.encode("utf-8")) > MAX_PUBLIC_INVESTIGATION_BYTES:

@@ -1,0 +1,38 @@
+{
+  "schema_version": "olist-semantic-publication-review.v1",
+  "date": "2026-10-18",
+  "target_repository": "masondev1024/agentic-marketing-data-pipeline",
+  "target_branches": [
+    "dev",
+    "main"
+  ],
+  "operator": "assistant",
+  "user_authorized_github_publication": true,
+  "reviewed_source_receipt": "review.json",
+  "reviewed_source_unchanged": true,
+  "code_review": {
+    "task": "/root/rdf_code_review",
+    "model": "gpt-6-luna",
+    "reasoning_effort": "high",
+    "verdict": "APPROVE",
+    "scope": "Source hash equality, public artifacts, unchanged historical receipts, dependency lock, PostgreSQL CI fixture."
+  },
+  "architecture_review": {
+    "task": "/root/rdf_arch_review",
+    "model": "gpt-6-luna",
+    "reasoning_effort": "high",
+    "verdict": "CLEAR",
+    "scope": "Declared dependencies vs row lineage, mock vs remote-model evidence, CPU deadline, source binding and deployment claims."
+  },
+  "checks": {
+    "uv_lock_check": "passed",
+    "git_diff_check": "passed",
+    "ruff": "passed",
+    "marketing_docs": "passed"
+  },
+  "limits": [
+    "Source dependencies rely on a reviewed static mapping bound to transformation fingerprint.",
+    "This publication is repository source/evidence only, not service deployment or a new remote-model quality result.",
+    "CI results must be checked against the published commit separately."
+  ]
+}

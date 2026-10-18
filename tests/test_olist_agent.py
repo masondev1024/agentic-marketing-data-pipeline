@@ -7,11 +7,12 @@ import psycopg
 import pytest
 
 from llm_ops_lab.olist import agent, tool_session
+from llm_ops_lab.olist.lineage import _source_fingerprint
 
 QUALITY = {
     "version_id": "v1",
     "active_published_version_id": "v1",
-    "transform_sha256": "a" * 64,
+    "transform_sha256": _source_fingerprint()[1],
     "quality_status": "passed",
     "failed_check_count": 0,
     "warning_count": 0,

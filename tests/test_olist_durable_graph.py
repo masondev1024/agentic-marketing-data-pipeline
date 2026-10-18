@@ -18,10 +18,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from llm_ops_lab.olist import durable_graph
 from llm_ops_lab.olist.diagnostics import _evidence_id, METRIC_DEFINITIONS
+from llm_ops_lab.olist.lineage import _source_fingerprint
 
 p=json.loads(sys.argv[1])
 QUALITY={"version_id":"v1", "active_published_version_id":"v1",
- "transform_sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+ "transform_sha256":_source_fingerprint()[1],
  "quality_status":"passed", "failed_check_count":0, "warning_count":0, "check_count":4}
 CHANNEL=[{"origin":None,"lead_count":3,"contract_count":1,
  "linked_contract_count":0,"unlinked_contract_count":1}]
@@ -322,6 +323,10 @@ def test_ambiguous_transport_failure_remains_unknown(tmp_path, provider_code):
 def test_source_fingerprint_includes_worker_wrapper():
     worker = Path(durable_graph.__file__).parent.parent / "service_worker.py"
     source_hashes = durable_graph._source_fingerprints()
+    assert {"semantics.py", "../../../data/olist/semantics/ontology-v1.ttl",
+            "../../../data/olist/semantics/shapes-v1.ttl",
+            "../../../data/olist/semantics/manifest-v1.json",
+            "../../../uv.lock"} <= source_hashes.keys()
     assert source_hashes["../service_worker.py"] == hashlib.sha256(worker.read_bytes()).hexdigest()
 
 

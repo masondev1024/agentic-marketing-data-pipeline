@@ -98,6 +98,18 @@ def test_investigation_is_disabled_without_trusted_root(tmp_path):
     assert supervisor.submissions == []
 
 
+def test_semantic_validation_reaches_http_contract(tmp_path):
+    supervisor = StubSupervisor()
+    supervisor.record["semantic_validation"] = {
+        "status": "passed", "contract_version": "olist.semantics.v1",
+        "dataset_version": supervisor.record["dataset_version"],
+    }
+    with api_client(tmp_path, supervisor) as client:
+        response = client.post("/v1/investigations", json={"question": "계약 연결 범위"})
+    assert response.status_code == 200
+    assert response.json()["semantic_validation"] == supervisor.record["semantic_validation"]
+
+
 def test_investigation_rejects_unknown_fields_and_duplicate_keys(tmp_path):
     supervisor = StubSupervisor()
     with api_client(tmp_path, supervisor) as client:

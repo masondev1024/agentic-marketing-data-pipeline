@@ -1,0 +1,14 @@
+{
+  "contract_version": "olist.semantics.v1",
+  "metric_policy_sha256": "4bdc6e45c7fdcf49042e1bf56056d4de49b012fcd2c67b5060d9a9df85faedb9",
+  "files": {
+    "ontology-v1.ttl": "14b8aead0b8ee9370b35291b07fdbc7fecf78792afb2f68e23fcc2714c9f9aee",
+    "shapes-v1.ttl": "2dcd19909be6a4e48b3cbdc3c23f690381fc85757ed6c37c05d23d98c05372a0"
+  },
+  "engines": {
+    "rdflib": "7.6.0",
+    "owlrl": "7.6.2",
+    "pyshacl": "0.40.1"
+  },
+  "transform_sha256": "16b724ec29b052cecfe2dd5f9399d453e6d1b1cd3d3483b97c7cde1d97ddfa1a"
+}

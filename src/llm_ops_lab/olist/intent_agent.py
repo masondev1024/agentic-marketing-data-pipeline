@@ -14,6 +14,7 @@ from typing import Callable
 
 from . import agent as evidence_contract
 from . import intent_plan
+from . import semantics as semantic_contract
 from .lineage import pipeline_context
 from .tool_session import OlistToolSession, SessionError
 
@@ -37,7 +38,8 @@ BACKGROUND_LIMITATIONS = [
 ]
 
 
-def _result(version, status, reason, evidence, findings, limitations, trace, usage, identity, plan):
+def _result(version, status, reason, evidence, findings, limitations, trace, usage, identity, plan,
+            semantic_validation=None):
     prompt_hash = hashlib.sha256(intent_plan.prompt_bytes()).hexdigest()
     policy, policy_hash = evidence_contract._metric_policy()
     result = {
@@ -69,6 +71,8 @@ def _result(version, status, reason, evidence, findings, limitations, trace, usa
         ),
     }
     by_tool = {item["tool"]: item for item in evidence}
+    if semantic_validation is not None:
+        result["semantic_validation"] = semantic_validation
     if "run_history" in by_tool and "version_evidence" in by_tool:
         result["pipeline_context"] = pipeline_context(
             by_tool["version_evidence"]["data"], by_tool["run_history"]["data"]
@@ -82,6 +86,7 @@ def _result(version, status, reason, evidence, findings, limitations, trace, usa
             limitations=["response_limit"],
         )
         result.pop("pipeline_context", None)
+        result.pop("semantic_validation", None)
     return result
 
 
@@ -344,7 +349,7 @@ def evidence_stage(
             "usage": usage}
 
 
-def render_stage(plan, evidence_result, plan_result) -> dict:
+def render_stage(plan, evidence_result, plan_result, *, remaining=None) -> dict:
     """Render only validated facts from the plan and committed evidence bundle."""
     evidence = evidence_result["evidence"]
     trace = plan_result["trace"] + evidence_result["trace"]
@@ -359,6 +364,19 @@ def render_stage(plan, evidence_result, plan_result) -> dict:
     if reason:
         return _result(observed, "abstained", "model_abstained" if semantic else reason,
                        evidence, [], [reason], trace, usage, identity, plan)
+    try:
+        if remaining is not None:
+            remaining()
+        semantic_report = semantic_contract.validate_bundle(evidence)
+        if remaining is not None:
+            remaining()
+    except semantic_contract.SemanticValidationError as error:
+        return _result(observed, "abstained", "semantic_validation_failed", [], [],
+                       ["semantic_validation_failed"], trace, usage, identity, plan,
+                       {"status": "failed", "code": error.code})
+    except TimeoutError:
+        return _result(observed, "abstained", "investigation_deadline_exceeded", [], [],
+                       ["investigation_deadline_exceeded"], trace, usage, identity, plan)
     findings = []
     by_tool = {item["tool"]: item for item in evidence}
     for intent in plan.intents:
@@ -369,7 +387,7 @@ def render_stage(plan, evidence_result, plan_result) -> dict:
         findings.extend(intent_findings)
     trace.append({"stage": "render", "finding_codes": [f["code"] for f in findings]})
     return _result(observed, "completed", "completed", evidence, findings,
-                   BACKGROUND_LIMITATIONS, trace, usage, identity, plan)
+                   BACKGROUND_LIMITATIONS, trace, usage, identity, plan, semantic_report)
 
 
 def investigate(
@@ -412,7 +430,7 @@ def investigate(
         evidence = evidence_stage(dsn, planned["plan"], version_id, remaining,
                                   deadline=deadline, evidence_bundle=evidence_bundle,
                                   started_at=started_at)
-        return render_stage(planned["plan"], evidence, planned)
+        return render_stage(planned["plan"], evidence, planned, remaining=remaining)
     except TimeoutError:
         planned = locals().get("planned", empty_plan)
         trace = planned.get("trace", []) + [{"stage": "deadline", "generation_attempted":

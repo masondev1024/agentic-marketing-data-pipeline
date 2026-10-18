@@ -147,7 +147,7 @@
     }
   ],
   "reviewed_sha256": {
-    "README.md": "107bcee9ad6083e5da7dc8249b002ce01479c46826db48f54a1653a9b17f5819",
+    "README.md": "210cb7f6f49f60e333451b020b940bcd5546abc1832d25faa08a55da448d9976",
     "data/marketing/experiments/preregistered-v1.json": "dde97e9739656743163c4f33869794edcca7b598c18b23ade79a0d240476ec5c",
     "data/marketing/v1/acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81",
     "data/marketing/v1/acceptance-freeze.json": "38ca9dc922588ada7fbb101e2f730ba9ec2225f97895b1fe530aa72c15c2c6f0",
@@ -295,5 +295,16 @@
     "readme_sha256_before": "fe4469ef97613bd4dd0fa41ccfa51088d390a7fc34d79e618410f4f9aae26af0",
     "readme_sha256_after": "107bcee9ad6083e5da7dc8249b002ce01479c46826db48f54a1653a9b17f5819",
     "scope": "User requested removing the verification results/current status section from README. Detailed evidence and historical results remain unchanged in docs and evidence. Removed the dependent reference to that section."
-  }
+  },
+  "review_updates": [
+    {
+      "date": "2026-10-18",
+      "scope": "README RDF/OWL semantic-validation extension only",
+      "previous_sha256": "107bcee9ad6083e5da7dc8249b002ce01479c46826db48f54a1653a9b17f5819",
+      "current_sha256": "210cb7f6f49f60e333451b020b940bcd5546abc1832d25faa08a55da448d9976",
+      "independent_review_reference": "evidence/olist-semantics-20261018/review.json",
+      "historical_receipt": "evidence/marketing-ac6-docs-before-rdf-semantics.json",
+      "historical_model_results_unchanged": true
+    }
+  ]
 }

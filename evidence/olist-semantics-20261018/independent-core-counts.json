@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "dataset_version": "2689e0232e022117caa2363b590c1e63fafb2c4d71d1c64122570872460b5369",
+  "connection_role": "olist_writer",
+  "transaction": "repeatable_read_read_only",
+  "comparison": "RDF observations vs independent core-table count queries",
+  "counts": {
+    "sample_lead_count": 8000,
+    "sample_missing_origin_count": 60,
+    "sample_contract_count": 842,
+    "sample_linked_contract_count": 380,
+    "sample_unlinked_contract_count": 462
+  },
+  "source": "Validated PostgreSQL core tables, not raw archive re-ingestion",
+  "published_version_unchanged": true,
+  "reader_core_table_access": "denied_as_expected_no_grants_changed"
+}
