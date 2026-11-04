@@ -147,7 +147,7 @@
     }
   ],
   "reviewed_sha256": {
-    "README.md": "210cb7f6f49f60e333451b020b940bcd5546abc1832d25faa08a55da448d9976",
+    "README.md": "eb651739ea496d1fbe3cf73ea4915c1ae18ec1b2bc2ae5151742ff51bfeefbe0",
     "data/marketing/experiments/preregistered-v1.json": "dde97e9739656743163c4f33869794edcca7b598c18b23ade79a0d240476ec5c",
     "data/marketing/v1/acceptance-expected.json": "5f1fd1af8854cfb5d0c0bdd28cdd501d4fe6149e7c056b7ffc8f3cf765146c81",
     "data/marketing/v1/acceptance-freeze.json": "38ca9dc922588ada7fbb101e2f730ba9ec2225f97895b1fe530aa72c15c2c6f0",
@@ -306,5 +306,13 @@
       "historical_receipt": "evidence/marketing-ac6-docs-before-rdf-semantics.json",
       "historical_model_results_unchanged": true
     }
-  ]
+  ],
+  "profile_readme_presentation_review": {
+    "date": "2026-11-04",
+    "operator": "assistant",
+    "prior_commit": "653ac9eca12d1db383841f8162cc339f2cca0fa9",
+    "readme_sha256_before": "210cb7f6f49f60e333451b020b940bcd5546abc1832d25faa08a55da448d9976",
+    "readme_sha256_after": "eb651739ea496d1fbe3cf73ea4915c1ae18ec1b2bc2ae5151742ff51bfeefbe0",
+    "scope": "User-approved README opening for the GitHub portfolio refresh. Reviewed the revised scope and results against the existing Olist and bounded AWS evidence. Experiment and result records remain unchanged."
+  }
 }
