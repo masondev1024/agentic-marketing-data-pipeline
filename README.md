@@ -1,14 +1,31 @@
 # Agentic Marketing Data Pipeline
 
-공개 Olist 표본에서 마케팅 리드·계약·주문을 연결하고, 확인 가능한 근거와 함께 조사 결과를 제공합니다.
+리드·계약·주문의 연결 누락과 중복 집계로 숫자가 잘못 해석되지 않도록, **조회 기준과 근거를 함께 제공**하는 개인 프로젝트입니다. 모델은 질문을 분류하고, 실제 조회와 계산은 애플리케이션이 맡도록 분리했습니다.
 
-**맡은 일** · 개인 프로젝트에서 PostgreSQL 분석 마트와 품질 검사, Python·LangGraph 조사 API, 모델 호출 상태·예산 기록을 구현했습니다. 모델은 질문을 분류하고, 앱은 허용된 조회와 수치 검증을 담당합니다.
+## 맡은 범위
 
-- **표본 검증** · 계약 842건 중 주문 표본에 연결되지 않은 462건을 `NULL`로 표시했습니다.
-- **호출 장애 시험** · 2026.10.12 AWS 단기 시험에서 워커를 종료한 뒤 같은 요청을 보냈을 때 재호출을 보류했고, 호출 예약 수가 그대로였습니다.
-- **복원 시험** · 같은 PostgreSQL RDS 인스턴스의 별도 DB로 복원한 테이블·뷰 14개의 행 수와 내용 해시가 원본과 일치했습니다.
+- **데이터 처리** · PostgreSQL 분석 마트, 품질 검사와 검증 버전 게시 구현. 주문 표본과 연결되지 않은 계약은 판매 0건과 구분.
+- **AI·실행 관리** · LangGraph 조사 API, 호출 상태·예산 기록과 완료 결과 재사용 구현. RDF → OWL 2 RL → SHACL로 지표 단위·버전·근거 검증 추가.
 
-AWS 시험은 승인 후 AI 어시스턴트가 실행했습니다. [배포·복구 검증](docs/olist-durable-release-20261012.md) · [도메인·지표 정의](docs/olist-metric-policy.md) · [AI 평가·오류 개선](docs/olist-boundary-fix.md) · [실행과 재현](#실행과-재현)
+## 구조 요약
+
+```text
+Olist → 품질 검사 → PostgreSQL Core·Mart → 검증 버전 게시
+질문 → Nemotron 의도 분류 → 허용된 조회·계산 → 근거 응답
+                         ↕ SQLite 호출 상태·예산 기록
+```
+
+**AWS 단기 시험 구성** · EC2·Caddy → 프라이빗 RDS / S3 백업. 모델에는 질문을 전달하고, DB 행·SQL·접속 정보는 전달하지 않는 구조입니다.
+
+## 확인한 결과
+
+- **미연결 계약 462/842건 구분** · 공개 Olist 표본에서 주문 연결 여부를 검사하고, 미연결 값을 `NULL`로 보존. [지표 정의](docs/olist-metric-policy.md)
+- **재요청 뒤 호출 예약 4회 유지** · 2026.10.12 AWS 워커 종료 시험에서 예약 수 `3 → 4 → 4`. 완료 여부가 불명확한 호출의 자동 재전송을 보류. [호출·복구 기록](docs/olist-durable-release-20261012.md)
+- **14개 테이블·뷰의 행 수·내용 해시 일치** · 같은 RDS 인스턴스의 별도 DB로 복원한 결과. [복원 기록](docs/olist-durable-release-20261012.md)
+
+RDF/OWL·SHACL은 [로컬 검증](docs/olist-semantic-validation.md), AWS 시험은 승인 후 AI 도구를 활용한 실행·기록입니다.
+
+[포트폴리오 상세](https://jungseongheon.org/portfolio/#agentic-marketing) · [API·실행 관리 설계](docs/olist-durable-service.md) · [실행과 재현](#실행과-재현)
 
 ## 마케팅·커머스에서 해결하려는 문제
 
@@ -126,3 +143,4 @@ Super HTTP 경로는 `--olist-engine intent-v1 --olist-provider nvidia-super`로
 원본 CSV·DB·모델 가중치·API 키는 저장소에 포함하지 않습니다. 외부 데이터는 출처에서 별도로
 확보하고 계약 검사를 거쳐야 합니다. 프로젝트 자체 코드에 별도 오픈소스 라이선스를
 아직 부여하지 않았으며, 외부 자료에는 각 자료의 라이선스가 적용됩니다.
+
